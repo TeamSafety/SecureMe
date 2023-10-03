@@ -13,7 +13,7 @@ Women deserve to feel safe and empowered in their daily lives. SecureShe's busin
 After conducting market research, we have identified a need for improvement in women's safety apps, particularly in the area of user privacy. As a result, we are planning to prioritize user privacy by implementing features such as control over data sharing, end-to-end encryption for communications, and the option to disable location sharing when needed.
 
 # Vlog links
-
+[Vlog#1](https://youtu.be/LEcPDddBlJ8)
 
 
 
