@@ -1,5 +1,5 @@
 # SecureShe
-A user-friendly app that can be availed by anyone who has it installed. The app offers women the quickest and easiest way to contact their nearest help.
+A mobile app that offers women the quickest and easiest way to contact their nearest help when in danger.
 
 # Team Members
 *  Kristina Langgard
