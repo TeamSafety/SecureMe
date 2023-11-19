@@ -1,17 +1,38 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:my_app/models/AppColors.dart';
 import 'package:my_app/models/background_wave.dart';
 import 'package:my_app/models/input_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpPage extends StatelessWidget {
   SignUpPage({super.key});
-
+  //initiating database connection
+  final FirebaseAuth _auth = FirebaseAuth.instance;// for user
   // text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final rptPasswordController = TextEditingController();
 
-  void signUpUser() {}
+  void signUpUser() async {
+    try {
+      if (passwordController.text != rptPasswordController.text) {
+        // Passwords don't match, show an error message or handle it as needed
+        print('Passwords do not match');
+        return;
+      }
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      // User has signed up successfully
+      print('User signed up: ${userCredential.user!.uid}');
+    } on FirebaseAuthException catch (e) {
+      // Handle errors
+      print('Signup failed: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -2,15 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:my_app/models/AppColors.dart';
 import 'package:my_app/models/background_wave.dart';
 import 'package:my_app/models/input_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+class LoginPage extends StatefulWidget {
+  LoginPage({Key? key}) : super(key: key);
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
 
+class _LoginPageState extends State<LoginPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   // text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  String errorMessage = ''; 
 
-  void signUserIn() {}
+  void signUserIn() async {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // Reset error message on successful sign-in
+      setState(() {
+        errorMessage = '';
+      });
+      } on FirebaseAuthException catch (e) {
+      // Handle errors
+        print('Error: $e');
+      // Set error message to be displayed
+        setState(() {
+          errorMessage = e.message ?? 'An error occurred';
+        });
+      } 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +70,7 @@ class LoginPage extends StatelessWidget {
                   hintText: "example@email.com",
                   obscureText: false,
                 ),
+                
               ),
               const SizedBox(
                 height: 24,
@@ -58,6 +87,7 @@ class LoginPage extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
+              //TODO: please design a way to print the errorMessage to the user
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
