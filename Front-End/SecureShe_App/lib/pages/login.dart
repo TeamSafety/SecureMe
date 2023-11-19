@@ -3,6 +3,8 @@ import 'package:my_app/models/AppColors.dart';
 import 'package:my_app/models/background_wave.dart';
 import 'package:my_app/models/input_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_app/pages/signup.dart';
+
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
 
@@ -15,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   // text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  String errorMessage = ''; 
+  String errorMessage = '';
 
   void signUserIn() async {
     String email = emailController.text.trim();
@@ -30,14 +32,14 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         errorMessage = '';
       });
-      } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       // Handle errors
-        print('Error: $e');
+      print('Error: $e');
       // Set error message to be displayed
-        setState(() {
-          errorMessage = e.message ?? 'An error occurred';
-        });
-      } 
+      setState(() {
+        errorMessage = e.message ?? 'An error occurred';
+      });
+    }
   }
 
   @override
@@ -70,7 +72,6 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: "example@email.com",
                   obscureText: false,
                 ),
-                
               ),
               const SizedBox(
                 height: 24,
@@ -162,11 +163,17 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Container(
                 alignment: Alignment.center,
-                child: Text(
-                  "Sign Up",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: AppColors.accent,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SignUpPage()));
+                  },
+                  child: Text(
+                    "Sign Up",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: AppColors.accent,
+                    ),
                   ),
                 ),
               )

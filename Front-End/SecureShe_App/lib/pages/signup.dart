@@ -9,7 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class SignUpPage extends StatelessWidget {
   SignUpPage({super.key});
   //initiating database connection
-  final FirebaseAuth _auth = FirebaseAuth.instance;// for user
+  final FirebaseAuth _auth = FirebaseAuth.instance; // for user
   // text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -22,7 +22,8 @@ class SignUpPage extends StatelessWidget {
         print('Passwords do not match');
         return;
       }
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
@@ -149,11 +150,16 @@ class SignUpPage extends StatelessWidget {
               ),
               Container(
                 alignment: Alignment.center,
-                child: Text(
-                  "Sign In",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: AppColors.accent,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "Sign In",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: AppColors.accent,
+                    ),
                   ),
                 ),
               )
