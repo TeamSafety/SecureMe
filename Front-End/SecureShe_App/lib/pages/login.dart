@@ -18,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   String errorMessage = '';
+  double errorFontSize = 0;
 
   void signUserIn() async {
     String email = emailController.text.trim();
@@ -31,6 +32,7 @@ class _LoginPageState extends State<LoginPage> {
       // Reset error message on successful sign-in
       setState(() {
         errorMessage = '';
+        errorFontSize = 0;
       });
     } on FirebaseAuthException catch (e) {
       // Handle errors
@@ -38,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
       // Set error message to be displayed
       setState(() {
         errorMessage = e.message ?? 'An error occurred';
+        errorFontSize = 12;
       });
     }
   }
@@ -88,7 +91,6 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 10,
               ),
-              //TODO: please design a way to print the errorMessage to the user
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
@@ -102,6 +104,13 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  errorMessage,
+                  style: TextStyle(color: Colors.red, fontSize: errorFontSize),
                 ),
               ),
               const SizedBox(
