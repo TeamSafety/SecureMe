@@ -17,7 +17,7 @@ bool isPasswordValid(String password) {
   return true;
 }
 
-
+// ignore: must_be_immutable
 class SignUpPage extends StatelessWidget {
   SignUpPage({super.key});
   //initiating database connection
@@ -26,26 +26,26 @@ class SignUpPage extends StatelessWidget {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final rptPasswordController = TextEditingController();
-  String passwordErrorMessage = ""; 
+  String passwordErrorMessage = "";
 
   void signUpUser() async {
-    String password = passwordController.text.trim(); 
+    String password = passwordController.text.trim();
     try {
       if (passwordController.text != rptPasswordController.text) {
         // Passwords don't match, show an error message or handle it as needed
-        passwordErrorMessage = "Password should have at least 8 characters and should have at least one special character (!@#%^&*(),.?:{}|<>])"; 
+        passwordErrorMessage =
+            "Password should have at least 8 characters and should have at least one special character (!@#%^&*(),.?:{}|<>])";
         print('Passwords do not match');
         return;
-      }
-      else if(!isPasswordValid(password)){
-        print("Invalid password"); 
-        return; 
+      } else if (!isPasswordValid(password)) {
+        print("Invalid password");
+        return;
       }
       UserCredential userCredential =
-        await _auth.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
-        );
+          await _auth.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
       // User has signed up successfully
       print('User signed up: ${userCredential.user!.uid}');
     } on FirebaseAuthException catch (e) {

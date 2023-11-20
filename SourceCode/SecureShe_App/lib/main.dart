@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:my_app/pages/login.dart';
 import 'firebase_options.dart';
 import 'package:my_app/pages/main_page.dart';
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(fontFamily: "ArbutusSlab"),
       debugShowCheckedModeBanner: false,
       // home: LoginPage(),
-      home: const MainPage(),
+      home: MainPage(),
     );
   }
 }
