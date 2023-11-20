@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/AppColors.dart';
 import 'package:my_app/models/personal_contact.dart';
+import 'package:my_app/models/preset_message_widget.dart';
 
 class MyContacts extends StatelessWidget {
   const MyContacts({super.key});
@@ -14,6 +15,9 @@ class MyContacts extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
+                const SizedBox(
+                  height: 24,
+                ),
                 personalContactsBuilder(),
                 const SizedBox(
                   height: 24,
@@ -22,12 +26,7 @@ class MyContacts extends StatelessWidget {
                 const SizedBox(
                   height: 24,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Preset Messages"),
-                  ],
-                )
+                presetMessagesBuilder(),
               ],
             ),
           ),
@@ -36,7 +35,33 @@ class MyContacts extends StatelessWidget {
     );
   }
 
-  // ignore: non_constant_identifier_names
+  Column presetMessagesBuilder() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Preset Messages',
+          style: TextStyle(color: AppColors.secondary, fontSize: 16),
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        const PresetMessage(
+            message:
+                "Hey I'm feeling unsafe right now! Please give me a call!"),
+        const SizedBox(
+          height: 8,
+        ),
+        const PresetMessage(
+            message:
+                "I'm lost! I'm sharing my location with you! Please let me know where to go!"),
+        const SizedBox(
+          height: 8,
+        ),
+      ],
+    );
+  }
+
   Column communityContactsBuilder() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,11 +73,25 @@ class MyContacts extends StatelessWidget {
         const SizedBox(
           height: 16,
         ),
-        const Column(
-          children: [
-            Text("No contacts found."),
-            Text("Start adding by going to the Community Page."),
-          ],
+        Container(
+          alignment: Alignment.center,
+          child: Text(
+            "No contacts found.",
+            style: TextStyle(
+              color: AppColors.secondary.withOpacity(0.6),
+              fontSize: 11,
+            ),
+          ),
+        ),
+        Container(
+          alignment: Alignment.center,
+          child: Text(
+            "Start adding by going to the Community Page.",
+            style: TextStyle(
+              color: AppColors.secondary.withOpacity(0.6),
+              fontSize: 11,
+            ),
+          ),
         ),
       ],
     );

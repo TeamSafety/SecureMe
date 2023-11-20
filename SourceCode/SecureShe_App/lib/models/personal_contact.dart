@@ -15,13 +15,17 @@ class PersonalContact extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-          color: AppColors.secondary.withOpacity(0.10),
-          blurRadius: 4,
-          offset: const Offset(0, 2),
-        )
-      ], color: AppColors.primary, borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.secondary.withOpacity(0.10),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          )
+        ],
+        color: AppColors.primary,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Row(
         children: [
           CircleAvatar(
@@ -43,6 +47,7 @@ class PersonalContact extends StatelessWidget {
                 ),
               ),
               const SizedBox(
+                height: 5,
                 width: 8,
               ),
               Row(
