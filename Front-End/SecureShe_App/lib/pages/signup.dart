@@ -6,6 +6,18 @@ import 'package:my_app/models/background_wave.dart';
 import 'package:my_app/models/input_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+bool isPasswordValid(String password) {
+  if (password.length < 8) {
+    return false;
+  }
+  RegExp specialCharRegex = RegExp(r'[!@#$%^&*(),.?":{}|<>]');
+  if (!specialCharRegex.hasMatch(password)) {
+    return false;
+  }
+  return true;
+}
+
+
 class SignUpPage extends StatelessWidget {
   SignUpPage({super.key});
   //initiating database connection
@@ -16,11 +28,16 @@ class SignUpPage extends StatelessWidget {
   final rptPasswordController = TextEditingController();
 
   void signUpUser() async {
+    String password = passwordController.text.trim(); 
     try {
       if (passwordController.text != rptPasswordController.text) {
         // Passwords don't match, show an error message or handle it as needed
         print('Passwords do not match');
         return;
+      }
+      else if(!isPasswordValid(password)){
+        print("Invalid password"); 
+        return; 
       }
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
