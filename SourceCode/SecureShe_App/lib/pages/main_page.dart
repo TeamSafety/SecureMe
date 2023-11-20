@@ -6,6 +6,7 @@ import 'package:my_app/pages/home_page.dart';
 import 'package:my_app/pages/map_page.dart';
 import 'package:my_app/pages/my_contacts.dart';
 import 'package:my_app/pages/my_profile.dart';
+import 'package:my_app/pages/osm_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -19,8 +20,8 @@ class _MainPageState extends State<MainPage> {
     ContactsPage(),
     MyContacts(),
     HomePage(),
-    MapPage(),
-    MyProfile()
+    MyMapOSM(),
+    MyProfile(),  
   ];
 
   int _currentIndex = 2;
