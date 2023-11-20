@@ -7,6 +7,18 @@ class Signup extends StatefulWidget {
   // ignore: library_private_types_in_public_api
   _SignupState createState() => _SignupState();
 }
+bool isPasswordValid(String password) {
+  if (password.length < 8) {
+    return false;
+  }
+  RegExp specialCharRegex = RegExp(r'[!@#$%^&*(),.?":{}|<>]');
+  if (!specialCharRegex.hasMatch(password)) {
+    return false;
+  }
+
+  // If the password passes both checks, consider it valid
+  return true;
+}
 
 class _SignupState extends State<Signup> {
   final FirebaseAuth _auth = FirebaseAuth.instance;// for user authentication 
@@ -15,6 +27,10 @@ class _SignupState extends State<Signup> {
   final TextEditingController _passwordConfirmController = TextEditingController();
   Future<void> _signup() async {
     try {
+      String password = _passwordController.text.trim(); 
+      if(!isPasswordValid(password)){
+        print("Invalid password"); 
+      }
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
