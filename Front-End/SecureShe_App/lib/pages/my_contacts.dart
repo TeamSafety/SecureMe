@@ -18,7 +18,16 @@ class MyContacts extends StatelessWidget {
                 const SizedBox(
                   height: 24,
                 ),
-                communityContactsBuilder()
+                communityContactsBuilder(),
+                const SizedBox(
+                  height: 24,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Preset Messages"),
+                  ],
+                )
               ],
             ),
           ),
@@ -81,25 +90,23 @@ class MyContacts extends StatelessWidget {
         const SizedBox(
           height: 8,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              height: 15,
-              width: 50,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: AppColors.secondary.withOpacity(0.08),
-              ),
-              child: Text(
-                "View All",
-                style: TextStyle(
-                  color: AppColors.secondary.withOpacity(0.8),
-                  fontSize: 7,
-                ),
+        Container(
+          alignment: Alignment.center,
+          child: Container(
+            height: 15,
+            width: 50,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: AppColors.secondary.withOpacity(0.08),
+            ),
+            child: Text(
+              "View All",
+              style: TextStyle(
+                color: AppColors.secondary.withOpacity(0.8),
+                fontSize: 7,
               ),
             ),
-          ],
+          ),
         ),
       ],
     );
