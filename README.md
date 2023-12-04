@@ -2,9 +2,9 @@
 A mobile app that offers women the quickest and easiest way to contact their nearest help when in danger.
 
 # Team Members
-*  Kristina Langgard
-* Charles Kenneth Samonte 
-* Kawthar Alkhateeb  
+*  Kristina Langgard: Database admin, Backend developer and Tester
+* Charles Kenneth Samonte: Front end developer, Tester and QA engineer
+* Kawthar Alkhateeb: Backend developer, Tester and Project manager
  
 # Project background/Business need
 Personal safety is a fundamental human right that should be universally upheld. Regrettably, over half of the global population, including women from various backgrounds and age groups, grapple with daily threats to their personal security. These threats can manifest in various scenarios such as walking alone, using transportation services, or merely being in public spaces. Every woman should at least have one personalized safety app on their smartphone.  
