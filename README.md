@@ -1,5 +1,5 @@
 # SecureShe
-A mobile app that offers women the quickest and easiest way to contact their nearest help when in danger.
+A mobile app that offers women (and others) the quickest and easiest means to reach to the nearest help when they are in danger or require support.
 
 # Team Members
 *  Kristina Langgard: Database admin, Backend developer and Tester
