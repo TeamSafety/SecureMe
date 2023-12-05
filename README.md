@@ -15,7 +15,7 @@ After conducting market research, we have identified a need for improvement in w
 # Vlog links
 [Vlog#1](https://youtu.be/LEcPDddBlJ8)
 
-[Vlog#2](https://www.youtube.com/watch?v=MsNM0-BFmtY&ab_channel=CharlesSamonte)
+[Vlog#2](https://www.youtube.com/watch?v=B5V21SvFhMI&ab_channel=CharlesSamonte)
 
 
 
