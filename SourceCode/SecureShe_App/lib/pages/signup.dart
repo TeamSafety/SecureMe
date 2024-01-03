@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:my_app/models/AppColors.dart';
 import 'package:my_app/models/background_wave.dart';
