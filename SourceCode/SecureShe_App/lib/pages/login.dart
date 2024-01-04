@@ -3,6 +3,8 @@ import 'package:my_app/models/AppColors.dart';
 import 'package:my_app/models/background_wave.dart';
 import 'package:my_app/models/input_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_app/pages/home_page.dart';
+import 'package:my_app/pages/main_page.dart';
 import 'package:my_app/pages/signup.dart';
 
 class LoginPage extends StatefulWidget {
@@ -34,6 +36,12 @@ class _LoginPageState extends State<LoginPage> {
         errorMessage = '';
         errorFontSize = 0;
       });
+         // Navigate to another page (e.g., Home page) on successful sign-in
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MainPage()), // Replace YourNextPage with the actual page you want to navigate to
+      );
     } on FirebaseAuthException catch (e) {
       // Handle errors
       print('Error: $e');
@@ -175,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignUpPage()));
+                        MaterialPageRoute(builder: (context) => SignUpPage(context:context)));
                   },
                   child: Text(
                     "Sign Up",

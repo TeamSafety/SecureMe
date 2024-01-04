@@ -5,6 +5,10 @@ import 'package:my_app/models/background_wave.dart';
 import 'package:my_app/models/input_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'main_page.dart';
+
+//TODO: please add the error messages to the user when they they try to signup ie. the 'passwordErrorMessage'
+//TODO: please add the email error message so users can see it. 
 bool isPasswordValid(String password) {
   if (password.length < 8) {
     return false;
@@ -18,7 +22,8 @@ bool isPasswordValid(String password) {
 
 // ignore: must_be_immutable
 class SignUpPage extends StatelessWidget {
-  SignUpPage({super.key});
+  final BuildContext context; // Add this line
+  SignUpPage({required this.context, Key? key}) : super(key: key);
   //initiating database connection
   final FirebaseAuth _auth = FirebaseAuth.instance; // for user
   // text editing controllers
@@ -26,27 +31,40 @@ class SignUpPage extends StatelessWidget {
   final passwordController = TextEditingController();
   final rptPasswordController = TextEditingController();
   String passwordErrorMessage = "";
+  String emailErrorMessage =''; 
 
   void signUpUser() async {
+    String email = emailController.text.trim(); 
     String password = passwordController.text.trim();
     try {
+      List<String> signInMethods = await _auth.fetchSignInMethodsForEmail(email);
+      if (signInMethods.isNotEmpty) {
+        // Email has been used before, show an error message
+        print('Email has already been used before');
+        emailErrorMessage = "Email has already been used before"; 
+        return;
+      }
       if (passwordController.text != rptPasswordController.text) {
-        // Passwords don't match, show an error message or handle it as needed
-        passwordErrorMessage =
-            "Password should have at least 8 characters and should have at least one special character (!@#%^&*(),.?:{}|<>])";
-        print('Passwords do not match');
+        // Passwords don't match, show an error message
+        passwordErrorMessage = "Passwords should match";
         return;
       } else if (!isPasswordValid(password)) {
-        print("Invalid password");
+        passwordErrorMessage =
+          "Password should have at least 8 characters and should have at least one special character (!@#%^&*(),.?:{}|<>])";
         return;
       }
       UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
+        await _auth.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
       // User has signed up successfully
       print('User signed up: ${userCredential.user!.uid}');
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MainPage()), // Replace YourNextPage with the actual page you want to navigate to
+      );
     } on FirebaseAuthException catch (e) {
       // Handle errors
       print('Signup failed: $e');
