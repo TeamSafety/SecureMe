@@ -4,7 +4,7 @@ import 'package:my_app/models/AppColors.dart';
 import 'package:my_app/models/background_wave.dart';
 import 'package:my_app/models/input_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'main_page.dart';
 
 //TODO: please add the error messages to the user when they they try to signup ie. the 'passwordErrorMessage'
@@ -47,10 +47,12 @@ class SignUpPage extends StatelessWidget {
       if (passwordController.text != rptPasswordController.text) {
         // Passwords don't match, show an error message
         passwordErrorMessage = "Passwords should match";
+        print (passwordErrorMessage); 
         return;
       } else if (!isPasswordValid(password)) {
         passwordErrorMessage =
           "Password should have at least 8 characters and should have at least one special character (!@#%^&*(),.?:{}|<>])";
+        print (passwordErrorMessage ); 
         return;
       }
       UserCredential userCredential =
@@ -58,12 +60,16 @@ class SignUpPage extends StatelessWidget {
           email: emailController.text,
           password: passwordController.text,
         );
+      await FirebaseFirestore.instance.collection('Users').doc(userCredential.user!.uid).set({
+        'email': email,
+        'password': password, 
+      });
       // User has signed up successfully
       print('User signed up: ${userCredential.user!.uid}');
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainPage()), // Replace YourNextPage with the actual page you want to navigate to
+        MaterialPageRoute(builder: (context) => const MainPage()),
       );
     } on FirebaseAuthException catch (e) {
       // Handle errors

@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/pages/home_page.dart';
 import 'package:my_app/pages/main_page.dart';
 import 'package:my_app/pages/signup.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -25,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
   void signUserIn() async {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
-
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
