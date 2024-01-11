@@ -9,6 +9,7 @@ import 'main_page.dart';
 
 //TODO: please add the error messages to the user when they they try to signup ie. the 'passwordErrorMessage'
 //TODO: please add the email error message so users can see it. 
+
 bool isPasswordValid(String password) {
   if (password.length < 8) {
     return false;
@@ -61,8 +62,7 @@ class SignUpPage extends StatelessWidget {
           password: passwordController.text,
         );
       await FirebaseFirestore.instance.collection('Users').doc(userCredential.user!.uid).set({
-        'email': email,
-        'password': password, 
+        'email': email, 
       });
       // User has signed up successfully
       print('User signed up: ${userCredential.user!.uid}');

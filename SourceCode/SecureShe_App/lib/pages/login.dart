@@ -8,6 +8,7 @@ import 'package:my_app/pages/main_page.dart';
 import 'package:my_app/pages/signup.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+final FirebaseAuth _auth = FirebaseAuth.instance;
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
   @override
@@ -16,7 +17,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   // text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
