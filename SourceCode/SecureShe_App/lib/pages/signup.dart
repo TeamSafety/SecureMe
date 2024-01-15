@@ -37,6 +37,8 @@ class SignUpPage extends StatelessWidget {
   void signUpUser() async {
     String email = emailController.text.trim(); 
     String password = passwordController.text.trim();
+    // Set a default username based on the email
+    String username = email.split('@')[0];
     try {
       List<String> signInMethods = await _auth.fetchSignInMethodsForEmail(email);
       if (signInMethods.isNotEmpty) {
@@ -63,6 +65,7 @@ class SignUpPage extends StatelessWidget {
         );
       await FirebaseFirestore.instance.collection('Users').doc(userCredential.user!.uid).set({
         'email': email, 
+        'username': username,
       });
       // User has signed up successfully
       print('User signed up: ${userCredential.user!.uid}');

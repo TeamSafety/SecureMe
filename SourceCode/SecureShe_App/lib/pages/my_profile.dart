@@ -29,7 +29,6 @@ class _MyProfileState extends State<MyProfile> {
       DocumentSnapshot<Map<String, dynamic>> snapshot =
           await FirebaseFirestore.instance.collection('Users').doc(user.uid).get();
 
-      // Check if the document exists before accessing its fields
       if (snapshot.exists) {
         setState(() {
           _usernameController.text = snapshot['username'];
@@ -41,21 +40,45 @@ class _MyProfileState extends State<MyProfile> {
     }
   }
 
+  Future<void> updateProfile() async {
+    User? user = _auth.currentUser;
+
+    if (user != null) {
+      try {
+        await FirebaseFirestore.instance.collection('Users').doc(user.uid).update({
+          'username': _usernameController.text,
+          'email': _emailController.text,
+        });
+      } catch (e) {
+        print('Error updating profile: $e');
+        // Handle error and provide user feedback
+      }
+    }
+  }
+
+  Future<void> updateEmail() async {
+    User? user = _auth.currentUser;
+
+    if (user != null) {
+      try {
+        await user.updateEmail(_emailController.text);
+      } catch (e) {
+        print('Error updating email: $e');
+        // Handle error and provide user feedback
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Profile'),
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Display user information here (username, email, etc.)
+            Text("Welcome ${_usernameController.text} "), 
             Text('Username: ${_usernameController.text}'),
             Text('Email: ${_emailController.text}'),
-
-            // A button to navigate to the Edit Info screen
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -65,7 +88,6 @@ class _MyProfileState extends State<MyProfile> {
                       usernameController: _usernameController,
                       emailController: _emailController,
                       onUpdate: () {
-                        // Update the profile information after editing
                         fetchUserProfile();
                       },
                     ),
@@ -74,15 +96,13 @@ class _MyProfileState extends State<MyProfile> {
               },
               child: const Text('Edit Info'),
             ),
-            // A Logout button
             ElevatedButton(
               onPressed: () async {
-                // Sign out the user
                 await _auth.signOut();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LoginPage(), 
+                    builder: (context) => LoginPage(),
                   ),
                 );
               },
@@ -94,6 +114,7 @@ class _MyProfileState extends State<MyProfile> {
     );
   }
 }
+
 
 class EditInfoScreen extends StatelessWidget {
   final TextEditingController usernameController;
@@ -107,7 +128,7 @@ class EditInfoScreen extends StatelessWidget {
     required this.onUpdate,
   }) : super(key: key);
 
-   void updateProfile() async {
+  void updateProfile() async {
     User? user = _auth.currentUser;
 
     if (user != null) {
@@ -115,6 +136,12 @@ class EditInfoScreen extends StatelessWidget {
         'username': usernameController.text,
         'email': emailController.text,
       });
+    }
+  }
+  Future<void> updateEmail() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      await user.updateEmail(emailController.text);
     }
   }
   @override
@@ -141,6 +168,7 @@ class EditInfoScreen extends StatelessWidget {
                 // Update the profile information
                 onUpdate();
                 updateProfile();
+                //updateEmail(); 
                 // Navigate back to the MyProfile screen
                 Navigator.pop(context);
               },
