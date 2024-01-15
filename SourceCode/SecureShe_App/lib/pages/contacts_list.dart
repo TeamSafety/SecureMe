@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:my_app/models/AppColors.dart';
 
 class ContactPage extends StatefulWidget {
   @override
@@ -34,9 +35,10 @@ class _ContactPageState extends State<ContactPage> {
                   children: [
                     Text(
                       contact['organization'],
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
+                        color: AppColors.secondary, 
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -46,10 +48,10 @@ class _ContactPageState extends State<ContactPage> {
                       },
                       child: Text(
                         'Phone: ${contact['phone'] ?? 'N/A'}',
-                        style: const TextStyle(
-                          // color: Colors.blue,
-                          decoration: TextDecoration.underline,
-                        ),
+                        // style: const TextStyle(
+                        //   // color: Colors.blue,
+                        //   decoration: TextDecoration.underline,
+                        // ),
                       ),
                     ),
                   ],
@@ -103,9 +105,10 @@ class _ContactPageState extends State<ContactPage> {
       children: [
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 26,
+            color: AppColors.accent, 
           ),
         ),
         const SizedBox(height: 8),
