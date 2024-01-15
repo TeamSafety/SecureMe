@@ -77,6 +77,7 @@ class _MyProfileState extends State<MyProfile> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text("Welcome ${_usernameController.text} "), 
+            const SizedBox(height:20), 
             Text('Username: ${_usernameController.text}'),
             Text('Email: ${_emailController.text}'),
             ElevatedButton(
@@ -96,6 +97,7 @@ class _MyProfileState extends State<MyProfile> {
               },
               child: const Text('Edit Info'),
             ),
+            const SizedBox(height: 20,), 
             ElevatedButton(
               onPressed: () async {
                 await _auth.signOut();

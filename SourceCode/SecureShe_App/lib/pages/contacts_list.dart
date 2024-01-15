@@ -1,7 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:my_app/models/AppColors.dart'; 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactPage extends StatefulWidget {
   @override
@@ -9,85 +8,112 @@ class ContactPage extends StatefulWidget {
 }
 
 class _ContactPageState extends State<ContactPage> {
-  late Map<String, dynamic> contactData;
+  late List<DocumentSnapshot> contacts = [];
 
   @override
   void initState() {
     super.initState();
-    contactData = {}; 
     loadContactData();
   }
 
   Future<void> loadContactData() async {
-    ByteData data = await rootBundle.load('localResources.json');
-    String jsonString = utf8.decode(data.buffer.asUint8List());
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('localResources').get();
     setState(() {
-      contactData = json.decode(jsonString);
+      contacts = querySnapshot.docs;
     });
   }
-  
-  Widget buildContactList(List<dynamic> contacts) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: contacts
-        .map((contact) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    contact['organization'],
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+
+  Widget buildContactList(List<DocumentSnapshot> contacts) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: contacts
+          .map((contact) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      contact['organization'],
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text('Phone: ${contact['phone'] ?? 'N/A'}'),
-                ],
-              ),
-            ))
-        .toList(),
-  );
-}
+                    const SizedBox(height: 4),
+                    GestureDetector(
+                      onTap: () {
+                        _makePhoneCall(contact['phone']);
+                      },
+                      child: Text(
+                        'Phone: ${contact['phone'] ?? 'N/A'}',
+                        style: const TextStyle(
+                          // color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ))
+          .toList(),
+    );
+  }
+
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (contactData.isEmpty) {
-      // Data is still loading, show a loading indicator or some other UI
-      return CircularProgressIndicator();
+    if (contacts == null) {
+      // Data is still loading, show a loading message or placeholder
+      return const Center(
+        child: Text(
+          'Loading contacts...',
+          style: TextStyle(fontSize: 18),
+        ),
+      );
     } else {
       // Data has been loaded, you can use it in your UI
       return Scaffold(
-        // appBar: AppBar(
-        //   title: const Text('Local Resources Contacts'),
-        // ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListView(
             children: [
-              Text("Emergency Contacts", 
-                style: TextStyle(
-                  color:AppColors.accent, 
-                  fontWeight: FontWeight.bold, 
-                  fontSize: 26, 
-                ), 
-              ), 
-              buildContactList(contactData['emergencyContacts']['helpLines']),
-              Text("Shelters", 
-                style: TextStyle(
-                  color:AppColors.accent, 
-                  fontWeight: FontWeight.bold, 
-                  fontSize: 26, 
-                ), 
-              ), 
-              buildContactList(contactData['shelters']),
-              // buildContactList(contactData['counsellingAndSupportServices']),
-
+              buildCategory("Emergency Contacts", contacts
+                  .where((contact) => contact['type'] == 'emergencyContacts')
+                  .toList()),
+              buildCategory("Shelters", contacts
+                  .where((contact) => contact['type'] == 'shelters')
+                  .toList()),
             ],
           ),
         ),
       );
     }
+  }
+
+  Widget buildCategory(String title, List<DocumentSnapshot> contacts) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 26,
+          ),
+        ),
+        const SizedBox(height: 8),
+        if (contacts.isNotEmpty)
+          buildContactList(contacts)
+        else
+          const Text('No contacts available.'),
+      ],
+    );
   }
 }
