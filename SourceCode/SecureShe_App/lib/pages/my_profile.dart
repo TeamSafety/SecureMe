@@ -1,22 +1,20 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-//TODO: please format the page! 
+import 'package:my_app/pages/login.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
-final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class MyProfile extends StatefulWidget {
-  const MyProfile({super.key});
+  const MyProfile({Key? key}) : super(key: key);
 
   @override
   _MyProfileState createState() => _MyProfileState();
 }
 
 class _MyProfileState extends State<MyProfile> {
-  String userEmail = "";
-  String username = "";
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   @override
   void initState() {
@@ -29,32 +27,17 @@ class _MyProfileState extends State<MyProfile> {
 
     if (user != null) {
       DocumentSnapshot<Map<String, dynamic>> snapshot =
-          await _firestore.collection('Users').doc(user.uid).get();
+          await FirebaseFirestore.instance.collection('Users').doc(user.uid).get();
 
+      // Check if the document exists before accessing its fields
       if (snapshot.exists) {
         setState(() {
-          userEmail = snapshot['email'];
-          username = snapshot['username'] ?? ''; // Get username if exists
+          _usernameController.text = snapshot['username'];
+          _emailController.text = snapshot['email'];
         });
       } else {
         print('Document does not exist.');
       }
-    }
-  }
-
-  Future<void> updateUserProfile(String newUsername) async {
-    User? user = _auth.currentUser;
-
-    if (user != null) {
-      // Update user profile in Firestore
-      await _firestore.collection('Users').doc(user.uid).update({
-        'username': newUsername,
-      });
-
-      // Update local state
-      setState(() {
-        username = newUsername;
-      });
     }
   }
 
@@ -64,65 +47,108 @@ class _MyProfileState extends State<MyProfile> {
       appBar: AppBar(
         title: const Text('My Profile'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Email: $userEmail',
-              style: const TextStyle(fontSize: 18.0),
-            ),
-            const SizedBox(height: 16.0),
-            Text(
-              'Username: $username',
-              style: const TextStyle(fontSize: 18.0),
-            ),
-            const SizedBox(height: 16.0),
+          children: <Widget>[
+            // Display user information here (username, email, etc.)
+            Text('Username: ${_usernameController.text}'),
+            Text('Email: ${_emailController.text}'),
+
+            // A button to navigate to the Edit Info screen
             ElevatedButton(
               onPressed: () {
-                _editUsernameDialog(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditInfoScreen(
+                      usernameController: _usernameController,
+                      emailController: _emailController,
+                      onUpdate: () {
+                        // Update the profile information after editing
+                        fetchUserProfile();
+                      },
+                    ),
+                  ),
+                );
               },
-              child: const Text('Edit Username'),
+              child: const Text('Edit Info'),
+            ),
+            // A Logout button
+            ElevatedButton(
+              onPressed: () async {
+                // Sign out the user
+                await _auth.signOut();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(), 
+                  ),
+                );
+              },
+              child: const Text('Logout'),
             ),
           ],
         ),
       ),
     );
   }
+}
 
-  Future<void> _editUsernameDialog(BuildContext context) async {
-    TextEditingController usernameController = TextEditingController();
+class EditInfoScreen extends StatelessWidget {
+  final TextEditingController usernameController;
+  final TextEditingController emailController;
+  final VoidCallback onUpdate;
 
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Edit Username'),
-          content: TextField(
-            controller: usernameController,
-            decoration: const InputDecoration(hintText: 'Enter new username'),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
+  const EditInfoScreen({
+    Key? key,
+    required this.usernameController,
+    required this.emailController,
+    required this.onUpdate,
+  }) : super(key: key);
+
+   void updateProfile() async {
+    User? user = _auth.currentUser;
+
+    if (user != null) {
+      await FirebaseFirestore.instance.collection('Users').doc(user.uid).update({
+        'username': usernameController.text,
+        'email': emailController.text,
+      });
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Edit Info'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              controller: usernameController,
+              decoration: const InputDecoration(labelText: 'Username'),
+            ),
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
             ElevatedButton(
-              onPressed: () {
-                String newUsername = usernameController.text.trim();
-                if (newUsername.isNotEmpty) {
-                  updateUserProfile(newUsername);
-                }
-                Navigator.of(context).pop();
+              onPressed: () async {
+                // Update the profile information
+                onUpdate();
+                updateProfile();
+                // Navigate back to the MyProfile screen
+                Navigator.pop(context);
               },
-              child: const Text('Save'),
+              child: const Text('Save Changes'),
             ),
           ],
-        );
-      },
+        ),
+      ),
     );
   }
 }
