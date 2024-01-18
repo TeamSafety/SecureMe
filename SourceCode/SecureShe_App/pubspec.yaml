@@ -30,7 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  flutter_map_location_marker: any
+  flutter_compass: '^0.8.0'
 
 
 
@@ -41,15 +42,9 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   firebase_auth: ^4.14.0
   firebase_core: ^2.22.0
-  cloud_firestore: ^4.12.2
   flutter_map: ^6.0.1
   url_launcher: ^6.2.1
   geolocator: ^10.1.0
-  flutter_map_location_marker: ^8.0.3
-  baseflow_plugin_template: ^2.1.2
-  latlong2: ^0.9.0
-  flutter_map_marker_popup: ^6.1.2
-  geocoding: ^2.1.1
   
   
 dev_dependencies:
