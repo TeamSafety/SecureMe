@@ -6,7 +6,7 @@ import 'package:my_app/models/input_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'main_page.dart';
-
+// for Charles: 
 //TODO: please add the error messages to the user when they they try to signup ie. the 'passwordErrorMessage'
 //TODO: please add the email error message so users can see it. 
 
