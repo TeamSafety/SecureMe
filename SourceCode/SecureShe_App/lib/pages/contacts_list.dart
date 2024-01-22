@@ -4,8 +4,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:my_app/models/AppColors.dart';
 /*
 TODO: 
-1. format the page correctly 
-2. add more cotacts 
+1. format the page correctly (ALMOST DONE)
+2. add more cotacts (DONE)
 3. search method to search the local resources in different ways like 
 according to the type of the contact, the urgency of your matter, type 
 of help you are looking for. 
@@ -18,6 +18,8 @@ class ContactPage extends StatefulWidget {
 
 class _ContactPageState extends State<ContactPage> {
   late List<DocumentSnapshot> contacts = [];
+  late List<DocumentSnapshot> originalContacts = [];
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -26,9 +28,10 @@ class _ContactPageState extends State<ContactPage> {
   }
 
   Future<void> loadContactData() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('localContacts').get();
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('localContacts').get();
     setState(() {
-      contacts = querySnapshot.docs;
+      contacts = originalContacts = querySnapshot.docs;
     });
   }
 
@@ -88,26 +91,47 @@ class _ContactPageState extends State<ContactPage> {
       return Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: ListView(
+          child: Column(
             children: [
-              buildCategory("HelpLines", contacts
-                  .where((contact) => contact['type'] == 'helpLines')
-                  .toList()),
-              buildCategory("Shelters", contacts
-                  .where((contact) => contact['type'] == 'shelters')
-                  .toList()),
-              buildCategory("Emergency Contacts", contacts
-                  .where((contact) => contact['type'] == 'emergencyContacts')
-                  .toList()),
-              buildCategory("Counselling Services", contacts
-                  .where((contact) => contact['type'] == 'counsellingAndSupportServices')
-                  .toList()),
+              TextField(
+                controller: searchController,
+                onChanged: (value) {
+                  filterContacts(value);
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Search contacts',
+                  prefixIcon: Icon(Icons.search),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: ListView(
+                  children: [
+                    buildCategory("HelpLines", contacts
+                        .where((contact) => contact['type'] == 'helpLines')
+                        .toList()),
+                    buildCategory("Shelters", contacts
+                        .where((contact) => contact['type'] == 'shelters')
+                        .toList()),
+                    buildCategory("Emergency Contacts", contacts
+                        .where((contact) =>
+                            contact['type'] == 'emergencyContacts')
+                        .toList()),
+                    buildCategory("Counselling Services", contacts
+                        .where((contact) =>
+                            contact['type'] ==
+                            'counsellingAndSupportServices')
+                        .toList()),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       );
     }
   }
+
 
   Widget buildCategory(String title, List<DocumentSnapshot> contacts) {
     return Column(
@@ -129,4 +153,16 @@ class _ContactPageState extends State<ContactPage> {
       ],
     );
   }
+  void filterContacts(String searchTerm) {
+    setState(() {
+      contacts = originalContacts
+          .where((contact) =>
+              contact['organization']
+                  .toLowerCase()
+                  .contains(searchTerm.toLowerCase()) ||
+              contact['type'].toLowerCase().contains(searchTerm.toLowerCase()))
+          .toList();
+    });
+  }
+
 }
