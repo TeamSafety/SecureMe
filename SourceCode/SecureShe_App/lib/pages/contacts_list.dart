@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:my_app/models/AppColors.dart';
-
+/*
+TODO: 
+1. format the page correctly (ALMOST DONE)
+2. add more cotacts (DONE)
+3. search method to search the local resources in different ways like 
+according to the type of the contact, the urgency of your matter, type 
+of help you are looking for. 
+4. add the ability to add the contacts to your own list of contacts 
+*/ 
 class ContactPage extends StatefulWidget {
   @override
   _ContactPageState createState() => _ContactPageState();
@@ -10,6 +18,8 @@ class ContactPage extends StatefulWidget {
 
 class _ContactPageState extends State<ContactPage> {
   late List<DocumentSnapshot> contacts = [];
+  late List<DocumentSnapshot> originalContacts = [];
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -18,9 +28,10 @@ class _ContactPageState extends State<ContactPage> {
   }
 
   Future<void> loadContactData() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('localResources').get();
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('localContacts').get();
     setState(() {
-      contacts = querySnapshot.docs;
+      contacts = originalContacts = querySnapshot.docs;
     });
   }
 
@@ -36,7 +47,7 @@ class _ContactPageState extends State<ContactPage> {
                     Text(
                       contact['organization'],
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: AppColors.secondary, 
                       ),
@@ -48,10 +59,6 @@ class _ContactPageState extends State<ContactPage> {
                       },
                       child: Text(
                         'Phone: ${contact['phone'] ?? 'N/A'}',
-                        // style: const TextStyle(
-                        //   // color: Colors.blue,
-                        //   decoration: TextDecoration.underline,
-                        // ),
                       ),
                     ),
                   ],
@@ -84,20 +91,47 @@ class _ContactPageState extends State<ContactPage> {
       return Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: ListView(
+          child: Column(
             children: [
-              buildCategory("Emergency Contacts", contacts
-                  .where((contact) => contact['type'] == 'emergencyContacts')
-                  .toList()),
-              buildCategory("Shelters", contacts
-                  .where((contact) => contact['type'] == 'shelters')
-                  .toList()),
+              TextField(
+                controller: searchController,
+                onChanged: (value) {
+                  filterContacts(value);
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Search contacts',
+                  prefixIcon: Icon(Icons.search),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: ListView(
+                  children: [
+                    buildCategory("HelpLines", contacts
+                        .where((contact) => contact['type'] == 'helpLines')
+                        .toList()),
+                    buildCategory("Shelters", contacts
+                        .where((contact) => contact['type'] == 'shelters')
+                        .toList()),
+                    buildCategory("Emergency Contacts", contacts
+                        .where((contact) =>
+                            contact['type'] == 'emergencyContacts')
+                        .toList()),
+                    buildCategory("Counselling Services", contacts
+                        .where((contact) =>
+                            contact['type'] ==
+                            'counsellingAndSupportServices')
+                        .toList()),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       );
     }
   }
+
 
   Widget buildCategory(String title, List<DocumentSnapshot> contacts) {
     return Column(
@@ -107,7 +141,7 @@ class _ContactPageState extends State<ContactPage> {
           title,
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 26,
+            fontSize: 22,
             color: AppColors.accent, 
           ),
         ),
@@ -119,4 +153,16 @@ class _ContactPageState extends State<ContactPage> {
       ],
     );
   }
+  void filterContacts(String searchTerm) {
+    setState(() {
+      contacts = originalContacts
+          .where((contact) =>
+              contact['organization']
+                  .toLowerCase()
+                  .contains(searchTerm.toLowerCase()) ||
+              contact['type'].toLowerCase().contains(searchTerm.toLowerCase()))
+          .toList();
+    });
+  }
+
 }

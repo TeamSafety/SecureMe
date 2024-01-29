@@ -1,7 +1,8 @@
 {
   "emergencyContacts": {
-    "urgentCall": "911",
-    "helpLines": [
+    "urgentCall": "911" 
+  },
+  "helpLines": [
       {
         "organization": "Kids Help Phone",
         "hours": "24 hrs",
@@ -39,8 +40,7 @@
         "organization": "Social Services Child Protection Intake Line",
         "phone": "306-787-3760"
       }
-    ]
-  },
+  ], 
   "police": {
     "emergency": "911",
     "nonEmergency": "306-777-6500",

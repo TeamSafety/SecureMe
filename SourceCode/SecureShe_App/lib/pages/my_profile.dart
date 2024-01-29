@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/pages/login.dart';
 
-//TODO: please format the page! 
+//TODO: please format the page!  (For Charles)
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
