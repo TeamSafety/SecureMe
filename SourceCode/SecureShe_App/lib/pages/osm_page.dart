@@ -7,8 +7,6 @@ import 'package:geolocator/geolocator.dart';
 //import 'package:geolocator_apple/geolocator_apple.dart';
 //import 'package:geolocator_android/geolocator_android.dart';
 import 'dart:async';
-import 'dart:io' show Platform;
-import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 
 Future<Position> _determinePosition() async {
   bool serviceEnabled;
@@ -41,20 +39,20 @@ Future<Position> _determinePosition() async {
   // When we reach here, permissions are granted and we can
   // continue accessing the position of the device.
 
-  final LocationSettings locationSettings = LocationSettings(
+  /*final LocationSettings locationSettings = LocationSettings(
     accuracy: LocationAccuracy.high,
     distanceFilter: 100,
   );
   StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
           (Position? position) {
         print(position == null ? 'Unknown' : '${position.latitude.toString()}, ${position.longitude.toString()}');
-      });
+      });*/
 
   return await Geolocator.getCurrentPosition();
 }
 
 class MyMapOSM extends StatelessWidget {
-  
+
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
@@ -69,21 +67,21 @@ class MyMapOSM extends StatelessWidget {
           userAgentPackageName: 'com.example.app',
         ),
         // Additional layers or widgets can be added here
-        //CurrentLocationLayer(),
+        CurrentLocationLayer(),
         CurrentLocationLayer(
-          alignDirectionOnUpdate: AlignOnUpdate.always, // or AlignOnUpdate.once, AlignOnUpdate.never
-          alignPositionOnUpdate: AlignOnUpdate.always, // or AlignOnUpdate.once, AlignOnUpdate.never
-          style: const LocationMarkerStyle(
-            marker: DefaultLocationMarker(
+          followOnLocationUpdate: FollowOnLocationUpdate.always,
+          turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
+          style: LocationMarkerStyle(
+            marker: const DefaultLocationMarker(
               child: Icon(
                 Icons.navigation,
                 color: Colors.white,
               ),
             ),
-            markerSize: Size(40, 40),
+            markerSize: const Size(40, 40),
             markerDirection: MarkerDirection.heading,
           ),
-        ),
+        ), //CurrentLocationLayer
         RichAttributionWidget(
           attributions: [
             TextSourceAttribution(
