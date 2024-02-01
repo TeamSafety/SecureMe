@@ -39,20 +39,15 @@ Future<Position> _determinePosition() async {
   // When we reach here, permissions are granted and we can
   // continue accessing the position of the device.
 
-  /*final LocationSettings locationSettings = LocationSettings(
-    accuracy: LocationAccuracy.high,
-    distanceFilter: 100,
-  );
-  StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
-          (Position? position) {
-        print(position == null ? 'Unknown' : '${position.latitude.toString()}, ${position.longitude.toString()}');
-      });*/
-
   return await Geolocator.getCurrentPosition();
 }
 
-class MyMapOSM extends StatelessWidget {
+Future<Position?> grabLastLocation() async {
+  Position? position = await Geolocator.getLastKnownPosition();
+  return position;
+}
 
+class MyMapOSM extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
@@ -94,49 +89,3 @@ class MyMapOSM extends StatelessWidget {
     );
   }
 }
-
-/*Widget build() {
-  return CurrentLocationLayer(
-    followOnLocationUpdate: FollowOnLocationUpdate.always,
-    turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
-    style: LocationMarkerStyle(
-      marker: const DefaultLocationMarker(
-        child: Icon(
-          Icons.navigation,
-          color: Colors.white,
-        ),
-      ),
-      markerSize: const Size(40, 40),
-      markerDirection: MarkerDirection.heading,
-    ),
-  );
-}*/
-
-// ignore: use_key_in_widget_constructors
-/*class MyMapOSM extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return FlutterMap(
-      options: const MapOptions(
-        initialCenter: LatLng(50.4488, -104.6178),
-        initialZoom: 9.2,
-        interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
-      ),
-      children: [
-        TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'com.example.app',
-        ),
-        // Additional layers or widgets can be added here
-        RichAttributionWidget(
-          attributions: [
-            TextSourceAttribution(
-              'OpenStreetMap contributors',
-              onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}*/
