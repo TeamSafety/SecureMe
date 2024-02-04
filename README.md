@@ -1,5 +1,5 @@
 # SecureMe
-A mobile app that offers women (and others) the quickest and easiest means to reach to the nearest help when they are in danger or require support.
+SecureMe is a mobile application designed to provide a swift and convenient way for individuals, particularly women, to access immediate assistance in times of danger or when seeking support.
 
 # Team Members
 * Kristina Langgard: Database admin, Backend developer and Tester
