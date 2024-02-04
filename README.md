@@ -1,8 +1,8 @@
-# SecureShe
+# SecureMe
 A mobile app that offers women (and others) the quickest and easiest means to reach to the nearest help when they are in danger or require support.
 
 # Team Members
-*  Kristina Langgard: Database admin, Backend developer and Tester
+* Kristina Langgard: Database admin, Backend developer and Tester
 * Charles Kenneth Samonte: Front end developer, Tester and QA engineer
 * Kawthar Alkhateeb: Backend developer, Tester and Project manager
  
