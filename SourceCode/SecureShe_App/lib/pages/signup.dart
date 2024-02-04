@@ -66,6 +66,7 @@ class SignUpPage extends StatelessWidget {
       await FirebaseFirestore.instance.collection('Users').doc(userCredential.user!.uid).set({
         'email': email, 
         'username': username,
+        'uid': userCredential.user?.uid, 
       });
       // User has signed up successfully
       print('User signed up: ${userCredential.user!.uid}');
