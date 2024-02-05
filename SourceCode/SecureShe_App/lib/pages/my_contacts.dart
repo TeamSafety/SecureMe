@@ -21,10 +21,12 @@ class _MyContactsState extends State<MyContacts> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<PersonalContactModel> personalContacts = [];
   String errorMessage = "";
+  final TextEditingController _messageController = TextEditingController(); 
   @override
   void initState(){
     super.initState();
     getPersonalContacts(); 
+    getExistingMessages(); 
   }
   Future<void> getPersonalContacts() async {
     User? user = _auth.currentUser;
@@ -88,31 +90,117 @@ class _MyContactsState extends State<MyContacts> {
   }
 
   Column presetMessagesBuilder() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Preset Messages',
-          style: TextStyle(color: AppColors.secondary, fontSize: 16),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        const PresetMessage(
-            message:
-                "Hey I'm feeling unsafe right now! Please give me a call!"),
-        const SizedBox(
-          height: 8,
-        ),
-        const PresetMessage(
-            message:
-                "I'm lost! I'm sharing my location with you! Please let me know where to go!"),
-        const SizedBox(
-          height: 8,
-        ),
-      ],
-    );
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        'Preset Messages',
+        style: TextStyle(color: AppColors.secondary, fontSize: 16),
+      ),
+      const SizedBox(
+        height: 16,
+      ),
+      // Display existing preset messages
+      FutureBuilder<List<String>>(
+        future: getExistingMessages(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // Display existing messages
+            return Column(
+              children: [
+                for (String message in snapshot.data ?? [])
+                  PresetMessage(message: message),
+                const SizedBox(height: 8),
+              ],
+            );
+          }
+        },
+      ),
+      // Allow the user to add more messages
+      ElevatedButton(
+        onPressed: _showAddMessageDialog,
+        child: Text('Add Message'),
+      ),
+      const SizedBox(
+        height: 8,
+      ),
+    ],
+  );
+}
+
+// Retrieve existing preset messages from the database
+Future<List<String>> getExistingMessages() async {
+  User? user = _auth.currentUser;
+  List<String> messages = [];
+
+  if (user != null) {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+        .collection('Users')
+        .doc(user.uid)
+        .collection('messages')
+        .get();
+
+    messages = querySnapshot.docs
+        .map((doc) => doc.get('message') as String)
+        .toList();
   }
+
+  return messages;
+}
+
+// Method to show a dialog for adding a new preset message
+void _showAddMessageDialog() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Add Preset Message'),
+        content: TextField(
+          controller: _messageController,
+          decoration: const InputDecoration(labelText: 'Enter message'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              String message = _messageController.text.trim();
+              if (message.isNotEmpty) {
+                await addPresetMessage(message);
+                Navigator.pop(context);
+                _messageController.clear();
+                getExistingMessages(); 
+              }
+            },
+            child: const Text('Add'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+// Method to add a new preset message to the database
+Future<void> addPresetMessage(String message) async {
+  User? user = _auth.currentUser;
+  if (user != null) {
+    await _firestore
+        .collection('Users')
+        .doc(user.uid)
+        .collection('messages')
+        .add({
+      'message': message,
+    });
+  }
+  getExistingMessages(); 
+}
+
 
   Column communityContactsBuilder() {
     return Column(
