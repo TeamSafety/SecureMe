@@ -206,7 +206,7 @@ class _MyContactsState extends State<MyContacts> {
                         _usernameController.clear();
                       } else {
                         // Case where the contact is already in the list
-                        errorMessage = "You have alread added  this contact"; 
+                        errorMessage = "You have alread added this contact"; 
                       }
                     } else {
                       errorMessage = "Cannot find the username"; 

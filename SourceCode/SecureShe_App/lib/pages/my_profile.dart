@@ -52,8 +52,6 @@ class _MyProfileState extends State<MyProfile> {
         await FirebaseFirestore.instance.collection('Users').doc(user.uid).update({
           'username': _usernameController.text,
           'email': _emailController.text,
-          'emergencyContact': _emergencyContactController.text,
-          'emergencyMessage': _emergencyMessageController.text,
         });
       } catch (e) {
         print('Error updating profile: $e');

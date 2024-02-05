@@ -19,6 +19,7 @@ class HomePage extends StatelessWidget {
     if (isConfigured) {
       // Proceed with sending the emergency message
       _sendEmergencyMessage();
+
     } else {
       // Guide the user to the profile page for configuration
       _showConfigurationGuidance(context);
@@ -27,7 +28,6 @@ class HomePage extends StatelessWidget {
 
   Future<bool> _checkSOSConfiguration() async {
     User? user = _auth.currentUser;
-
     if (user != null) {
       try {
         DocumentSnapshot<Map<String, dynamic>> snapshot =
@@ -35,15 +35,6 @@ class HomePage extends StatelessWidget {
 
         if (snapshot.exists) {
           bool isConfigured = snapshot['SOSConfigured'] ?? false;
-
-          if (isConfigured) {
-            List<String> emergencyContacts = List<String>.from(snapshot['emergencyContact'] ?? []);
-            String emergencyMessage = snapshot['emergencyMessage'] ?? '';
-
-            // For debugging purposes 
-            print('Emergency Contacts: $emergencyContacts');
-            print('Emergency Message: $emergencyMessage');
-          }
           return isConfigured;
         }
       } catch (e) {
@@ -58,6 +49,7 @@ class HomePage extends StatelessWidget {
     // Implement logic to send the emergency message
     // This can involve using the user's configured emergency contacts and message
     // Make sure to handle security and privacy considerations
+    // we need to navigate to a page where it allows the user to send an I'm safe message when they are save
   }
 
   void _showConfigurationGuidance(BuildContext context) {
@@ -71,7 +63,6 @@ class HomePage extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                // Navigate the user to the profile page
                 Navigator.pushNamed(context, 'package:my_app/pages/my_profile.dart'); 
               },
               child: Text('Go to Profile'),
@@ -104,7 +95,7 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                // TODO: Navigate to the SOS page or trigger SOS action
+                _handleSOSButtonPress(context); 
               },
               child: const Text('SOS'),
             ),

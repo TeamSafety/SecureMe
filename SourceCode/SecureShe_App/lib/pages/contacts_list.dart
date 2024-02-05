@@ -60,6 +60,9 @@ class _ContactPageState extends State<ContactPage> {
                       },
                       child: Text(
                         'Phone: ${contact['phone'] ?? 'N/A'}',
+                        style: const TextStyle(
+                          decoration: TextDecoration.underline,
+                        ),
                       ),
                     ),
                   ],

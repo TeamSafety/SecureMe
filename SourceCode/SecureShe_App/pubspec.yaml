@@ -50,6 +50,7 @@ dependencies:
   flutter_map_marker_popup: ^6.1.2
   geocoding: ^2.1.1
   flutter_compass: ^0.8.0
+  firebase_messaging: ^14.7.10
   
 dev_dependencies:
   flutter_test:
