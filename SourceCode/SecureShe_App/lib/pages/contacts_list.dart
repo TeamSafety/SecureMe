@@ -8,8 +8,9 @@ TODO:
 2. add more cotacts (DONE)
 3. search method to search the local resources in different ways like 
 according to the type of the contact, the urgency of your matter, type 
-of help you are looking for. 
-4. add the ability to add the contacts to your own list of contacts 
+of help you are looking for (DONE)
+4. add the ability to add the contacts to your own list of contacts (Next up)
+5. admin and user roles (Next up)
 */ 
 class ContactPage extends StatefulWidget {
   @override
