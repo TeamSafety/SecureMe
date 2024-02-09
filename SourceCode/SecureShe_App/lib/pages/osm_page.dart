@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 //import 'package:geolocator_apple/geolocator_apple.dart';
 //import 'package:geolocator_android/geolocator_android.dart';
 import 'dart:async';
+import 'package:my_app/models/AppColors.dart';
 
 Future<Position> _determinePosition() async {
   bool serviceEnabled;
@@ -47,6 +48,25 @@ Future<Position?> grabLastLocation() async {
   return position;
 }
 
+void placeMarker(lat, long, name) {
+  MarkerLayer(
+    markers: [
+      Marker(
+        point: LatLng(lat, long),
+        child: Column(
+          children: <Widget>[
+            Icon(Icons.location_on, color: AppColors.accent, shadows: <Shadow>[Shadow(color: Colors.white, blurRadius: 15.0)], size: 30.0),
+            FittedBox(
+              fit: BoxFit.cover,
+              child: Text(name),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
+
 class MyMapOSM extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -61,13 +81,34 @@ class MyMapOSM extends StatelessWidget {
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           userAgentPackageName: 'com.example.app',
         ),
-        // Additional layers or widgets can be added here
+        MarkerLayer(
+          markers: [
+            Marker(
+              point: LatLng(50.450840, -104.619410),
+              child: Wrap(
+                children: <Widget>[
+                  Icon(
+                    Icons.location_on,
+                    color: AppColors.accent,
+                    shadows: <Shadow>[Shadow(color: Colors.white, blurRadius: 15.0)],
+                    size: 30.0
+                  ),
+                  FittedBox(
+                    fit: BoxFit.cover,
+                      child: Text("Sofia House"),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
         CurrentLocationLayer(),
         CurrentLocationLayer(
-          followOnLocationUpdate: FollowOnLocationUpdate.always,
+          followOnLocationUpdate: FollowOnLocationUpdate.never,
           turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
           style: LocationMarkerStyle(
-            marker: const DefaultLocationMarker(
+            marker: DefaultLocationMarker(
+              color: AppColors.accent, //(0xffFF8D83),
               child: Icon(
                 Icons.navigation,
                 color: Colors.white,
