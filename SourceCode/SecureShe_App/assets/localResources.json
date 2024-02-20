@@ -44,7 +44,10 @@
   "police": {
     "emergency": "911",
     "nonEmergency": "306-777-6500",
-    "victimServices": "306-777-8660"
+    "victimServices": "306-777-8660",
+    "address": "1717 Saskatchewan Drive Regina, SK S4P 2E2",
+    "latitude": 50.451750,
+    "longitude": -104.605310
   },
   "legal": {
     "familyLawSaskatchewan": "Legal Aid Regina Office",
@@ -63,7 +66,10 @@
     },
     {
       "organization": "Salvation Army",
-      "phone": "306-569-6088"
+      "phone": "306-569-6088",
+      "address": "2929 26 Ave, Regina, SK S4S 7A7",
+      "latitude": 50.416950,
+      "longitude": -104.623500
     },
     {
       "organization": "Sofia House",
@@ -71,7 +77,10 @@
     },
     {
       "organization": "Souls Harbour Men's Shelter",
-      "phone": "306-543-0011"
+      "phone": "306-543-0011",
+      "address": "1632 Angus St, Regina, SK S4T 1Z2",
+      "latitude": 50.452810,
+      "longitude": -104.619690
     },
     {
       "organization": "Wish Safe House",
