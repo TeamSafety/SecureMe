@@ -1,19 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:my_app/models/community_contact.dart';
-//import 'package:url_launcher/url_launcher.dart';
 import 'package:my_app/models/AppVars.dart';
 
-/*
-TODO: 
-1. format the page correctly (ALMOST DONE)
-2. add more cotacts (DONE)
-3. search method to search the local resources in different ways like 
-according to the type of the contact, the urgency of your matter, type 
-of help you are looking for (DONE)
-4. add the ability to add the contacts to your own list of contacts (Next up)
-5. admin and user roles (Next up)
-*/
 class ContactPage extends StatefulWidget {
   @override
   _ContactPageState createState() => _ContactPageState();

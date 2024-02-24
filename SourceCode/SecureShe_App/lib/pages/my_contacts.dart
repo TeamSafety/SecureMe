@@ -118,47 +118,48 @@ class _MyContactsState extends State<MyContacts> {
   }
 
   Column presetMessagesBuilder() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Preset Messages',
-          style: TextStyle(color: AppVars.secondary, fontSize: 16),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        // Display existing preset messages
-        FutureBuilder<List<String>>(
-          future: getExistingMessages(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              // Display existing messages
-              return Column(
-                children: [
-                  for (String message in snapshot.data ?? [])
-                    PresetMessage(message: message),
-                  const SizedBox(height: 8),
-                ],
-              );
-            }
-          },
-        ),
-        // Allow the user to add more messages
-        ElevatedButton(
-          onPressed: _showAddMessageDialog,
-          child: Text('Add Message'),
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-      ],
-    );
-  }
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        'Preset Messages',
+        style: TextStyle(color: AppVars.secondary, fontSize: 16),
+      ),
+      const SizedBox(
+        height: 16,
+      ),
+      // Display existing preset messages
+      FutureBuilder<List<String>>(
+        future: getExistingMessages(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // Display existing messages
+            return Column(
+              children: [
+                for (String message in snapshot.data ?? [])
+                  PresetMessage(message: message),
+                const SizedBox(height: 8),
+              ],
+            );
+          }
+        },
+      ),
+      // Allow the user to add more messages
+      ElevatedButton(
+        onPressed: _showAddMessageDialog,
+        child: Text('Add Message'),
+        
+      ),
+      const SizedBox(
+        height: 8,
+      ),
+    ],
+  );
+}
 
 // Retrieve existing preset messages from the database
   Future<List<String>> getExistingMessages() async {
