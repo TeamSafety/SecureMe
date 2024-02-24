@@ -65,28 +65,50 @@ class _MyContactsState extends State<MyContacts> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 24,
-                ),
-                personalContactsBuilder(),
-                const SizedBox(
-                  height: 24,
-                ),
-                communityContactsBuilder(),
-                const SizedBox(
-                  height: 24,
-                ),
-                presetMessagesBuilder(),
-                const SizedBox(
-                  height: 24,
-                ),
-              ],
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          // appBar: AppBar(
+          //   bottom: const TabBar(
+          //     tabs: [
+          //       Tab(
+          //         text: "Personal Contacts",
+          //       ),
+          //       Tab(
+          //         text: "Community Contacts",
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          // body: TabBarView(children: [
+          //   Container(
+          //     margin: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+          //     child: personalContactsBuilder(),
+          //   ),
+          //   communityContactsBuilder(),
+          // ]),
+          body: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  personalContactsBuilder(),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  communityContactsBuilder(),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  presetMessagesBuilder(),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
