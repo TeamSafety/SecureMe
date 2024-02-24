@@ -132,6 +132,7 @@ class _ContactPageState extends State<ContactPage> {
           buildContactList(contacts)
         else
           const Text('No contacts available.'),
+        const SizedBox(height: 24),
       ],
     );
   }

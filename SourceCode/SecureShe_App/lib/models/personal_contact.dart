@@ -10,8 +10,8 @@ class PersonalContact extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return // CONTACT ROW
-        Container(
+    // CONTACT ROW
+    return Container(
       width: double.infinity,
       height: 80,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),

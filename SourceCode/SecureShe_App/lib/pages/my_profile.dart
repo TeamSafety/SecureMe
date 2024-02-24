@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/pages/login.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -92,69 +93,91 @@ class _MyProfileState extends State<MyProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text("Welcome ${_usernameController.text} "),
-            const SizedBox(height: 20),
-            Text('Username: ${_usernameController.text}'),
-            Text('Email: ${_emailController.text}'),
-
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditInfoScreen(
-                      usernameController: _usernameController,
-                      emailController: _emailController,
-                      onUpdate: () {
-                        fetchUserProfile();
-                      },
-                    ),
+      body: Row(
+        children: [
+          // PROFILE PIC
+          AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              height: 10,
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppVars.secondary.withOpacity(0.3),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2.0),
                   ),
-                );
-              },
-              child: const Text('Edit Info'),
+                ],
+              ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            // SOS Button Configuration UI
-            TextField(
-              controller: _emergencyContactController,
-              decoration: const InputDecoration(labelText: 'Emergency Contact'),
-            ),
-            TextField(
-              controller: _emergencyMessageController,
-              decoration: const InputDecoration(labelText: 'Emergency Message'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                await updateProfile();
-                emergencySOSUpdate();
-              },
-              child: const Text('Update SOS Emergency info'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                await _auth.signOut();
-                // ignore: use_build_context_synchronously
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
-                  ),
-                );
-              },
-              child: const Text('Logout'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
+      // body: Center(
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: <Widget>[
+      //       Text("Welcome ${_usernameController.text} "),
+      //       const SizedBox(height: 20),
+      //       Text('Username: ${_usernameController.text}'),
+      //       Text('Email: ${_emailController.text}'),
+
+      //       ElevatedButton(
+      //         onPressed: () {
+      //           Navigator.push(
+      //             context,
+      //             MaterialPageRoute(
+      //               builder: (context) => EditInfoScreen(
+      //                 usernameController: _usernameController,
+      //                 emailController: _emailController,
+      //                 onUpdate: () {
+      //                   fetchUserProfile();
+      //                 },
+      //               ),
+      //             ),
+      //           );
+      //         },
+      //         child: const Text('Edit Info'),
+      //       ),
+      //       const SizedBox(
+      //         height: 20,
+      //       ),
+      //       // SOS Button Configuration UI
+      //       TextField(
+      //         controller: _emergencyContactController,
+      //         decoration: const InputDecoration(labelText: 'Emergency Contact'),
+      //       ),
+      //       TextField(
+      //         controller: _emergencyMessageController,
+      //         decoration: const InputDecoration(labelText: 'Emergency Message'),
+      //       ),
+      //       const SizedBox(height: 20),
+      //       ElevatedButton(
+      //         onPressed: () async {
+      //           await updateProfile();
+      //           emergencySOSUpdate();
+      //         },
+      //         child: const Text('Update SOS Emergency info'),
+      //       ),
+      //       const SizedBox(height: 20),
+      //       ElevatedButton(
+      //         onPressed: () async {
+      //           await _auth.signOut();
+      //           // ignore: use_build_context_synchronously
+      //           Navigator.push(
+      //             context,
+      //             MaterialPageRoute(
+      //               builder: (context) => LoginPage(),
+      //             ),
+      //           );
+      //         },
+      //         child: const Text('Logout'),
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 
