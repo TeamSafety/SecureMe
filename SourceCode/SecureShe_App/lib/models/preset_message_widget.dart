@@ -16,12 +16,12 @@ class PresetMessage extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: AppColors.secondary.withOpacity(0.10),
+            color: AppVars.secondary.withOpacity(0.10),
             blurRadius: 4,
             offset: const Offset(0, 2),
           )
         ],
-        color: AppColors.primary,
+        color: AppVars.primary,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -33,7 +33,7 @@ class PresetMessage extends StatelessWidget {
             child: Text(
               message,
               style: TextStyle(
-                  color: AppColors.secondary.withOpacity(0.8), fontSize: 12),
+                  color: AppVars.secondary.withOpacity(0.8), fontSize: 12),
             ),
           ),
           const SizedBox(
@@ -44,7 +44,7 @@ class PresetMessage extends StatelessWidget {
               height: 35,
               width: 35,
               decoration: BoxDecoration(
-                color: AppColors.accent.withOpacity(0.09),
+                color: AppVars.accent.withOpacity(0.09),
                 borderRadius: BorderRadius.circular(5),
               ),
               child: Column(
@@ -57,8 +57,7 @@ class PresetMessage extends StatelessWidget {
                   Text(
                     "Send to",
                     style: TextStyle(
-                        fontSize: 6,
-                        color: AppColors.secondary.withOpacity(0.8)),
+                        fontSize: 6, color: AppVars.secondary.withOpacity(0.8)),
                   )
                 ],
               ),

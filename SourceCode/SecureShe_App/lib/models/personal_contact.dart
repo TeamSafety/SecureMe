@@ -1,95 +1,158 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:my_app/models/AppColors.dart';
 
 class PersonalContact extends StatelessWidget {
-  final String initialsTemp;
   final String contactName;
   const PersonalContact({
     super.key,
     required this.contactName,
-    required this.initialsTemp,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
+    return // CONTACT ROW
+        Container(
+      width: double.infinity,
+      height: 90,
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       decoration: BoxDecoration(
+        color: AppVars.primary,
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
         boxShadow: [
           BoxShadow(
-            color: AppColors.secondary.withOpacity(0.10),
+            color: AppVars.secondary.withOpacity(0.1),
             blurRadius: 4,
-            offset: const Offset(0, 2),
-          )
+            offset: const Offset(0, 2.0),
+          ),
         ],
-        color: AppColors.primary,
-        borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: 25,
-            backgroundColor: Colors.brown.shade800,
-            child: Text(initialsTemp),
-          ),
-          const SizedBox(
-            width: 8,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                contactName,
-                style: TextStyle(
-                  color: AppColors.secondary.withOpacity(0.8),
-                  fontSize: 14,
+          // PROFILE PIC
+          AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              height: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(100),
                 ),
-              ),
-              const SizedBox(
-                height: 5,
-                width: 8,
-              ),
-              Row(
-                children: [
-                  contactButton("assets/icons/locate_icon.svg", "Locate"),
-                  const SizedBox(width: 8),
-                  contactButton("assets/icons/send_icon.svg", "Quick SMS"),
-                  const SizedBox(width: 8),
-                  contactButton("assets/icons/Phone_light.svg", "Call"),
-                  const SizedBox(width: 8),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppVars.secondary.withOpacity(0.3),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2.0),
+                  ),
                 ],
-              )
-            ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  contactName,
+                  style: TextStyle(
+                    color: AppVars.secondary,
+                    fontSize: AppVars.textTitle,
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    children: [
+                      // CONTACT BUTTON
+                      GestureDetector(
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppVars.accent,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                              border: Border.all(color: Colors.white),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppVars.secondary.withOpacity(0.3),
+                                  blurRadius: 2,
+                                  offset: const Offset(0, 2.0),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.map,
+                              color: AppVars.primary,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      // CONTACT BUTTON
+                      GestureDetector(
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppVars.primary,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                              border: Border.all(
+                                  color: AppVars.secondary.withOpacity(0.2)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppVars.secondary.withOpacity(0.2),
+                                  blurRadius: 2,
+                                  offset: const Offset(0, 2.0),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.message,
+                              color: AppVars.accent,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8), // CONTACT BUTTON
+                      GestureDetector(
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppVars.primary,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                              border: Border.all(
+                                  color: AppVars.secondary.withOpacity(0.2)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppVars.secondary.withOpacity(0.2),
+                                  blurRadius: 2,
+                                  offset: const Offset(0, 2.0),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.phone_callback,
+                              color: AppVars.accent,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
-      ),
-    );
-  }
-
-  GestureDetector contactButton(iconPath, caption) {
-    return GestureDetector(
-      child: Container(
-        height: 35,
-        width: 35,
-        decoration: BoxDecoration(
-          color: AppColors.accent.withOpacity(0.09),
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Column(
-          children: [
-            SvgPicture.asset(
-              iconPath,
-              height: 25,
-              width: 25,
-            ),
-            Text(
-              caption,
-              style: TextStyle(
-                  fontSize: 6, color: AppColors.secondary.withOpacity(0.8)),
-            )
-          ],
-        ),
       ),
     );
   }

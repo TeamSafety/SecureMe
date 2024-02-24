@@ -9,6 +9,7 @@ import 'package:my_app/pages/signup.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
+
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
   @override
@@ -36,11 +37,13 @@ class _LoginPageState extends State<LoginPage> {
         errorMessage = '';
         errorFontSize = 0;
       });
-         // Navigate to another page (e.g., Home page) on successful sign-in
+      // Navigate to another page (e.g., Home page) on successful sign-in
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainPage()), // Replace YourNextPage with the actual page you want to navigate to
+        MaterialPageRoute(
+            builder: (context) =>
+                const MainPage()), // Replace YourNextPage with the actual page you want to navigate to
       );
     } on FirebaseAuthException catch (e) {
       // Handle errors
@@ -67,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Text(
                   "Sign In",
                   style: TextStyle(
-                    color: AppColors.secondary,
+                    color: AppVars.secondary,
                     fontSize: 50,
                   ),
                 ),
@@ -107,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                     Text(
                       "Forgot Password",
                       style: TextStyle(
-                        color: AppColors.accent,
+                        color: AppVars.accent,
                         fontSize: 12,
                       ),
                     ),
@@ -131,11 +134,11 @@ class _LoginPageState extends State<LoginPage> {
                   horizontal: 20,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.accent,
+                  color: AppVars.accent,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.secondary.withOpacity(0.25),
+                      color: AppVars.secondary.withOpacity(0.25),
                       blurRadius: 4,
                       offset: const Offset(0, 4),
                     )
@@ -146,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text(
                     "Sign In",
                     style: TextStyle(
-                      color: AppColors.primary,
+                      color: AppVars.primary,
                       fontSize: 24,
                     ),
                   ),
@@ -158,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Divider(
-                  color: AppColors.secondary.withOpacity(0.6),
+                  color: AppVars.secondary.withOpacity(0.6),
                   thickness: 1,
                 ),
               ),
@@ -171,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                   "Don't have an account?",
                   style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.secondary.withOpacity(0.5),
+                    color: AppVars.secondary.withOpacity(0.5),
                   ),
                 ),
               ),
@@ -182,14 +185,17 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: Alignment.center,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignUpPage(context:context)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                SignUpPage(context: context)));
                   },
                   child: Text(
                     "Sign Up",
                     style: TextStyle(
                       fontSize: 16,
-                      color: AppColors.accent,
+                      color: AppVars.accent,
                     ),
                   ),
                 ),
