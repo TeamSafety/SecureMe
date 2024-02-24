@@ -23,7 +23,7 @@ class InputField extends StatelessWidget {
         Text(
           headerText,
           style: TextStyle(
-            color: AppColors.secondary.withOpacity(0.6),
+            color: AppVars.secondary.withOpacity(0.6),
             fontSize: 24,
           ),
         ),
@@ -34,10 +34,10 @@ class InputField extends StatelessWidget {
           height: 30,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: AppColors.primary,
+            color: AppVars.primary,
             boxShadow: [
               BoxShadow(
-                  color: AppColors.accent.withOpacity(0.8),
+                  color: AppVars.accent.withOpacity(0.8),
                   blurRadius: 2,
                   offset: const Offset(0, 4))
             ],

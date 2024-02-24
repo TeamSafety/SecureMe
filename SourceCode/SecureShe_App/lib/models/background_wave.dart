@@ -22,7 +22,7 @@ class BackgroundWave extends StatelessWidget {
             child: ClipPath(
               clipper: WaveClipper(),
               child: Container(
-                color: AppColors.accent,
+                color: AppVars.accent,
                 height: height,
               ),
             ),
@@ -30,7 +30,7 @@ class BackgroundWave extends StatelessWidget {
           ClipPath(
             clipper: WaveClipper(),
             child: Container(
-              color: AppColors.accent,
+              color: AppVars.accent,
               height: height - 5,
             ),
           ),

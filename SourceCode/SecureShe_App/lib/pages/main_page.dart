@@ -17,11 +17,11 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   List pages = [
-    ContactPage(), 
-    MyContacts(), 
+    ContactPage(),
+    MyContacts(),
     HomePage(),
     MyMapOSM(),
-    MyProfile(),  
+    MyProfile(),
   ];
 
   int _currentIndex = 2;
@@ -36,7 +36,7 @@ class _MainPageState extends State<MainPage> {
     return SafeArea(
       child: Scaffold(
         body: pages[_currentIndex],
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppVars.primary,
         bottomNavigationBar: _bottomNavigationBar(),
       ),
     );
@@ -63,7 +63,7 @@ class _MainPageState extends State<MainPage> {
           height: 65,
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
-            backgroundColor: AppColors.primary,
+            backgroundColor: AppVars.primary,
             onTap: onTap,
             unselectedFontSize: 0,
             selectedFontSize: 0,
@@ -82,8 +82,8 @@ class _MainPageState extends State<MainPage> {
                     height: 30,
                     colorFilter: ColorFilter.mode(
                         _currentIndex == 0
-                            ? AppColors.accent
-                            : AppColors.secondary.withOpacity(0.6),
+                            ? AppVars.accent
+                            : AppVars.secondary.withOpacity(0.6),
                         BlendMode.srcIn),
                   ),
                 ),
@@ -96,8 +96,8 @@ class _MainPageState extends State<MainPage> {
                   height: 30,
                   colorFilter: ColorFilter.mode(
                       _currentIndex == 1
-                          ? AppColors.accent
-                          : AppColors.secondary.withOpacity(0.6),
+                          ? AppVars.accent
+                          : AppVars.secondary.withOpacity(0.6),
                       BlendMode.srcIn),
                 ),
               ),
@@ -105,7 +105,7 @@ class _MainPageState extends State<MainPage> {
                 label: 'Home',
                 icon: Container(
                   decoration: BoxDecoration(
-                      color: AppColors.accent, shape: BoxShape.circle),
+                      color: AppVars.accent, shape: BoxShape.circle),
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: SvgPicture.asset(
@@ -113,7 +113,7 @@ class _MainPageState extends State<MainPage> {
                       width: 30,
                       height: 30,
                       colorFilter: ColorFilter.mode(
-                        AppColors.primary,
+                        AppVars.primary,
                         BlendMode.srcIn,
                       ),
                     ),
@@ -128,8 +128,8 @@ class _MainPageState extends State<MainPage> {
                   height: 30,
                   colorFilter: ColorFilter.mode(
                       _currentIndex == 3
-                          ? AppColors.accent
-                          : AppColors.secondary.withOpacity(0.6),
+                          ? AppVars.accent
+                          : AppVars.secondary.withOpacity(0.6),
                       BlendMode.srcIn),
                 ),
               ),
@@ -141,8 +141,8 @@ class _MainPageState extends State<MainPage> {
                   height: 30,
                   colorFilter: ColorFilter.mode(
                       _currentIndex == 4
-                          ? AppColors.accent
-                          : AppColors.secondary.withOpacity(0.6),
+                          ? AppVars.accent
+                          : AppVars.secondary.withOpacity(0.6),
                       BlendMode.srcIn),
                 ),
               ),

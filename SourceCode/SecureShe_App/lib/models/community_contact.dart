@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/AppColors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class PersonalContact extends StatelessWidget {
+class CommunityContact extends StatelessWidget {
   final String contactName;
-  const PersonalContact({
+  final String phoneNumber;
+  const CommunityContact({
     super.key,
     required this.contactName,
+    required this.phoneNumber,
   });
 
   @override
@@ -35,9 +38,9 @@ class PersonalContact extends StatelessWidget {
             child: Container(
               height: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Colors.grey,
                 borderRadius: const BorderRadius.all(
-                  Radius.circular(100),
+                  Radius.circular(10),
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -84,42 +87,17 @@ class PersonalContact extends StatelessWidget {
                               ],
                             ),
                             child: Icon(
-                              Icons.map,
+                              Icons.add,
                               color: AppVars.primary,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      // CONTACT BUTTON
-                      GestureDetector(
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppVars.primary,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                              border: Border.all(
-                                  color: AppVars.secondary.withOpacity(0.2)),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppVars.secondary.withOpacity(0.2),
-                                  blurRadius: 2,
-                                  offset: const Offset(0, 2.0),
-                                ),
-                              ],
-                            ),
-                            child: Icon(
-                              Icons.message,
-                              color: AppVars.accent,
                             ),
                           ),
                         ),
                       ),
                       const SizedBox(width: 8), // CONTACT BUTTON
                       GestureDetector(
+                        onTap: () {
+                          _makePhoneCall(phoneNumber);
+                        },
                         child: AspectRatio(
                           aspectRatio: 1,
                           child: Container(
@@ -146,6 +124,34 @@ class PersonalContact extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
+                      // CONTACT BUTTON
+                      GestureDetector(
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppVars.primary,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                              border: Border.all(
+                                  color: AppVars.secondary.withOpacity(0.2)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppVars.secondary.withOpacity(0.2),
+                                  blurRadius: 2,
+                                  offset: const Offset(0, 2.0),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.map,
+                              color: AppVars.accent,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
                     ],
                   ),
                 ),
@@ -156,4 +162,12 @@ class PersonalContact extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _makePhoneCall(String phoneNumber) async {
+  final Uri launchUri = Uri(
+    scheme: 'tel',
+    path: phoneNumber,
+  );
+  await launchUrl(launchUri);
 }

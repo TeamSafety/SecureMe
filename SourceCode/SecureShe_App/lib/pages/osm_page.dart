@@ -55,7 +55,12 @@ void placeMarker(lat, long, name) {
         point: LatLng(lat, long),
         child: Column(
           children: <Widget>[
-            Icon(Icons.location_on, color: AppColors.accent, shadows: <Shadow>[Shadow(color: Colors.white, blurRadius: 15.0)], size: 30.0),
+            Icon(Icons.location_on,
+                color: AppVars.accent,
+                shadows: <Shadow>[
+                  Shadow(color: Colors.white, blurRadius: 15.0)
+                ],
+                size: 30.0),
             FittedBox(
               fit: BoxFit.cover,
               child: Text(name),
@@ -87,15 +92,15 @@ class MyMapOSM extends StatelessWidget {
               point: LatLng(50.450840, -104.619410),
               child: Wrap(
                 children: <Widget>[
-                  Icon(
-                    Icons.location_on,
-                    color: AppColors.accent,
-                    shadows: <Shadow>[Shadow(color: Colors.white, blurRadius: 15.0)],
-                    size: 30.0
-                  ),
+                  Icon(Icons.location_on,
+                      color: AppVars.accent,
+                      shadows: <Shadow>[
+                        Shadow(color: Colors.white, blurRadius: 15.0)
+                      ],
+                      size: 30.0),
                   FittedBox(
                     fit: BoxFit.cover,
-                      child: Text("Sofia House"),
+                    child: Text("Sofia House"),
                   ),
                 ],
               ),
@@ -108,7 +113,7 @@ class MyMapOSM extends StatelessWidget {
           turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
           style: LocationMarkerStyle(
             marker: DefaultLocationMarker(
-              color: AppColors.accent, //(0xffFF8D83),
+              color: AppVars.accent, //(0xffFF8D83),
               child: Icon(
                 Icons.navigation,
                 color: Colors.white,
@@ -122,7 +127,8 @@ class MyMapOSM extends StatelessWidget {
           attributions: [
             TextSourceAttribution(
               'OpenStreetMap contributors',
-              onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
+              onTap: () =>
+                  launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
             ),
           ],
         ),

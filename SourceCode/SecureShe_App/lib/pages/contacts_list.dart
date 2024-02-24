@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:my_app/models/community_contact.dart';
+//import 'package:url_launcher/url_launcher.dart';
 import 'package:my_app/models/AppColors.dart';
+
 /*
 TODO: 
 1. format the page correctly (ALMOST DONE)
@@ -11,7 +13,7 @@ according to the type of the contact, the urgency of your matter, type
 of help you are looking for (DONE)
 4. add the ability to add the contacts to your own list of contacts (Next up)
 5. admin and user roles (Next up)
-*/ 
+*/
 class ContactPage extends StatefulWidget {
   @override
   _ContactPageState createState() => _ContactPageState();
@@ -42,46 +44,17 @@ class _ContactPageState extends State<ContactPage> {
       children: contacts
           .map((contact) => Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      contact['organization'],
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.secondary, 
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    GestureDetector(
-                      onTap: () {
-                        _makePhoneCall(contact['phone']);
-                      },
-                      child: Text(
-                        'Phone: ${contact['phone'] ?? 'N/A'}',
-                        style: const TextStyle(
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                child: CommunityContact(
+                    contactName: contact['organization'],
+                    phoneNumber: '${contact['phone'] ?? 'N/A'}'),
               ))
           .toList(),
     );
   }
 
-  Future<void> _makePhoneCall(String phoneNumber) async {
-    final Uri launchUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
-    await launchUrl(launchUri);
-  }
-
   @override
   Widget build(BuildContext context) {
+    // ignore: unnecessary_null_comparison
     if (contacts == null) {
       // Data is still loading, show a loading message or placeholder
       return const Center(
@@ -111,21 +84,29 @@ class _ContactPageState extends State<ContactPage> {
               Expanded(
                 child: ListView(
                   children: [
-                    buildCategory("HelpLines", contacts
-                        .where((contact) => contact['type'] == 'helpLines')
-                        .toList()),
-                    buildCategory("Shelters", contacts
-                        .where((contact) => contact['type'] == 'shelters')
-                        .toList()),
-                    buildCategory("Emergency Contacts", contacts
-                        .where((contact) =>
-                            contact['type'] == 'emergencyContacts')
-                        .toList()),
-                    buildCategory("Counselling Services", contacts
-                        .where((contact) =>
-                            contact['type'] ==
-                            'counsellingAndSupportServices')
-                        .toList()),
+                    buildCategory(
+                        "HelpLines",
+                        contacts
+                            .where((contact) => contact['type'] == 'helpLines')
+                            .toList()),
+                    buildCategory(
+                        "Shelters",
+                        contacts
+                            .where((contact) => contact['type'] == 'shelters')
+                            .toList()),
+                    buildCategory(
+                        "Emergency Contacts",
+                        contacts
+                            .where((contact) =>
+                                contact['type'] == 'emergencyContacts')
+                            .toList()),
+                    buildCategory(
+                        "Counselling Services",
+                        contacts
+                            .where((contact) =>
+                                contact['type'] ==
+                                'counsellingAndSupportServices')
+                            .toList()),
                   ],
                 ),
               ),
@@ -136,7 +117,6 @@ class _ContactPageState extends State<ContactPage> {
     }
   }
 
-
   Widget buildCategory(String title, List<DocumentSnapshot> contacts) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +126,7 @@ class _ContactPageState extends State<ContactPage> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 22,
-            color: AppColors.accent, 
+            color: AppVars.accent,
           ),
         ),
         const SizedBox(height: 8),
@@ -157,6 +137,7 @@ class _ContactPageState extends State<ContactPage> {
       ],
     );
   }
+
   void filterContacts(String searchTerm) {
     setState(() {
       contacts = originalContacts
@@ -168,5 +149,4 @@ class _ContactPageState extends State<ContactPage> {
           .toList();
     });
   }
-
 }
