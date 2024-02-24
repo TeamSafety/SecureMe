@@ -16,11 +16,10 @@ class MyProfile extends StatefulWidget {
 class _MyProfileState extends State<MyProfile> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _emergencyContactController =
-      TextEditingController();
-  final TextEditingController _emergencyMessageController =
-      TextEditingController();
-
+  final TextEditingController _emergencyContactController = TextEditingController();
+  final TextEditingController _emergencyMessageController = TextEditingController();
+  
+  
   @override
   void initState() {
     super.initState();

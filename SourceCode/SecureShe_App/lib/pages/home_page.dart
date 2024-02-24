@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:my_app/models/AppVars.dart';
-
-/*TODO: add a welcome message to the user with maybe a 
-privacy statement about saving data in the firestore DB, 
-plus maybe a guide on how to use the app 
-and a quick way to access the messages and send them, 
-plus maybe an SOS button */
+import 'package:my_app/pages/my_profile.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -67,8 +61,10 @@ class HomePage extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(
-                    context, 'package:my_app/pages/my_profile.dart');
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyProfile()),
+                );
               },
               child: Text('Go to Profile'),
             ),
@@ -85,11 +81,8 @@ class HomePage extends StatelessWidget {
         width: double.infinity,
         child: Column(
           children: [
-            const SizedBox(
-              height: 16,
-            ),
-            Text(
-              'SecureMe',
+            const Text(
+              'Welcome to SecureMe',
               style: TextStyle(
                   fontSize: AppVars.bigHeader,
                   fontWeight: FontWeight.bold,
@@ -149,21 +142,13 @@ class HomePage extends StatelessWidget {
             //   'Privacy Statement:\nYour data is securely stored in our database.',
             //   style: TextStyle(fontSize: 16),
             // ),
-
-            // const SizedBox(height: 16),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     _handleSOSButtonPress(context);
-            //   },
-            //   child: const Text('SOS'),
-            // ),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     // TODO: Navigate to the Messages page
-            //   },
-            //   child: const Text('View Messages'),
-            // ),
-            // const SizedBox(height: 16),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                _handleSOSButtonPress(context); 
+              },
+              child: const Text('SOS'),
+            ),
           ],
         ),
       ),
