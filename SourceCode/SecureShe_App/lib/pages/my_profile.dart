@@ -3,10 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/pages/login.dart';
 
-//TODO: please format the page!  (For Charles)
-
 final FirebaseAuth _auth = FirebaseAuth.instance;
-final FirebaseFirestore _firestore = FirebaseFirestore.instance; 
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
 class MyProfile extends StatefulWidget {
   const MyProfile({Key? key}) : super(key: key);
 
@@ -17,9 +16,11 @@ class MyProfile extends StatefulWidget {
 class _MyProfileState extends State<MyProfile> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _emergencyContactController = TextEditingController();
-  final TextEditingController _emergencyMessageController = TextEditingController();
-  
+  final TextEditingController _emergencyContactController =
+      TextEditingController();
+  final TextEditingController _emergencyMessageController =
+      TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -30,8 +31,11 @@ class _MyProfileState extends State<MyProfile> {
     User? user = _auth.currentUser;
 
     if (user != null) {
-      DocumentSnapshot<Map<String, dynamic>> snapshot =
-          await FirebaseFirestore.instance.collection('Users').doc(user.uid).get();
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('Users')
+          .doc(user.uid)
+          .get();
 
       if (snapshot.exists) {
         setState(() {
@@ -49,13 +53,16 @@ class _MyProfileState extends State<MyProfile> {
 
     if (user != null) {
       try {
-        await FirebaseFirestore.instance.collection('Users').doc(user.uid).update({
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(user.uid)
+            .update({
           'username': _usernameController.text,
           'email': _emailController.text,
         });
       } catch (e) {
         print('Error updating profile: $e');
-        showSnackbar("Error fetching data from the database"); 
+        showSnackbar("Error fetching data from the database");
       }
     }
   }
@@ -68,18 +75,20 @@ class _MyProfileState extends State<MyProfile> {
         await user.updateEmail(_emailController.text);
       } catch (e) {
         print('Error updating email: $e');
-        showSnackbar('Error updating email'); 
+        showSnackbar('Error updating email');
       }
     }
   }
-    void showSnackbar(String message) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          duration: const Duration(seconds: 2),
-        ),
-      );
-    }
+
+  void showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,8 +96,8 @@ class _MyProfileState extends State<MyProfile> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("Welcome ${_usernameController.text} "), 
-            const SizedBox(height:20), 
+            Text("Welcome ${_usernameController.text} "),
+            const SizedBox(height: 20),
             Text('Username: ${_usernameController.text}'),
             Text('Email: ${_emailController.text}'),
 
@@ -109,7 +118,9 @@ class _MyProfileState extends State<MyProfile> {
               },
               child: const Text('Edit Info'),
             ),
-            const SizedBox(height: 20,), 
+            const SizedBox(
+              height: 20,
+            ),
             // SOS Button Configuration UI
             TextField(
               controller: _emergencyContactController,
@@ -123,7 +134,7 @@ class _MyProfileState extends State<MyProfile> {
             ElevatedButton(
               onPressed: () async {
                 await updateProfile();
-                emergencySOSUpdate(); 
+                emergencySOSUpdate();
               },
               child: const Text('Update SOS Emergency info'),
             ),
@@ -146,13 +157,18 @@ class _MyProfileState extends State<MyProfile> {
       ),
     );
   }
+
   Future<void> emergencySOSUpdate() async {
     User? user = _auth.currentUser;
     if (user != null) {
-      bool isContactInList = await isEmergencyContactInList(user.uid, _emergencyContactController.text);
+      bool isContactInList = await isEmergencyContactInList(
+          user.uid, _emergencyContactController.text);
       if (isContactInList) {
         try {
-          await FirebaseFirestore.instance.collection('Users').doc(user.uid).update({
+          await FirebaseFirestore.instance
+              .collection('Users')
+              .doc(user.uid)
+              .update({
             'emergencyContact': _emergencyContactController.text,
             'emergencyMessage': _emergencyMessageController.text,
             'SOSConfigured': true,
@@ -168,14 +184,20 @@ class _MyProfileState extends State<MyProfile> {
     }
   }
 
-  Future<bool> isEmergencyContactInList(String userId, String emergencyContact) async {
+  Future<bool> isEmergencyContactInList(
+      String userId, String emergencyContact) async {
     try {
       QuerySnapshot<Map<String, dynamic>> contactsSnapshot =
-          await FirebaseFirestore.instance.collection('Users').doc(userId).collection('contacts').get();
+          await FirebaseFirestore.instance
+              .collection('Users')
+              .doc(userId)
+              .collection('contacts')
+              .get();
 
       if (contactsSnapshot.docs.isNotEmpty) {
         // Check if the emergency contact is in the user's contacts subcollection
-        return contactsSnapshot.docs.any((contact) => contact['contactName'] == emergencyContact);
+        return contactsSnapshot.docs
+            .any((contact) => contact['contactName'] == emergencyContact);
       } else {
         print('User contacts subcollection is empty.');
         return false;
@@ -204,18 +226,23 @@ class EditInfoScreen extends StatelessWidget {
     User? user = _auth.currentUser;
 
     if (user != null) {
-      await FirebaseFirestore.instance.collection('Users').doc(user.uid).update({
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user.uid)
+          .update({
         'username': usernameController.text,
         'email': emailController.text,
       });
     }
   }
+
   Future<void> updateEmail() async {
     User? user = _auth.currentUser;
     if (user != null) {
       await user.updateEmail(emailController.text);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -240,7 +267,7 @@ class EditInfoScreen extends StatelessWidget {
                 // Update the profile information
                 onUpdate();
                 updateProfile();
-                //updateEmail(); 
+                //updateEmail();
                 // Navigate back to the MyProfile screen
                 Navigator.pop(context);
               },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_app/models/AppVars.dart';
 
 /*TODO: add a welcome message to the user with maybe a 
 privacy statement about saving data in the firestore DB, 
@@ -80,36 +81,89 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SizedBox(
+        width: double.infinity,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Welcome to SecureShe',
+            const SizedBox(
+              height: 16,
+            ),
+            Text(
+              'SecureMe',
               style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+                  fontSize: AppVars.bigHeader,
+                  fontWeight: FontWeight.bold,
+                  color: AppVars.accent),
+            ),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 114,
+                      height: 114,
+                      decoration: BoxDecoration(
+                        color: AppVars.accent,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppVars.secondary.withOpacity(0.25),
+                            blurRadius: 4,
+                            offset: const Offset(4.0, 4.0),
+                          ),
+                          BoxShadow(
+                            color: AppVars.primary,
+                            blurRadius: 4,
+                            spreadRadius: 1,
+                            offset: const Offset(-4.0, -4.0),
+                          ),
+                        ],
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomRight,
+                          end: Alignment.topLeft,
+                          colors: [
+                            AppVars.accent,
+                            AppVars.accent,
+                            AppVars.accent,
+                            AppVars.accent,
+                            AppVars.accent.withOpacity(0.9),
+                            AppVars.accent.withOpacity(0.8),
+                          ],
+                        ),
+                      ),
+                      child: Text(
+                        "SOS",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: AppVars.primary,
+                            fontSize: AppVars.bigHeader),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
             // const Text(
             //   'Privacy Statement:\nYour data is securely stored in our database.',
             //   style: TextStyle(fontSize: 16),
             // ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                _handleSOSButtonPress(context);
-              },
-              child: const Text('SOS'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // TODO: Navigate to the Messages page
-              },
-              child: const Text('View Messages'),
-            ),
-            const SizedBox(height: 16),
+
+            // const SizedBox(height: 16),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     _handleSOSButtonPress(context);
+            //   },
+            //   child: const Text('SOS'),
+            // ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     // TODO: Navigate to the Messages page
+            //   },
+            //   child: const Text('View Messages'),
+            // ),
+            // const SizedBox(height: 16),
           ],
         ),
       ),
