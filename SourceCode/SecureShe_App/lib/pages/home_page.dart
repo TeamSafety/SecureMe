@@ -146,7 +146,7 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                _handleSOSButtonPress(context); 
+                _handleSOSButtonPress(context);
               },
               child: const Text('SOS'),
             ),

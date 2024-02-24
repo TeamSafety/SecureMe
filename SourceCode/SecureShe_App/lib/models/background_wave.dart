@@ -10,32 +10,26 @@ class BackgroundWave extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // height: 200,
-      // decoration: BoxDecoration(
-      //   color: AppColors.accent,
-      // ),
-      child: Stack(
-        children: [
-          Opacity(
-            opacity: 0.2,
-            child: ClipPath(
-              clipper: WaveClipper(),
-              child: Container(
-                color: AppVars.accent,
-                height: height,
-              ),
-            ),
-          ),
-          ClipPath(
+    return Stack(
+      children: [
+        Opacity(
+          opacity: 0.2,
+          child: ClipPath(
             clipper: WaveClipper(),
             child: Container(
               color: AppVars.accent,
-              height: height - 5,
+              height: height,
             ),
           ),
-        ],
-      ),
+        ),
+        ClipPath(
+          clipper: WaveClipper(),
+          child: Container(
+            color: AppVars.accent,
+            height: height - 5,
+          ),
+        ),
+      ],
     );
   }
 }

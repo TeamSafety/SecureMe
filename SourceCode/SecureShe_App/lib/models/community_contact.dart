@@ -66,7 +66,7 @@ class CommunityContact extends StatelessWidget {
                     fontSize: AppVars.textTitle,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 2,
                 ),
                 Expanded(

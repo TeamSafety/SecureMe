@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/pages/contacts_list.dart';
 import 'package:my_app/pages/home_page.dart';
-import 'package:my_app/pages/map_page.dart';
 import 'package:my_app/pages/my_contacts.dart';
 import 'package:my_app/pages/my_profile.dart';
 import 'package:my_app/pages/osm_page.dart';

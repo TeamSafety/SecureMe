@@ -44,7 +44,7 @@ class _MyProfileState extends State<MyProfile> {
           _emailController.text = snapshot['email'];
         });
       } else {
-        print('Document does not exist.');
+        //print('Document does not exist.');
       }
     }
   }
@@ -62,7 +62,7 @@ class _MyProfileState extends State<MyProfile> {
           'email': _emailController.text,
         });
       } catch (e) {
-        print('Error updating profile: $e');
+        //print('Error updating profile: $e');
         showSnackbar("Error fetching data from the database");
       }
     }
@@ -75,7 +75,7 @@ class _MyProfileState extends State<MyProfile> {
       try {
         await user.updateEmail(_emailController.text);
       } catch (e) {
-        print('Error updating email: $e');
+        //print('Error updating email: $e');
         showSnackbar('Error updating email');
       }
     }
@@ -256,7 +256,7 @@ class _MyProfileState extends State<MyProfile> {
           });
           showSnackbar("SOS emergency info updated successfully");
         } catch (e) {
-          print('Error updating SOS emergency info: $e');
+          //print('Error updating SOS emergency info: $e');
           showSnackbar('Error updating SOS button info');
         }
       } else {
@@ -280,11 +280,11 @@ class _MyProfileState extends State<MyProfile> {
         return contactsSnapshot.docs
             .any((contact) => contact['contactName'] == emergencyContact);
       } else {
-        print('User contacts subcollection is empty.');
+        //print('User contacts subcollection is empty.');
         return false;
       }
     } catch (e) {
-      print('Error checking emergency contact: $e');
+      //print('Error checking emergency contact: $e');
       return false;
     }
   }
@@ -297,11 +297,11 @@ class EditInfoScreen extends StatelessWidget {
   final VoidCallback onUpdate;
 
   const EditInfoScreen({
-    Key? key,
+    super.key,
     required this.usernameController,
     required this.emailController,
     required this.onUpdate,
-  }) : super(key: key);
+  });
 
   void updateProfile() async {
     User? user = _auth.currentUser;

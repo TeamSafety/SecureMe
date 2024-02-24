@@ -4,6 +4,8 @@ import 'package:my_app/models/community_contact.dart';
 import 'package:my_app/models/AppVars.dart';
 
 class ContactPage extends StatefulWidget {
+  const ContactPage({super.key});
+
   @override
   _ContactPageState createState() => _ContactPageState();
 }
