@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/models/AppColors.dart';
+import 'package:my_app/models/AppVars.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CommunityContact extends StatelessWidget {

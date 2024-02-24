@@ -1,7 +1,7 @@
 // ignore_for_file: use_super_parameters, library_private_types_in_public_api
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:my_app/models/AppColors.dart';
+import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/personal_contact.dart';
 import 'package:my_app/models/preset_message_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';

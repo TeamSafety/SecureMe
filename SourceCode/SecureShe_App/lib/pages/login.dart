@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/models/AppColors.dart';
+import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/background_wave.dart';
 import 'package:my_app/models/input_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';

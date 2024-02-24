@@ -7,7 +7,7 @@ import 'package:geolocator/geolocator.dart';
 //import 'package:geolocator_apple/geolocator_apple.dart';
 //import 'package:geolocator_android/geolocator_android.dart';
 import 'dart:async';
-import 'package:my_app/models/AppColors.dart';
+import 'package:my_app/models/AppVars.dart';
 
 Future<Position> _determinePosition() async {
   bool serviceEnabled;
