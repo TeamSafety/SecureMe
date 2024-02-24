@@ -13,7 +13,7 @@ class PersonalContact extends StatelessWidget {
     return // CONTACT ROW
         Container(
       width: double.infinity,
-      height: 90,
+      height: 80,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       decoration: BoxDecoration(
         color: AppVars.primary,
@@ -55,11 +55,16 @@ class PersonalContact extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   contactName,
                   style: TextStyle(
                     color: AppVars.secondary,
                     fontSize: AppVars.textTitle,
                   ),
+                ),
+                const SizedBox(
+                  height: 3,
                 ),
                 Expanded(
                   child: Row(

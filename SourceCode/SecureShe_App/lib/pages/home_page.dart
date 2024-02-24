@@ -7,8 +7,9 @@ privacy statement about saving data in the firestore DB,
 plus maybe a guide on how to use the app 
 and a quick way to access the messages and send them, 
 plus maybe an SOS button */
+
 final FirebaseAuth _auth = FirebaseAuth.instance;
-final FirebaseFirestore _firestore = FirebaseFirestore.instance; 
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,7 +20,6 @@ class HomePage extends StatelessWidget {
     if (isConfigured) {
       // Proceed with sending the emergency message
       _sendEmergencyMessage();
-
     } else {
       // Guide the user to the profile page for configuration
       _showConfigurationGuidance(context);
@@ -31,7 +31,10 @@ class HomePage extends StatelessWidget {
     if (user != null) {
       try {
         DocumentSnapshot<Map<String, dynamic>> snapshot =
-            await FirebaseFirestore.instance.collection('Users').doc(user.uid).get();
+            await FirebaseFirestore.instance
+                .collection('Users')
+                .doc(user.uid)
+                .get();
 
         if (snapshot.exists) {
           bool isConfigured = snapshot['SOSConfigured'] ?? false;
@@ -43,7 +46,6 @@ class HomePage extends StatelessWidget {
     }
     return false;
   }
-
 
   void _sendEmergencyMessage() {
     // Implement logic to send the emergency message
@@ -59,11 +61,13 @@ class HomePage extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('SOS Button Setup'),
-          content: Text('To use the SOS button, please set up your emergency contacts and message in the profile page.'),
+          content: Text(
+              'To use the SOS button, please set up your emergency contacts and message in the profile page.'),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, 'package:my_app/pages/my_profile.dart'); 
+                Navigator.pushNamed(
+                    context, 'package:my_app/pages/my_profile.dart');
               },
               child: Text('Go to Profile'),
             ),
@@ -95,7 +99,7 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                _handleSOSButtonPress(context); 
+                _handleSOSButtonPress(context);
               },
               child: const Text('SOS'),
             ),
@@ -112,4 +116,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-

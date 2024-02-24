@@ -7,6 +7,7 @@ import 'package:my_app/models/preset_message_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:my_app/models/personalContact.dart';
+import 'package:my_app/models/saved_community_contact.dart';
 
 //TODO: Please display the errorMessage to users
 
@@ -230,35 +231,27 @@ class _MyContactsState extends State<MyContacts> {
 
   Column communityContactsBuilder() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Community Contacts',
-          style: TextStyle(color: AppVars.secondary, fontSize: 16),
+        SizedBox(
+          width: double.infinity,
+          child: Text(
+            "Saved Community Contacts",
+            style: TextStyle(
+              color: AppVars.secondary,
+              fontSize: AppVars.textHeader,
+            ),
+          ),
         ),
         const SizedBox(
           height: 16,
         ),
-        Container(
-          alignment: Alignment.center,
-          child: Text(
-            "No contacts found.",
-            style: TextStyle(
-              color: AppVars.secondary.withOpacity(0.6),
-              fontSize: 11,
-            ),
-          ),
+        const SavedCommunityContact(
+          contactName: "Test Community Contact",
+          phoneNumber: "123",
         ),
-        Container(
-          alignment: Alignment.center,
-          child: Text(
-            "Start adding by going to the Community Page.",
-            style: TextStyle(
-              color: AppVars.secondary.withOpacity(0.6),
-              fontSize: 11,
-            ),
-          ),
-        ),
+        //     ElevatedButton(
+        //       onPressed: () => _showAddContactDialog(),
+        //       child: Text('Add Contact'),
       ],
     );
   }
@@ -285,32 +278,11 @@ class _MyContactsState extends State<MyContacts> {
         const SizedBox(height: 8),
         const PersonalContact(contactName: "Kristina Langgard"),
         const SizedBox(height: 8),
+        //     ElevatedButton(
+        //       onPressed: () => _showAddContactDialog(),
+        //       child: Text('Add Contact'),
       ],
     );
-    // return Column(
-    //   crossAxisAlignment: CrossAxisAlignment.start,
-    //   children: [
-    //     Text(
-    //       'Personal Contacts',
-    //       style: TextStyle(color: AppColors.secondary, fontSize: 16),
-    //     ),
-    //     const SizedBox(
-    //       height: 16,
-    //     ),
-    //     for (var contact in personalContacts)
-    //       PersonalContact(
-    //         contactName: contact.contactName,
-    //         initialsTemp: contact.initialsTemp,
-    //       ),
-    //     const SizedBox(
-    //       height: 16,
-    //     ),
-    //     ElevatedButton(
-    //       onPressed: () => _showAddContactDialog(),
-    //       child: Text('Add Contact'),
-    //     ),
-    //   ],
-    // );
   }
 
   void _showAddContactDialog() {

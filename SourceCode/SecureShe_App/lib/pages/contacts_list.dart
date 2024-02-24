@@ -23,7 +23,6 @@ class _ContactPageState extends State<ContactPage> {
   late List<DocumentSnapshot> contacts = [];
   late List<DocumentSnapshot> originalContacts = [];
   TextEditingController searchController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -43,7 +42,7 @@ class _ContactPageState extends State<ContactPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: contacts
           .map((contact) => Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(bottom: 8),
                 child: CommunityContact(
                     contactName: contact['organization'],
                     phoneNumber: '${contact['phone'] ?? 'N/A'}'),
@@ -124,9 +123,8 @@ class _ContactPageState extends State<ContactPage> {
         Text(
           title,
           style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-            color: AppVars.accent,
+            fontSize: AppVars.textHeader,
+            color: AppVars.secondary,
           ),
         ),
         const SizedBox(height: 8),
