@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:my_app/models/AppColors.dart';
+import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/pages/contacts_list.dart';
 import 'package:my_app/pages/home_page.dart';
 import 'package:my_app/pages/map_page.dart';

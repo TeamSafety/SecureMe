@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class CommunityContact extends StatelessWidget {
+class SavedCommunityContact extends StatelessWidget {
   final String contactName;
   final String phoneNumber;
-  const CommunityContact({
+  const SavedCommunityContact({
     super.key,
     required this.contactName,
     required this.phoneNumber,
@@ -66,7 +66,7 @@ class CommunityContact extends StatelessWidget {
                     fontSize: AppVars.textTitle,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 2,
                 ),
                 Expanded(
@@ -82,23 +82,24 @@ class CommunityContact extends StatelessWidget {
                               borderRadius: const BorderRadius.all(
                                 Radius.circular(10),
                               ),
-                              border: Border.all(color: Colors.white),
+                              border: Border.all(color: AppVars.primary),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppVars.secondary.withOpacity(0.3),
+                                  color: AppVars.secondary.withOpacity(0.2),
                                   blurRadius: 2,
                                   offset: const Offset(0, 2.0),
                                 ),
                               ],
                             ),
                             child: Icon(
-                              Icons.add,
+                              Icons.map,
                               color: AppVars.primary,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8), // CONTACT BUTTON
+                      const SizedBox(width: 8),
+                      // CONTACT BUTTON
                       GestureDetector(
                         onTap: () {
                           _makePhoneCall(phoneNumber);
@@ -128,35 +129,6 @@ class CommunityContact extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      // CONTACT BUTTON
-                      GestureDetector(
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppVars.primary,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                              border: Border.all(
-                                  color: AppVars.secondary.withOpacity(0.2)),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppVars.secondary.withOpacity(0.2),
-                                  blurRadius: 2,
-                                  offset: const Offset(0, 2.0),
-                                ),
-                              ],
-                            ),
-                            child: Icon(
-                              Icons.map,
-                              color: AppVars.accent,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
                     ],
                   ),
                 ),
