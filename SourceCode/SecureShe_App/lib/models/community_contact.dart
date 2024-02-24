@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/AppVars.dart';
+import 'package:my_app/pages/osm_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CommunityContact extends StatelessWidget {
   final String contactName;
   final String phoneNumber;
+  final double lat; 
+  final double long; 
   const CommunityContact({
     super.key,
     required this.contactName,
     required this.phoneNumber,
+    required this.lat, 
+    required this.long, 
   });
 
   @override
@@ -131,6 +136,9 @@ class CommunityContact extends StatelessWidget {
                       const SizedBox(width: 8),
                       // CONTACT BUTTON
                       GestureDetector(
+                        onTap: () {
+                          placeMarker(lat, long, contactName);
+                        },
                         child: AspectRatio(
                           aspectRatio: 1,
                           child: Container(
