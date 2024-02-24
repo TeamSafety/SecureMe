@@ -17,10 +17,11 @@ class MyProfile extends StatefulWidget {
 class _MyProfileState extends State<MyProfile> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _emergencyContactController = TextEditingController();
-  final TextEditingController _emergencyMessageController = TextEditingController();
-  
-  
+  final TextEditingController _emergencyContactController =
+      TextEditingController();
+  final TextEditingController _emergencyMessageController =
+      TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -92,27 +93,85 @@ class _MyProfileState extends State<MyProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-        children: [
-          // PROFILE PIC
-          AspectRatio(
-            aspectRatio: 1,
-            child: Container(
-              height: 10,
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppVars.secondary.withOpacity(0.3),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2.0),
+      backgroundColor: AppVars.primary,
+      body: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: AppVars.pagePadding,
+          vertical: 0,
+        ),
+        width: double.infinity,
+        child: Column(
+          children: [
+            SizedBox(
+              height: AppVars.sectionPadding,
+            ),
+            SizedBox(
+              // color: Colors.red,
+              width: double.infinity,
+              height: 120,
+              child: Row(
+                children: [
+                  // PROFILE PIC
+                  AspectRatio(
+                    aspectRatio: 1,
+                    child: Container(
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppVars.secondary.withOpacity(0.4),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2.0),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  // NAME AND Edit button
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: AppVars.elementMargin,
+                        ),
+                        // NAME
+                        Text(
+                          "Charles Kenneth Samonte",
+                          textAlign: TextAlign.start,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: AppVars.secondary,
+                          ),
+                        ),
+                        SizedBox(
+                          height: AppVars.elementMargin,
+                        ),
+                        InkWell(
+                          onTap: null,
+                          child: Text(
+                            "Edit profile",
+                            style: TextStyle(
+                                color: AppVars.accent,
+                                decoration: TextDecoration.underline,
+                                fontSize: AppVars.textHref),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       // body: Center(
       //   child: Column(

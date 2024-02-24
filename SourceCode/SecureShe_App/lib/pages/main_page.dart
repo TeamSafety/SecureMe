@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_app/models/AppVars.dart';
@@ -75,17 +77,15 @@ class _MainPageState extends State<MainPage> {
             items: [
               BottomNavigationBarItem(
                 label: 'Group',
-                icon: Container(
-                  child: SvgPicture.asset(
-                    'assets/icons/group.svg',
-                    width: 30,
-                    height: 30,
-                    colorFilter: ColorFilter.mode(
-                        _currentIndex == 0
-                            ? AppVars.accent
-                            : AppVars.secondary.withOpacity(0.6),
-                        BlendMode.srcIn),
-                  ),
+                icon: SvgPicture.asset(
+                  'assets/icons/group.svg',
+                  width: 30,
+                  height: 30,
+                  colorFilter: ColorFilter.mode(
+                      _currentIndex == 0
+                          ? AppVars.accent
+                          : AppVars.secondary.withOpacity(0.6),
+                      BlendMode.srcIn),
                 ),
               ),
               BottomNavigationBarItem(

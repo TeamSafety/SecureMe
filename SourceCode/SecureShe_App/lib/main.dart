@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(fontFamily: "ArbutusSlab"),
       debugShowCheckedModeBanner: false,
       //home: LoginPage(),
-      home: MainPage(),
+      home: const MainPage(),
     );
   }
 }
