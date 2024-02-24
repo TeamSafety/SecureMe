@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/pages/my_profile.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -81,7 +82,7 @@ class HomePage extends StatelessWidget {
         width: double.infinity,
         child: Column(
           children: [
-            const Text(
+            Text(
               'Welcome to SecureMe',
               style: TextStyle(
                   fontSize: AppVars.bigHeader,

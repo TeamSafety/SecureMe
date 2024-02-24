@@ -123,7 +123,7 @@ class _MyContactsState extends State<MyContacts> {
     children: [
       Text(
         'Preset Messages',
-        style: TextStyle(color: AppColors.secondary, fontSize: 16),
+        style: TextStyle(color: AppVars.secondary, fontSize: 16),
       ),
       const SizedBox(
         height: 16,
