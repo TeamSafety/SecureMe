@@ -115,10 +115,13 @@ class _MyProfileState extends State<MyProfile> {
                   AspectRatio(
                     aspectRatio: 1,
                     child: Container(
+                      clipBehavior: Clip.hardEdge,
                       height: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.blue,
-                        shape: BoxShape.circle,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(100),
+                        ),
+                        color: AppVars.secondary,
                         boxShadow: [
                           BoxShadow(
                             color: AppVars.secondary.withOpacity(0.4),
@@ -126,6 +129,13 @@ class _MyProfileState extends State<MyProfile> {
                             offset: const Offset(0, 2.0),
                           ),
                         ],
+                      ),
+                      child: const Image(
+                        fit: BoxFit.scaleDown,
+                        image: AssetImage("assets/images/profile_charles.png"),
+                        height: double.infinity,
+                        width: double.infinity,
+                        alignment: Alignment.center,
                       ),
                     ),
                   ),

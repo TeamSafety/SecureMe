@@ -3,9 +3,11 @@ import 'package:my_app/models/AppVars.dart';
 
 class PersonalContact extends StatelessWidget {
   final String contactName;
+  final String imagePath; // TODO: WILL CHANGE LATER
   const PersonalContact({
     super.key,
     required this.contactName,
+    required this.imagePath,
   });
 
   @override
@@ -33,9 +35,12 @@ class PersonalContact extends StatelessWidget {
           AspectRatio(
             aspectRatio: 1,
             child: Container(
+              clipBehavior: Clip.hardEdge,
               height: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.blue,
+                border: Border.all(
+                  color: AppVars.secondary.withOpacity(0.5),
+                ),
                 borderRadius: const BorderRadius.all(
                   Radius.circular(100),
                 ),
@@ -46,6 +51,13 @@ class PersonalContact extends StatelessWidget {
                     offset: const Offset(0, 2.0),
                   ),
                 ],
+              ),
+              child: Image(
+                fit: BoxFit.scaleDown,
+                image: AssetImage(imagePath),
+                height: double.infinity,
+                width: double.infinity,
+                alignment: Alignment.center,
               ),
             ),
           ),

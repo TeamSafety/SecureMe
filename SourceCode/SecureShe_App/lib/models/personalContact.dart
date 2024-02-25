@@ -7,14 +7,14 @@ class PersonalContactModel {
   PersonalContactModel({
     required this.contactName,
     required this.initialsTemp,
-    required this.uid, 
+    required this.uid,
   });
 
   factory PersonalContactModel.fromMap(Map<String, dynamic> map) {
     return PersonalContactModel(
       contactName: map['contactName'] ?? '',
       initialsTemp: map['initialsTemp'] ?? '',
-      uid:map['uid'] ?? '', 
+      uid: map['uid'] ?? '',
     );
   }
 }
