@@ -36,8 +36,8 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: pages[_currentIndex],
         backgroundColor: AppVars.primary,
+        body: pages[_currentIndex],
         bottomNavigationBar: _bottomNavigationBar(),
       ),
     );

@@ -1,4 +1,3 @@
-// ignore_for_file: use_super_parameters, library_private_types_in_public_api
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:my_app/models/AppVars.dart';
@@ -12,7 +11,7 @@ import 'package:my_app/models/saved_community_contact.dart';
 //TODO: Please display the errorMessage to users
 
 class MyContacts extends StatefulWidget {
-  const MyContacts({Key? key}) : super(key: key);
+  const MyContacts({super.key});
   @override
   _MyContactsState createState() => _MyContactsState();
 }
@@ -24,6 +23,15 @@ class _MyContactsState extends State<MyContacts> {
   List<PersonalContactModel> personalContacts = [];
   String errorMessage = "";
   final TextEditingController _messageController = TextEditingController();
+
+  // TEMPORARY Users
+  final List _userContacts = [
+    ["Charles Samonte", "123", "assets/images/profile_charles.png"],
+    ["Charles Samonte", "123", "assets/images/profile_charles.png"],
+    ["Charles Samonte", "123", "assets/images/profile_charles.png"],
+    ["Kawthar Alkhateeb", "345", "assets/images/profile_kawthar.png"],
+    ["Kristina Langgard", "567", "assets/images/profile_kristina.png"],
+  ];
 
   @override
   void initState() {
@@ -71,25 +79,6 @@ class _MyContactsState extends State<MyContacts> {
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
-          // appBar: AppBar(
-          //   bottom: const TabBar(
-          //     tabs: [
-          //       Tab(
-          //         text: "Personal Contacts",
-          //       ),
-          //       Tab(
-          //         text: "Community Contacts",
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          // body: TabBarView(children: [
-          //   Container(
-          //     margin: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-          //     child: personalContactsBuilder(),
-          //   ),
-          //   communityContactsBuilder(),
-          // ]),
           body: SingleChildScrollView(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -262,6 +251,9 @@ class _MyContactsState extends State<MyContacts> {
     return Column(
       children: [
         SizedBox(
+          height: AppVars.sectionPadding,
+        ),
+        SizedBox(
           width: double.infinity,
           child: Text(
             "Personal contacts",
@@ -310,6 +302,49 @@ class _MyContactsState extends State<MyContacts> {
       ],
     );
   }
+
+  // EDIT builder using listview
+  // Column personalContactsBuilder2() {
+  //   return Column(
+  //     children: [
+  //       SizedBox(
+  //         width: double.infinity,
+  //         child: Text(
+  //           "Personal contacts",
+  //           style: TextStyle(
+  //             color: AppVars.secondary,
+  //             fontSize: AppVars.textHeader,
+  //           ),
+  //         ),
+  //       ),
+  //       SizedBox(
+  //         height: AppVars.titleMargin,
+  //       ),
+  //       SizedBox(
+  //         height: 400,
+  //         child: ListView.builder(
+  //           itemCount: _userContacts.length,
+  //           itemBuilder: (context, index) {
+  //             return Column(
+  //               children: [
+  //                 PersonalContact(
+  //                   contactName: _userContacts[index][0],
+  //                   imagePath: _userContacts[index][2],
+  //                 ),
+  //                 SizedBox(
+  //                   height: AppVars.elementMargin,
+  //                 )
+  //               ],
+  //             );
+  //           },
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  //   //     ElevatedButton(
+  //   //       onPressed: () => _showAddContactDialog(),
+  //   //       child: Text('Add Contact'),
+  // }
 
   void _showAddContactDialog() {
     showDialog(
