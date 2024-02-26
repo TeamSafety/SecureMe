@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/message_chat.dart';
 import 'package:my_app/models/message_service.dart';
 
@@ -27,16 +28,27 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
      return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppVars.accent, 
         title: FutureBuilder<String>(
           future: _messageService.getUserName(widget.recipientUserId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Text('Loading...');
+              return const Text(
+                'Loading...',
+                style: TextStyle(color: Colors.white),
+              );
             }
             if (snapshot.hasError) {
-              return const Text('Error loading user name');
+              return const Text(
+                'Error loading user name', 
+                style: TextStyle(color: Colors.white),
+              );
             }
-            return Text('Chat with ${snapshot.data}');
+            return Text(
+              'Chat with ${snapshot.data}', 
+              style: const TextStyle(color: Colors.white),
+
+            );
           },
         ),
       ),
@@ -90,7 +102,7 @@ class _ChatScreenState extends State<ChatScreen> {
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: isCurrentUser ? Colors.blue : Colors.grey,
+              color: isCurrentUser ? AppVars.accent : Colors.grey.shade200,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
@@ -100,13 +112,13 @@ class _ChatScreenState extends State<ChatScreen> {
                   isCurrentUser ? 'You' : senderName,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: isCurrentUser ? Colors.white : Colors.black,
+                    color: isCurrentUser ? Colors.white : Colors.black87,
                   ),
                 ),
                 const SizedBox(height: 5),
                 Text(
                   message.content,
-                  style: TextStyle(color: isCurrentUser ? Colors.white : Colors.black),
+                  style: TextStyle(color: isCurrentUser ? Colors.white : Colors.black87),
                 ),
               ],
             ),
