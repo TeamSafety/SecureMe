@@ -48,7 +48,7 @@ Future<Position?> grabLastLocation() async {
   return position;
 }
 
-void placeMarker(lat, long, name) {
+void placeMarker(double lat, double long, name) {
   MarkerLayer(
     markers: [
       Marker(
