@@ -33,16 +33,16 @@ class _ContactPageState extends State<ContactPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: contacts.map((contact) {
         // Check if latitude and longitude are not null
-        double? latitude = contact['latitude'];
-        double? longitude = contact['longitude'];
+        double? latitude = (contact['latitude'] as num?)?.toDouble();
+        double? longitude = (contact['longitude'] as num?)?.toDouble();
 
         return Padding(
           padding: const EdgeInsets.only(bottom: 8),
           child: CommunityContact(
             contactName: contact['organization'],
             phoneNumber: '${contact['phone'] ?? 'N/A'}',
-            lat: contact['latitude'], // Use 0.0 as a default value
-            long: contact['longitude'], // Use 0.0 as a default value
+            lat: latitude ?? 0.0, // Use 0.0 as a default value
+            long: longitude ?? 0.0, // Use 0.0 as a default value
           ),
         );
       }).toList(),
