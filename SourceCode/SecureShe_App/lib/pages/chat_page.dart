@@ -29,6 +29,12 @@ class _ChatScreenState extends State<ChatScreen> {
      return Scaffold(
       appBar: AppBar(
         backgroundColor: AppVars.accent, 
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         title: FutureBuilder<String>(
           future: _messageService.getUserName(widget.recipientUserId),
           builder: (context, snapshot) {

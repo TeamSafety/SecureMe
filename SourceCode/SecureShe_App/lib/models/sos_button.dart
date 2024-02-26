@@ -79,7 +79,6 @@ class SOSButton extends StatelessWidget {
                 .collection('Users')
                 .doc(user.uid)
                 .get();
-
         if (snapshot.exists) {
           bool isConfigured = snapshot['SOSConfigured'] ?? false;
           return isConfigured;
