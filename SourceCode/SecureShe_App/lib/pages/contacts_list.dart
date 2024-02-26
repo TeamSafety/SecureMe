@@ -29,27 +29,25 @@ class _ContactPageState extends State<ContactPage> {
   }
 
   Widget buildContactList(List<DocumentSnapshot> contacts) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: contacts
-        .map((contact) {
-          // Check if latitude and longitude are not null
-          double? latitude = contact['latitude'];
-          double? longitude = contact['longitude'];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: contacts.map((contact) {
+        // Check if latitude and longitude are not null
+        double? latitude = contact['latitude'];
+        double? longitude = contact['longitude'];
 
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: CommunityContact(
-              contactName: contact['organization'],
-              phoneNumber: '${contact['phone'] ?? 'N/A'}',
-              lat: contact['latitude'],  // Use 0.0 as a default value
-              long: contact['longitude'], // Use 0.0 as a default value
-            ),
-          );
-        })
-        .toList(),
-  );
-}
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: CommunityContact(
+            contactName: contact['organization'],
+            phoneNumber: '${contact['phone'] ?? 'N/A'}',
+            lat: contact['latitude'], // Use 0.0 as a default value
+            long: contact['longitude'], // Use 0.0 as a default value
+          ),
+        );
+      }).toList(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

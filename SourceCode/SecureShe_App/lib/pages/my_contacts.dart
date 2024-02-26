@@ -272,11 +272,18 @@ class _MyContactsState extends State<MyContacts> {
         const SizedBox(
           height: 16,
         ),
-        const PersonalContact(contactName: "Charles Samonte"),
+        const PersonalContact(
+          contactName: "Charles Samonte",
+          imagePath: "assets/images/profile_charles.png",
+        ),
         const SizedBox(height: 8),
-        const PersonalContact(contactName: "Kawthar Alkhateeb"),
+        const PersonalContact(
+            contactName: "Kawthar Alkhateeb",
+            imagePath: "assets/images/profile_kristina.png"),
         const SizedBox(height: 8),
-        const PersonalContact(contactName: "Kristina Langgard"),
+        const PersonalContact(
+            contactName: "Kristina Langgard",
+            imagePath: "assets/images/profile_kawthar.png"),
         const SizedBox(height: 8),
         //     ElevatedButton(
         //       onPressed: () => _showAddContactDialog(),
