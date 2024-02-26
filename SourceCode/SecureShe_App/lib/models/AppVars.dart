@@ -7,6 +7,7 @@ class AppVars {
 
   static double pagePadding = 20;
   static double sectionPadding = 24;
+  static double titleMargin = 16;
   static double elementMargin = 8;
 
   static double bigHeader = 34;
