@@ -24,6 +24,15 @@ class _MyContactsState extends State<MyContacts> {
   String errorMessage = "";
   final TextEditingController _messageController = TextEditingController();
 
+  // TEMPORARY Users
+  final List _userContacts = [
+    ["Charles Samonte", "123", "assets/images/profile_charles.png"],
+    ["Charles Samonte", "123", "assets/images/profile_charles.png"],
+    ["Charles Samonte", "123", "assets/images/profile_charles.png"],
+    ["Kawthar Alkhateeb", "345", "assets/images/profile_kawthar.png"],
+    ["Kristina Langgard", "567", "assets/images/profile_kristina.png"],
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -295,47 +304,47 @@ class _MyContactsState extends State<MyContacts> {
   }
 
   // EDIT builder using listview
-  Column personalContactsBuilder2() {
-    return Column(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          child: Text(
-            "Personal contacts",
-            style: TextStyle(
-              color: AppVars.secondary,
-              fontSize: AppVars.textHeader,
-            ),
-          ),
-        ),
-        SizedBox(
-          height: AppVars.titleMargin,
-        ),
-        SizedBox(
-          height: 400,
-          child: ListView.builder(
-            itemCount: _userContacts.length,
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  PersonalContact(
-                    contactName: _userContacts[index][0],
-                    imagePath: _userContacts[index][2],
-                  ),
-                  SizedBox(
-                    height: AppVars.elementMargin,
-                  )
-                ],
-              );
-            },
-          ),
-        ),
-      ],
-    );
-    //     ElevatedButton(
-    //       onPressed: () => _showAddContactDialog(),
-    //       child: Text('Add Contact'),
-  }
+  // Column personalContactsBuilder2() {
+  //   return Column(
+  //     children: [
+  //       SizedBox(
+  //         width: double.infinity,
+  //         child: Text(
+  //           "Personal contacts",
+  //           style: TextStyle(
+  //             color: AppVars.secondary,
+  //             fontSize: AppVars.textHeader,
+  //           ),
+  //         ),
+  //       ),
+  //       SizedBox(
+  //         height: AppVars.titleMargin,
+  //       ),
+  //       SizedBox(
+  //         height: 400,
+  //         child: ListView.builder(
+  //           itemCount: _userContacts.length,
+  //           itemBuilder: (context, index) {
+  //             return Column(
+  //               children: [
+  //                 PersonalContact(
+  //                   contactName: _userContacts[index][0],
+  //                   imagePath: _userContacts[index][2],
+  //                 ),
+  //                 SizedBox(
+  //                   height: AppVars.elementMargin,
+  //                 )
+  //               ],
+  //             );
+  //           },
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  //   //     ElevatedButton(
+  //   //       onPressed: () => _showAddContactDialog(),
+  //   //       child: Text('Add Contact'),
+  // }
 
   void _showAddContactDialog() {
     showDialog(
