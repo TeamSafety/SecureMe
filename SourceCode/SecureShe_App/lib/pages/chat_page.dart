@@ -1,12 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/message_chat.dart';
 import 'package:my_app/models/message_service.dart';
 
 class ChatScreen extends StatefulWidget {
   final String userId;
+  final String recipientUserId;
 
-  ChatScreen({required this.userId});
+  ChatScreen({required this.userId, required this.recipientUserId});
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -15,35 +15,50 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final MessageService _messageService = MessageService();
+  late String _chatroomId;
+
+  @override
+  void initState() {
+    super.initState();
+    _chatroomId = _messageService.getChatroomId(widget.userId, widget.recipientUserId);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat'),
+        title: FutureBuilder<String>(
+          future: _messageService.getUserName(widget.recipientUserId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Text('Loading...');
+            }
+            if (snapshot.hasError) {
+              return const Text('Error loading user name');
+            }
+            return Text('Chat with ${snapshot.data}');
+          },
+        ),
       ),
       body: Column(
         children: [
           Expanded(
             child: StreamBuilder<List<MessageChat>>(
-              stream: _messageService.getMessages(widget.userId),
+              stream: _messageService.getMessages(_chatroomId),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 }
 
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(child: Text('No messages yet.'));
+                  return const Center(child: Text('No messages yet.'));
                 }
 
                 return ListView.builder(
-                  reverse: true,
+                  //reverse: true, // To display the latest messages at the bottom
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(snapshot.data![index].content),
-                      subtitle: Text(snapshot.data![index].timestamp.toString()),
-                    );
+                    return _buildMessageItem(snapshot.data![index]);
                   },
                 );
               },
@@ -52,6 +67,52 @@ class _ChatScreenState extends State<ChatScreen> {
           _buildInput(),
         ],
       ),
+    );
+  }
+  Widget _buildMessageItem(MessageChat message) {
+    return FutureBuilder<Map<String, String>>(
+      future: _messageService.getUserNames(message.fromUserId, message.toUserId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        }
+
+        if (snapshot.hasError) {
+          return const Text('Error loading names');
+        }
+
+        final senderName = snapshot.data?[message.fromUserId] ?? 'Unknown User';
+        final isCurrentUser = message.fromUserId == widget.userId;
+
+        return Align(
+          alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: isCurrentUser ? Colors.blue : Colors.grey,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  isCurrentUser ? 'You' : senderName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: isCurrentUser ? Colors.white : Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  message.content,
+                  style: TextStyle(color: isCurrentUser ? Colors.white : Colors.black),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -63,13 +124,13 @@ class _ChatScreenState extends State<ChatScreen> {
           Expanded(
             child: TextField(
               controller: _messageController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Type your message...',
               ),
             ),
           ),
           IconButton(
-            icon: Icon(Icons.send),
+            icon: const Icon(Icons.send),
             onPressed: () {
               _sendMessage();
             },
@@ -84,12 +145,12 @@ class _ChatScreenState extends State<ChatScreen> {
     if (content.isNotEmpty) {
       final newMessage = MessageChat(
         fromUserId: widget.userId,
-        toUserId: 'recipientUserId', // Set the recipient's user ID here
+        toUserId: widget.recipientUserId,
         timestamp: DateTime.now(),
-        content: content, // Set the message type (text, image, etc.)
+        content: content,
       );
 
-      _messageService.sendMessage(newMessage);
+      _messageService.sendMessage(newMessage, _chatroomId);
       _messageController.clear();
     }
   }

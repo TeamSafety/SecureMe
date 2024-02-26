@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/AppVars.dart';
+import 'package:my_app/pages/chat_page.dart';
 
 class PersonalContact extends StatelessWidget {
   final String contactName;
   final String imagePath; // TODO: WILL CHANGE LATER
+  final String addedContactUid; 
+  final String currentUserId; 
   const PersonalContact({
     super.key,
     required this.contactName,
     required this.imagePath,
+    required this.addedContactUid, 
+    required this.currentUserId, 
   });
 
   @override
@@ -110,6 +115,14 @@ class PersonalContact extends StatelessWidget {
                       const SizedBox(width: 8),
                       // CONTACT BUTTON
                       GestureDetector(
+                        onTap: (){
+                          Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatScreen(userId: currentUserId, recipientUserId: addedContactUid)
+                          ),
+                        );
+                        },
                         child: AspectRatio(
                           aspectRatio: 1,
                           child: Container(

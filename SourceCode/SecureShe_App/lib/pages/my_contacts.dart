@@ -24,6 +24,7 @@ class _MyContactsState extends State<MyContacts> {
   List<PersonalContactModel> personalContacts = [];
   String errorMessage = "";
   final TextEditingController _messageController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -58,6 +59,7 @@ class _MyContactsState extends State<MyContacts> {
           .doc(contactUid)
           .set({
         'contactName': contactName,
+        'contactUid': contactUid,
       });
     }
     getPersonalContacts();
@@ -272,22 +274,39 @@ class _MyContactsState extends State<MyContacts> {
         const SizedBox(
           height: 16,
         ),
-        const PersonalContact(
-          contactName: "Charles Samonte",
-          imagePath: "assets/images/profile_charles.png",
-        ),
+        // const PersonalContact(
+        //   contactName: "Charles Samonte",
+        //   imagePath: "assets/images/profile_charles.png",
+        // ),
+        // const SizedBox(height: 8),
+        // const PersonalContact(
+        //     contactName: "Kawthar Alkhateeb",
+        //     imagePath: "assets/images/profile_kristina.png"),
+        // const SizedBox(height: 8),
+        // const PersonalContact(
+        //     contactName: "Kristina Langgard",
+        //     imagePath: "assets/images/profile_kawthar.png"),
         const SizedBox(height: 8),
-        const PersonalContact(
-            contactName: "Kawthar Alkhateeb",
-            imagePath: "assets/images/profile_kristina.png"),
+        for (PersonalContactModel contact in personalContacts)
+          Column(
+            children: [
+              PersonalContact(
+                contactName: contact.contactName,
+                imagePath: contact.imagePath,
+                addedContactUid: contact.addedContactUid,
+                currentUserId: _auth.currentUser!.uid,
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        // const PersonalContact(
+        //     contactName: ,
+        //     imagePath: "assets/images/profile_kawthar.png"),
         const SizedBox(height: 8),
-        const PersonalContact(
-            contactName: "Kristina Langgard",
-            imagePath: "assets/images/profile_kawthar.png"),
-        const SizedBox(height: 8),
-        //     ElevatedButton(
-        //       onPressed: () => _showAddContactDialog(),
-        //       child: Text('Add Contact'),
+        ElevatedButton(
+          onPressed: () => _showAddContactDialog(),
+          child: const Text('Add Contact'),
+        )
       ],
     );
   }
