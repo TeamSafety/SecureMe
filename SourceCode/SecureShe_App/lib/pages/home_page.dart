@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/models/AppVars.dart';
-import 'package:my_app/models/share_locationButton.dart';
+import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:my_app/models/sos_button.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;

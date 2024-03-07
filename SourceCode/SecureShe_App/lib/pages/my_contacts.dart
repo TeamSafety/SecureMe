@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:my_app/models/AppVars.dart';
-import 'package:my_app/models/personal_contact.dart';
+import 'package:my_app/models/PersonalConatcts/personal_contact.dart';
 import 'package:my_app/models/preset_message_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:my_app/models/personalContact.dart';
+import 'package:my_app/models/PersonalConatcts/personalContact.dart';
 import 'package:my_app/models/saved_community_contact.dart';
 
 //TODO: Please display the errorMessage to users
