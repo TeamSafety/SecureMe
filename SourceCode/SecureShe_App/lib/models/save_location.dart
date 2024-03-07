@@ -4,7 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:my_app/pages/osm_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-Future<void> saveToDatabase(Position position) async {
+Future<void> saveToDatabase(Position position, String userID) async {
   CollectionReference usersCollection = FirebaseFirestore.instance.collection('Users');
   String userId = 'uid';
   DocumentReference userDocRef = usersCollection.doc(userId);
@@ -26,7 +26,7 @@ Future<void> startLocationUpdates() async {
   Position? initialPosition = await grabLastLocation();
   if (initialPosition != null) {
     // Save the initial position to the database
-    await saveToDatabase(initialPosition);
+    await saveToDatabase(initialPosition, "uid");
   }
 
   // Set up a periodic timer to update the location every few seconds
@@ -35,8 +35,9 @@ Future<void> startLocationUpdates() async {
     Position? currentPosition = await grabLastLocation();
     if (currentPosition != null) {
       // Save the current position to the database
-      await saveToDatabase(currentPosition);
+      await saveToDatabase(currentPosition, "uid");
     }
   });
 }
+
 
