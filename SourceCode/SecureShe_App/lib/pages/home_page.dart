@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/models/AppVars.dart';
+import 'package:my_app/models/share_locationButton.dart';
 import 'package:my_app/models/sos_button.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -25,14 +26,16 @@ class HomePage extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   color: AppVars.accent),
             ),
-            const Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SOSButton(),
-                ],
-              ),
-            ),
+            LocationPage(), 
+            // Expanded(
+            //   child: Column(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       //SOSButton(),
+            //       LocationPage(),  
+            //     ],
+            //   ),
+            // ),
             // const Text(
             //   'Privacy Statement:\nYour data is securely stored in our database.',
             //   style: TextStyle(fontSize: 16),

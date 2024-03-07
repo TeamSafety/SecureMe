@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_app/models/AppVars.dart';
+import 'package:my_app/models/share_locationButton.dart';
 import 'package:my_app/pages/contacts_list.dart';
 import 'package:my_app/pages/home_page.dart';
 import 'package:my_app/pages/my_contacts.dart';
@@ -20,7 +21,8 @@ class _MainPageState extends State<MainPage> {
   List pages = [
     ContactPage(),
     MyContacts(),
-    HomePage(),
+    //HomePage(),
+    LocationPage(), 
     MyMapOSM(),
     MyProfile(),
   ];
