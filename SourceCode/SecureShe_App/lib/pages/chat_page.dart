@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/AppVars.dart';
-import 'package:my_app/models/message_chat.dart';
-import 'package:my_app/models/message_service.dart';
+import 'package:my_app/models/Chat/message_chat.dart';
+import 'package:my_app/models/Chat/message_service.dart';
 
 class ChatScreen extends StatefulWidget {
   final String userId;

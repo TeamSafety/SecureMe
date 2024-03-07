@@ -2,10 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/AppVars.dart';
+import 'package:my_app/models/Chat/message_chat.dart';
+import 'package:my_app/models/Chat/message_service.dart';
 import 'package:my_app/pages/my_profile.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final MessageService _messageService = MessageService();
 
 class SOSButton extends StatelessWidget {
   const SOSButton({super.key});
@@ -89,13 +92,6 @@ class SOSButton extends StatelessWidget {
     }
     return false;
   }
-
-  void _sendEmergencyMessage() {
-    // Implement logic to send the emergency message
-    // This can involve using the user's configured emergency contacts and message
-    // Make sure to handle security and privacy considerations
-    // we need to navigate to a page where it allows the user to send an I'm safe message when they are save
-  }
   void _showConfigurationGuidance(BuildContext context) {
     // Display a message guiding the user to the profile page for SOS button setup
     showDialog(
@@ -119,5 +115,46 @@ class SOSButton extends StatelessWidget {
         );
       },
     );
+  }
+  Future<void> _sendEmergencyMessage() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      try {
+        DocumentSnapshot<Map<String, dynamic>> snapshot =
+            await FirebaseFirestore.instance
+                .collection('Users')
+                .doc(user.uid)
+                .get();
+        if (snapshot.exists) {
+          dynamic emergencyContacts = snapshot['emergencyContact'] ?? [];
+          // If it's a single string, convert it to a list with a single element
+          List<String> contacts = (emergencyContacts is String)
+              ? [emergencyContacts]
+              : List<String>.from(emergencyContacts);
+          String emergencyMessage = snapshot['emergencyMessage'] ?? '';
+
+          for (String contactId in contacts) {
+            String chatroomId = _messageService.getChatroomId(user.uid, contactId);
+            Map<String, String> userNames = await _messageService.getUserNames(user.uid, contactId);
+
+            String formattedMessage = 'EMERGENCY: ${userNames[user.uid]} needs help. Message: $emergencyMessage';
+
+            MessageChat emergencyMessageObj = MessageChat(
+              fromUserId: user.uid,
+              toUserId: contactId,
+              content: formattedMessage,
+              timestamp: DateTime.now(), 
+              
+            );
+            await _messageService.sendMessage(emergencyMessageObj, chatroomId);
+            print("Message was sent!!!"); //for debug purposes!
+          }
+
+          // Navigate to a page where the user can send an "I'm safe" message or a timer
+        }
+      } catch (e) {
+        print('Error sending emergency message: $e');
+      }
+    }
   }
 }
