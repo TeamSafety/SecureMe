@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:my_app/models/message_chat.dart';
+import 'package:my_app/models/Chat/message_chat.dart';
 
 class MessageService {
   final CollectionReference _messagesCollection = FirebaseFirestore.instance.collection('messages');
