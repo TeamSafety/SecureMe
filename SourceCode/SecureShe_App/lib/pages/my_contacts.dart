@@ -68,6 +68,7 @@ class _MyContactsState extends State<MyContacts> {
           .set({
         'contactName': contactName,
         'contactUid': contactUid,
+        
       });
     }
     getPersonalContacts();

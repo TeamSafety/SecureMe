@@ -75,23 +75,25 @@ class SOSButton extends StatelessWidget {
 
   Future<bool> _checkSOSConfiguration() async {
     User? user = _auth.currentUser;
+
     if (user != null) {
       try {
-        DocumentSnapshot<Map<String, dynamic>> snapshot =
+        // Check if the EmergencyInfo collection has any documents for the user
+        QuerySnapshot<Map<String, dynamic>> emergencyInfoSnapshot =
             await FirebaseFirestore.instance
                 .collection('Users')
                 .doc(user.uid)
+                .collection('EmergencyInfo')
                 .get();
-        if (snapshot.exists) {
-          bool isConfigured = snapshot['SOSConfigured'] ?? false;
-          return isConfigured;
-        }
+        bool isConfigured = emergencyInfoSnapshot.docs.isNotEmpty;
+        return isConfigured;
       } catch (e) {
         print('Error checking SOS configuration: $e');
       }
     }
     return false;
   }
+
   void _showConfigurationGuidance(BuildContext context) {
     // Display a message guiding the user to the profile page for SOS button setup
     showDialog(
@@ -120,34 +122,43 @@ class SOSButton extends StatelessWidget {
     User? user = _auth.currentUser;
     if (user != null) {
       try {
-        DocumentSnapshot<Map<String, dynamic>> snapshot =
+        // Retrieve the emergency contact information from the EmergencyInfo collection
+        QuerySnapshot<Map<String, dynamic>> emergencyInfoSnapshot =
             await FirebaseFirestore.instance
                 .collection('Users')
                 .doc(user.uid)
+                .collection('EmergencyInfo')
                 .get();
-        if (snapshot.exists) {
-          dynamic emergencyContacts = snapshot['emergencyContact'] ?? [];
-          // If it's a single string, convert it to a list with a single element
-          List<String> contacts = (emergencyContacts is String)
-              ? [emergencyContacts]
-              : List<String>.from(emergencyContacts);
-          String emergencyMessage = snapshot['emergencyMessage'] ?? '';
 
-          for (String contactId in contacts) {
+        if (emergencyInfoSnapshot.docs.isNotEmpty) {
+          // Extract emergency contact IDs, names, and messages from the snapshot
+          List<String> emergencyContactIds = [];
+          List<String> emergencyContactNames = [];
+          List<String> emergencyMessages = [];
+
+          emergencyInfoSnapshot.docs.forEach((emergencyDoc) {
+            emergencyContactIds.add(emergencyDoc.id);
+            emergencyContactNames.add(emergencyDoc['emergencyContact']);
+            emergencyMessages.add(emergencyDoc['emergencyMessage']);
+          });
+
+          for (int i = 0; i < emergencyContactIds.length; i++) {
+            String contactId = emergencyContactIds[i];
             String chatroomId = _messageService.getChatroomId(user.uid, contactId);
-            Map<String, String> userNames = await _messageService.getUserNames(user.uid, contactId);
+            print(user.uid); 
 
-            String formattedMessage = 'EMERGENCY: ${userNames[user.uid]} needs help. Message: $emergencyMessage';
+            String formattedMessage =
+                'EMERGENCY Message: ${emergencyMessages[i]}';
 
             MessageChat emergencyMessageObj = MessageChat(
               fromUserId: user.uid,
               toUserId: contactId,
               content: formattedMessage,
-              timestamp: DateTime.now(), 
-              
+              timestamp: DateTime.now(),
             );
+
             await _messageService.sendMessage(emergencyMessageObj, chatroomId);
-            print("Message was sent!!!"); //for debug purposes!
+            print("Message was sent to $contactId!"); // for debug purposes!
           }
 
           // Navigate to a page where the user can send an "I'm safe" message or a timer
@@ -157,4 +168,5 @@ class SOSButton extends StatelessWidget {
       }
     }
   }
+
 }

@@ -10,6 +10,7 @@ class EmergencyConfiguration{
     required this.contacts,
   });
   final FirebaseAuth _auth = FirebaseAuth.instance;  
+
   Future<void> emergencySOSUpdate() async {
     User? user = _auth.currentUser;
     if (user != null) {
@@ -23,14 +24,15 @@ class EmergencyConfiguration{
             String emergencyContactId = await getEmergencyContactUserId(emergencyContactName);
 
             await FirebaseFirestore.instance
-                .collection('Users')
-                .doc(user.uid)
-                .update({
-              'emergencyContact': emergencyContactName,
-              'emergencyContactId': emergencyContactId, // Save the contact's user ID
-              'emergencyMessage': message,
-              'SOSConfigured': true,
-            });
+              .collection('Users')
+              .doc(user.uid)
+              .collection('EmergencyInfo')
+              .doc(emergencyContactId)
+              .set({
+                'emergencyContact': emergencyContactName,
+                'emergencyContactId': emergencyContactId, // Save the contact's user ID
+                'emergencyMessage': message,
+              });
             //showSnackbar("SOS emergency info updated successfully");
             print("SOS emergency info updated successfully"); 
           } catch (e) {

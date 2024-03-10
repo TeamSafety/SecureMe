@@ -13,10 +13,11 @@ class LocationPage extends StatefulWidget {
   @override
   _LocationPageState createState() => _LocationPageState();
 }
-
 class _LocationPageState extends State<LocationPage> {
-  bool isLocationSharing = false;
+  bool isLocationSharing = false; // taggle the button
   Timer? locationTimer;
+  bool shouldSaveLocation = false; // Flag to control saving location updates, false=don't save location
+
 
   @override
   void dispose() {
@@ -24,18 +25,24 @@ class _LocationPageState extends State<LocationPage> {
     super.dispose();
   }
 
-  Future<void> stopLocationUpdates() async {
+  Future<void> stopLocationUpdates(bool shouldSave) async {
+    shouldSaveLocation = shouldSave; 
     locationTimer?.cancel();
+    locationTimer = null; // Set the timer to null to indicate it's not running
   }
 
   void toggleLocationSharing() {
+    User? user = _auth.currentUser;
     setState(() {
       if (isLocationSharing) {
         // Stop location sharing
-        stopLocationUpdates();
+        stopLocationUpdates(shouldSaveLocation);
       } else {
         // Start location sharing
-        startLocationUpdates();
+        if(user!=null){
+          shouldSaveLocation = true;
+          startLocationUpdates(user.uid, shouldSaveLocation);
+        }
       }
       isLocationSharing = !isLocationSharing;
     });

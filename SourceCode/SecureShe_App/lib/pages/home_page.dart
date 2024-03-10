@@ -26,20 +26,20 @@ class HomePage extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   color: AppVars.accent),
             ),
-            LocationPage(), 
-            // Expanded(
-            //   child: Column(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       //SOSButton(),
-            //       LocationPage(),  
-            //     ],
-            //   ),
-            // ),
-            // const Text(
-            //   'Privacy Statement:\nYour data is securely stored in our database.',
-            //   style: TextStyle(fontSize: 16),
-            // ),
+            //LocationPage(), 
+            const Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SOSButton(),
+                  //LocationPage(),  
+                ],
+              ),
+            ),
+            const Text(
+              'Privacy Statement:\nYour data is securely stored in our database.',
+              style: TextStyle(fontSize: 16),
+            ),
           ],
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/models/AppVars.dart';
+import 'package:my_app/models/Profile/SOS_configuration.dart';
 import 'package:my_app/pages/login.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -17,7 +18,9 @@ class MyProfile extends StatefulWidget {
 class _MyProfileState extends State<MyProfile> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-
+  final TextEditingController _emergencyContactController = TextEditingController(); 
+  final TextEditingController _emergencyMessageController = TextEditingController(); 
+  final List<String> contacts = ['KawtharKH']; 
   @override
   void initState() {
     super.initState();
@@ -90,158 +93,159 @@ class _MyProfileState extends State<MyProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppVars.primary,
-      body: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: AppVars.pagePadding,
-          vertical: 0,
-        ),
-        width: double.infinity,
-        child: Column(
-          children: [
-            SizedBox(
-              height: AppVars.sectionPadding,
-            ),
-            SizedBox(
-              // color: Colors.red,
-              width: double.infinity,
-              height: 120,
-              child: Row(
-                children: [
-                  // PROFILE PIC
-                  AspectRatio(
-                    aspectRatio: 1,
-                    child: Container(
-                      clipBehavior: Clip.hardEdge,
-                      height: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(100),
-                        ),
-                        color: AppVars.secondary,
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppVars.secondary.withOpacity(0.4),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2.0),
-                          ),
-                        ],
-                      ),
-                      child: const Image(
-                        fit: BoxFit.scaleDown,
-                        image: AssetImage("assets/images/profile_charles.png"),
-                        height: double.infinity,
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  // NAME AND Edit button
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: AppVars.elementMargin,
-                        ),
-                        // NAME
-                        Text(
-                          "Charles Kenneth Samonte",
-                          textAlign: TextAlign.start,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: AppVars.secondary,
-                          ),
-                        ),
-                        SizedBox(
-                          height: AppVars.elementMargin,
-                        ),
-                        InkWell(
-                          onTap: null,
-                          child: Text(
-                            "Edit profile",
-                            style: TextStyle(
-                                color: AppVars.accent,
-                                decoration: TextDecoration.underline,
-                                fontSize: AppVars.textHref),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-      // body: Center(
+      // body: Container(
+      //   padding: EdgeInsets.symmetric(
+      //     horizontal: AppVars.pagePadding,
+      //     vertical: 0,
+      //   ),
+      //   width: double.infinity,
       //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: <Widget>[
-      //       Text("Welcome ${_usernameController.text} "),
-      //       const SizedBox(height: 20),
-      //       Text('Username: ${_usernameController.text}'),
-      //       Text('Email: ${_emailController.text}'),
-
-      //       ElevatedButton(
-      //         onPressed: () {
-      //           Navigator.push(
-      //             context,
-      //             MaterialPageRoute(
-      //               builder: (context) => EditInfoScreen(
-      //                 usernameController: _usernameController,
-      //                 emailController: _emailController,
-      //                 onUpdate: () {
-      //                   fetchUserProfile();
-      //                 },
+      //     children: [
+      //       SizedBox(
+      //         height: AppVars.sectionPadding,
+      //       ),
+      //       SizedBox(
+      //         // color: Colors.red,
+      //         width: double.infinity,
+      //         height: 120,
+      //         child: Row(
+      //           children: [
+      //             // PROFILE PIC
+      //             AspectRatio(
+      //               aspectRatio: 1,
+      //               child: Container(
+      //                 clipBehavior: Clip.hardEdge,
+      //                 height: double.infinity,
+      //                 decoration: BoxDecoration(
+      //                   borderRadius: const BorderRadius.all(
+      //                     Radius.circular(100),
+      //                   ),
+      //                   color: AppVars.secondary,
+      //                   boxShadow: [
+      //                     BoxShadow(
+      //                       color: AppVars.secondary.withOpacity(0.4),
+      //                       blurRadius: 4,
+      //                       offset: const Offset(0, 2.0),
+      //                     ),
+      //                   ],
+      //                 ),
+      //                 child: const Image(
+      //                   fit: BoxFit.scaleDown,
+      //                   image: AssetImage("assets/images/profile_charles.png"),
+      //                   height: double.infinity,
+      //                   width: double.infinity,
+      //                   alignment: Alignment.center,
+      //                 ),
       //               ),
       //             ),
-      //           );
-      //         },
-      //         child: const Text('Edit Info'),
-      //       ),
-      //       const SizedBox(
-      //         height: 20,
-      //       ),
-      //       // SOS Button Configuration UI
-      //       TextField(
-      //         controller: _emergencyContactController,
-      //         decoration: const InputDecoration(labelText: 'Emergency Contact'),
-      //       ),
-      //       TextField(
-      //         controller: _emergencyMessageController,
-      //         decoration: const InputDecoration(labelText: 'Emergency Message'),
-      //       ),
-      //       const SizedBox(height: 20),
-      //       ElevatedButton(
-      //         onPressed: () async {
-      //           await updateProfile();
-      //           emergencySOSUpdate();
-      //         },
-      //         child: const Text('Update SOS Emergency info'),
-      //       ),
-      //       const SizedBox(height: 20),
-      //       ElevatedButton(
-      //         onPressed: () async {
-      //           await _auth.signOut();
-      //           // ignore: use_build_context_synchronously
-      //           Navigator.push(
-      //             context,
-      //             MaterialPageRoute(
-      //               builder: (context) => LoginPage(),
+      //             const SizedBox(
+      //               width: 16,
       //             ),
-      //           );
-      //         },
-      //         child: const Text('Logout'),
+      //             // NAME AND Edit button
+      //             Expanded(
+      //               child: Column(
+      //                 crossAxisAlignment: CrossAxisAlignment.start,
+      //                 children: [
+      //                   SizedBox(
+      //                     height: AppVars.elementMargin,
+      //                   ),
+      //                   // NAME
+      //                   Text(
+      //                     "Charles Kenneth Samonte",
+      //                     textAlign: TextAlign.start,
+      //                     maxLines: 2,
+      //                     overflow: TextOverflow.ellipsis,
+      //                     style: TextStyle(
+      //                       fontSize: 20,
+      //                       color: AppVars.secondary,
+      //                     ),
+      //                   ),
+      //                   SizedBox(
+      //                     height: AppVars.elementMargin,
+      //                   ),
+      //                   InkWell(
+      //                     onTap: null,
+      //                     child: Text(
+      //                       "Edit profile",
+      //                       style: TextStyle(
+      //                           color: AppVars.accent,
+      //                           decoration: TextDecoration.underline,
+      //                           fontSize: AppVars.textHref),
+      //                     ),
+      //                   )
+      //                 ],
+      //               ),
+      //             )
+      //           ],
+      //         ),
       //       ),
       //     ],
       //   ),
       // ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text("Welcome ${_usernameController.text} "),
+            const SizedBox(height: 20),
+            Text('Username: ${_usernameController.text}'),
+            Text('Email: ${_emailController.text}'),
+
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditInfoScreen(
+                      usernameController: _usernameController,
+                      emailController: _emailController,
+                      onUpdate: () {
+                        fetchUserProfile();
+                      },
+                    ),
+                  ),
+                );
+              },
+              child: const Text('Edit Info'),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            // SOS Button Configuration UI
+            TextField(
+              controller: _emergencyContactController,
+              decoration: const InputDecoration(labelText: 'Emergency Contact'),
+            ),
+            TextField(
+              controller: _emergencyMessageController,
+              decoration: const InputDecoration(labelText: 'Emergency Message'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                await updateProfile();
+                EmergencyConfiguration emergencyClass = EmergencyConfiguration(message: 'Help me', contacts: contacts );
+                emergencyClass.emergencySOSUpdate(); 
+              },
+              child: const Text('Update SOS Emergency info'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                await _auth.signOut();
+                // ignore: use_build_context_synchronously
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  ),
+                );
+              },
+              child: const Text('Logout'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

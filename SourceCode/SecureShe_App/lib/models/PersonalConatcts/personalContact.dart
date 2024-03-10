@@ -18,7 +18,7 @@ class PersonalContactModel {
       contactName: map['contactName'] ?? '',
       initialsTemp: map['initialsTemp'] ?? '',
       uid: map['uid'] ?? '',
-      imagePath: map['imagePath'] ?? 'avatar_default.jpg',
+      imagePath: map['imagePath'] ?? 'assets/images/avatar_default.jpg',
       addedContactUid: map['contactUid'] ?? '',
     );
   }

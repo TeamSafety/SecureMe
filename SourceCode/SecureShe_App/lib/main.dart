@@ -4,6 +4,8 @@ import 'package:my_app/pages/login.dart';
 import 'firebase_options.dart';
 import 'package:my_app/pages/main_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 
 void main() async {
@@ -12,6 +14,27 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // Request permission
+  final messaging = FirebaseMessaging.instance;
+
+  final settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  if (kDebugMode) {
+    print('Permission granted: ${settings.authorizationStatus}');
+  }
+  // //Register with FCM 
+  // // It requests a registration token for sending messages to users from server.
+  // String? token = await messaging.getToken();
+  // if (kDebugMode) {
+  //   print('Registration Token=$token');
+  // }
   runApp(const MyApp());
 }
 // Background message handler
