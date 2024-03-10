@@ -3,32 +3,31 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/models/UserLocation/save_location.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:my_app/pages/osm_page.dart';
+
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-
+  bool isLocationSharing = false;
+  Timer? locationTimer;
+  bool shouldSaveLocation = false;
 class LocationPage extends StatefulWidget {
   @override
   _LocationPageState createState() => _LocationPageState();
 }
-class _LocationPageState extends State<LocationPage> {
-  bool isLocationSharing = false; // taggle the button
-  Timer? locationTimer;
-  bool shouldSaveLocation = false; // Flag to control saving location updates, false=don't save location
 
+class _LocationPageState extends State<LocationPage> {
 
   @override
   void dispose() {
-    locationTimer?.cancel();
+    stopLocationUpdates();
     super.dispose();
   }
 
-  Future<void> stopLocationUpdates(bool shouldSave) async {
-    shouldSaveLocation = shouldSave; 
+  Future<void> stopLocationUpdates() async {
+    shouldSaveLocation = false;
     locationTimer?.cancel();
-    locationTimer = null; // Set the timer to null to indicate it's not running
   }
 
   void toggleLocationSharing() {
@@ -36,12 +35,12 @@ class _LocationPageState extends State<LocationPage> {
     setState(() {
       if (isLocationSharing) {
         // Stop location sharing
-        stopLocationUpdates(shouldSaveLocation);
+        stopLocationUpdates();
       } else {
         // Start location sharing
-        if(user!=null){
+        if (user != null) {
           shouldSaveLocation = true;
-          startLocationUpdates(user.uid, shouldSaveLocation);
+          startLocationUpdates(user.uid);
         }
       }
       isLocationSharing = !isLocationSharing;
@@ -64,4 +63,40 @@ class _LocationPageState extends State<LocationPage> {
       ),
     );
   }
+}
+
+Future<void> saveToDatabase(Position position, String userID) async {
+  CollectionReference usersCollection = FirebaseFirestore.instance.collection('Users');
+  DocumentReference userDocRef = usersCollection.doc(userID);
+
+  Map<String, dynamic> data = {
+    'latitude': position.latitude,
+    'longitude': position.longitude,
+    'timestamp': FieldValue.serverTimestamp(),
+  };
+  await userDocRef.update(data);
+
+  print('Saved to Firestore: ${position.latitude}, ${position.longitude}');
+}
+
+Future<void> startLocationUpdates(String userID) async {
+  // Initial save
+  Position? initialPosition = await grabLastLocation();
+  if (initialPosition != null) {
+    await saveToDatabase(initialPosition, userID);
+  }
+
+  // Periodic updates
+  const Duration updateInterval = Duration(seconds: 10);
+
+  locationTimer = Timer.periodic(updateInterval, (timer) async {
+    if (shouldSaveLocation) {
+      Position? currentPosition = await grabLastLocation();
+      if (currentPosition != null) {
+        await saveToDatabase(currentPosition, userID);
+      }
+    } else {
+      timer.cancel(); // Stop the timer if saving location updates is disabled
+    }
+  });
 }
