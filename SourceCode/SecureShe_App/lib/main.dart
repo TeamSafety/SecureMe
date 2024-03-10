@@ -7,7 +7,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -29,7 +28,7 @@ void main() async {
   if (kDebugMode) {
     print('Permission granted: ${settings.authorizationStatus}');
   }
-  // //Register with FCM 
+  // //Register with FCM
   // // It requests a registration token for sending messages to users from server.
   // String? token = await messaging.getToken();
   // if (kDebugMode) {
@@ -37,13 +36,12 @@ void main() async {
   // }
   runApp(const MyApp());
 }
+
 // Background message handler
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
   // Handle the background message
-  
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -54,8 +52,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(fontFamily: "ArbutusSlab"),
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
-      //home: const MainPage(),
+      //home: LoginPage(),
+      home: const MainPage(),
     );
   }
 }

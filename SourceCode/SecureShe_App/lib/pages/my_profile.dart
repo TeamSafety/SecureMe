@@ -18,9 +18,11 @@ class MyProfile extends StatefulWidget {
 class _MyProfileState extends State<MyProfile> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _emergencyContactController = TextEditingController(); 
-  final TextEditingController _emergencyMessageController = TextEditingController(); 
-  final List<String> contacts = ['KawtharKH']; 
+  final TextEditingController _emergencyContactController =
+      TextEditingController();
+  final TextEditingController _emergencyMessageController =
+      TextEditingController();
+  final List<String> contacts = ['KawtharKH'];
   @override
   void initState() {
     super.initState();
@@ -224,8 +226,9 @@ class _MyProfileState extends State<MyProfile> {
             ElevatedButton(
               onPressed: () async {
                 await updateProfile();
-                EmergencyConfiguration emergencyClass = EmergencyConfiguration(message: 'Help me', contacts: contacts );
-                emergencyClass.emergencySOSUpdate(); 
+                EmergencyConfiguration emergencyClass = EmergencyConfiguration(
+                    message: 'Help me', contacts: contacts);
+                emergencyClass.emergencySOSUpdate();
               },
               child: const Text('Update SOS Emergency info'),
             ),
