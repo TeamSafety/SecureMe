@@ -9,7 +9,6 @@ import 'package:rxdart/rxdart.dart';
 // used to pass messages from event handler to the UI
 final _messageStreamController = BehaviorSubject<RemoteMessage>();
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -30,7 +29,7 @@ void main() async {
   if (kDebugMode) {
     print('Permission granted: ${settings.authorizationStatus}');
   }
-  // //Register with FCM 
+  // //Register with FCM
   // // It requests a registration token for sending messages to users from server.
   // String? token = await messaging.getToken();
   // if (kDebugMode) {
@@ -47,6 +46,7 @@ void main() async {
   });
   runApp(const MyApp());
 }
+
 // Background message handler
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -58,6 +58,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     print('Message notification: ${message.notification?.body}');
   }
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
