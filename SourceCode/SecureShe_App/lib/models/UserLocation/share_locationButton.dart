@@ -3,21 +3,22 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/UserLocation/save_location.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-
-class LocationPage extends StatefulWidget {
+class ShareLocationButton extends StatefulWidget {
   @override
-  _LocationPageState createState() => _LocationPageState();
+  _ShareLocationButtonState createState() => _ShareLocationButtonState();
 }
-class _LocationPageState extends State<LocationPage> {
+
+class _ShareLocationButtonState extends State<ShareLocationButton> {
   bool isLocationSharing = false; // taggle the button
   Timer? locationTimer;
-  bool shouldSaveLocation = false; // Flag to control saving location updates, false=don't save location
-
+  bool shouldSaveLocation =
+      false; // Flag to control saving location updates, false=don't save location
 
   @override
   void dispose() {
@@ -26,7 +27,7 @@ class _LocationPageState extends State<LocationPage> {
   }
 
   Future<void> stopLocationUpdates(bool shouldSave) async {
-    shouldSaveLocation = shouldSave; 
+    shouldSaveLocation = shouldSave;
     locationTimer?.cancel();
     locationTimer = null; // Set the timer to null to indicate it's not running
   }
@@ -39,7 +40,7 @@ class _LocationPageState extends State<LocationPage> {
         stopLocationUpdates(shouldSaveLocation);
       } else {
         // Start location sharing
-        if(user!=null){
+        if (user != null) {
           shouldSaveLocation = true;
           startLocationUpdates(user.uid, shouldSaveLocation);
         }
@@ -50,17 +51,40 @@ class _LocationPageState extends State<LocationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Location Sharing'),
+    final ButtonStyle unSelectedStyle = ElevatedButton.styleFrom(
+      foregroundColor: AppVars.accent,
+      backgroundColor: AppVars.primary,
+      shadowColor: AppVars.secondary.withOpacity(0.8),
+      side: BorderSide(
+        color: AppVars.accent,
+        width: 0.5,
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: toggleLocationSharing,
-          child: Text(isLocationSharing
-              ? 'Stop Location Sharing'
-              : 'Start Location Sharing'),
-        ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+    );
+
+    final ButtonStyle selectedStyle = ElevatedButton.styleFrom(
+      foregroundColor: AppVars.primary,
+      backgroundColor: AppVars.accent,
+      shadowColor: AppVars.accent.withOpacity(0.8),
+      side: BorderSide(
+        color: AppVars.accent,
+        width: 0.5,
+      ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+    );
+
+    return Container(
+      alignment: Alignment.topCenter,
+      child: ElevatedButton(
+        style: isLocationSharing ? selectedStyle : unSelectedStyle,
+        onPressed: toggleLocationSharing,
+        child: Text(isLocationSharing
+            ? 'Stop Location Sharing'
+            : 'Start Location Sharing'),
       ),
     );
   }

@@ -18,21 +18,27 @@ class HomePage extends StatelessWidget {
         width: double.infinity,
         child: Column(
           children: [
+            SizedBox(
+              height: AppVars.elementMargin,
+            ),
             Text(
-              'Welcome to SecureMe',
+              'SecureMe',
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: AppVars.bigHeader,
                   fontWeight: FontWeight.bold,
                   color: AppVars.accent),
             ),
-            //LocationPage(), 
-            const Expanded(
+            SizedBox(
+              height: AppVars.elementMargin,
+            ),
+            Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SOSButton(),
-                  //LocationPage(),  
+                  ShareLocationButton(),
+                  const Expanded(
+                    child: SOSButton(),
+                  ),
                 ],
               ),
             ),

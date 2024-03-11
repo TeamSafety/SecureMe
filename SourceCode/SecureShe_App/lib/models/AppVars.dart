@@ -14,4 +14,13 @@ class AppVars {
   static double textHeader = 20;
   static double textTitle = 16;
   static double textHref = 16;
+
+  static ButtonStyle primaryButtonStyle = ElevatedButton.styleFrom(
+    foregroundColor: AppVars.primary,
+    backgroundColor: AppVars.accent,
+    shadowColor: AppVars.secondary.withOpacity(0.8),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+  );
 }

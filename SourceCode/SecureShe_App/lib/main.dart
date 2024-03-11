@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(fontFamily: "ArbutusSlab"),
       debugShowCheckedModeBanner: false,
-      //home: LoginPage(),
+      // home: LoginPage(),
       home: const MainPage(),
     );
   }
