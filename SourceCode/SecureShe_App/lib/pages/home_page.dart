@@ -32,19 +32,16 @@ class HomePage extends StatelessWidget {
             SizedBox(
               height: AppVars.elementMargin,
             ),
+            ShareLocationButton(),
             Expanded(
-              child: Column(
-                children: [
-                  ShareLocationButton(),
-                  const Expanded(
-                    child: SOSButton(),
-                  ),
-                ],
-              ),
+              child: Container(child: const SOSButton()),
             ),
-            const Text(
+            Text(
               'Privacy Statement:\nYour data is securely stored in our database.',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(
+                fontSize: 16,
+                color: AppVars.secondary,
+              ),
             ),
           ],
         ),
