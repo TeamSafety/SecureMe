@@ -52,4 +52,30 @@ class MessageService {
     userIds.sort(); // Ensure consistent order to generate the same chatroom ID for both users
     return userIds.join('_'); // Combine user IDs to create a unique chatroom ID
   }
+
+  Future<List<String>> getUserPresetMessages(String userId) async {
+    try {
+      var userDoc = await _firestore.collection('Users').doc(userId).get();
+
+      if (userDoc.exists) {
+        var messagesCollection = userDoc.reference.collection('messages');
+        // Fetch documents from the 'messages' subcollection
+        var messagesQuery = await messagesCollection.get();
+        // Extract the message field from each document
+        List<String> presetMessages = messagesQuery.docs
+            .map((messageDoc) => messageDoc['message'] as String)
+            .toList();
+
+        return presetMessages;
+      } else {
+        // User document not found
+        return [];
+      }
+    } catch (e) {
+      // Handle errors
+      print('Error fetching user preset messages: $e');
+      return [];
+    }
+  }
 }
+
