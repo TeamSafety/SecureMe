@@ -36,10 +36,10 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-            const Text(
-              'Privacy Statement:\nYour data is securely stored in our database.',
-              style: TextStyle(fontSize: 16),
-            ),
+            // const Text(
+            //   'Privacy Statement:\nYour data is securely stored in our database.',
+            //   style: TextStyle(fontSize: 16),
+            // ),
           ],
         ),
       ),
