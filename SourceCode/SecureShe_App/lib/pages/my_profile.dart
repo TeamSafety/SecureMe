@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/Profile/SOS_configuration.dart';
+import 'package:my_app/models/drop_downList.dart';
 import 'package:my_app/pages/login.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -18,19 +19,27 @@ class MyProfile extends StatefulWidget {
 class _MyProfileState extends State<MyProfile> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _emergencyContactController = TextEditingController(); 
-  final TextEditingController _emergencyMessageController = TextEditingController(); 
-  final List<String> contacts = ['KawtharKH']; 
+  //final TextEditingController _emergencyContactController = TextEditingController(); 
+  //final TextEditingController _emergencyMessageController = TextEditingController(); 
+
+  List<String> userContacts = ["KawtharKH"]; 
+  List<String> userMessages = ["Help please"]; 
+  String? selectedEmergencyContact;
+  String? selectedEmergencyMessage;
+
+  late Future<void> userProfileFuture;
+
   @override
   void initState() {
     super.initState();
-    fetchUserProfile();
+    userProfileFuture = fetchUserProfile();  
   }
 
-  void fetchUserProfile() async {
+  Future<void> fetchUserProfile() async {
     User? user = _auth.currentUser;
 
     if (user != null) {
+      // Fetch user profile data
       DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
           .instance
           .collection('Users')
@@ -43,10 +52,32 @@ class _MyProfileState extends State<MyProfile> {
           _emailController.text = snapshot['email'];
         });
       } else {
-        //print('Document does not exist.');
+        // Handle the case where the document does not exist.
       }
+
+      // Fetch user contacts
+      QuerySnapshot<Map<String, dynamic>> contactsSnapshot = await FirebaseFirestore
+          .instance
+          .collection('Users')
+          .doc(user.uid)
+          .collection('contacts')
+          .get();
+
+      userContacts = contactsSnapshot.docs.map((doc) => doc['contactName'] as String).toList();
+
+      // Fetch user messages
+      QuerySnapshot<Map<String, dynamic>> messagesSnapshot = await FirebaseFirestore
+          .instance
+          .collection('Users')
+          .doc(user.uid)
+          .collection('messages')
+          .get();
+
+      userMessages = messagesSnapshot.docs.map((doc) => doc['message'] as String).toList();
     }
   }
+
+  
 
   Future<void> updateProfile() async {
     User? user = _auth.currentUser;
@@ -183,70 +214,110 @@ class _MyProfileState extends State<MyProfile> {
       //   ),
       // ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text("Welcome ${_usernameController.text} "),
-            const SizedBox(height: 20),
-            Text('Username: ${_usernameController.text}'),
-            Text('Email: ${_emailController.text}'),
+        child: FutureBuilder(
+          future: userProfileFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // Return a loading indicator while fetching data
+              return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              // Handle error
+              return Text('Error: ${snapshot.error}');
+            } else {
+              // Data has been fetched, build the UI
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("Welcome ${_usernameController.text} "),
+                  const SizedBox(height: 20),
+                  Text('Username: ${_usernameController.text}'),
+                  Text('Email: ${_emailController.text}'),
 
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditInfoScreen(
-                      usernameController: _usernameController,
-                      emailController: _emailController,
-                      onUpdate: () {
-                        fetchUserProfile();
-                      },
-                    ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditInfoScreen(
+                            usernameController: _usernameController,
+                            emailController: _emailController,
+                            onUpdate: () {
+                              fetchUserProfile();
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text('Edit Info'),
                   ),
-                );
-              },
-              child: const Text('Edit Info'),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            // SOS Button Configuration UI
-            TextField(
-              controller: _emergencyContactController,
-              decoration: const InputDecoration(labelText: 'Emergency Contact'),
-            ),
-            TextField(
-              controller: _emergencyMessageController,
-              decoration: const InputDecoration(labelText: 'Emergency Message'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                await updateProfile();
-                EmergencyConfiguration emergencyClass = EmergencyConfiguration(message: 'Help me', contacts: contacts );
-                emergencyClass.emergencySOSUpdate(); 
-              },
-              child: const Text('Update SOS Emergency info'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                await _auth.signOut();
-                // ignore: use_build_context_synchronously
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
+                  const SizedBox(
+                    height: 20,
                   ),
-                );
-              },
-              child: const Text('Logout'),
-            ),
-          ],
-        ),
-      ),
-    );
+                  // SOS Button Configuration UI
+                  // TextField(
+                  //   controller: _emergencyContactController,
+                  //   decoration: const InputDecoration(labelText: 'Emergency Contact'),
+                  // ),
+                  // TextField(
+                  //   controller: _emergencyMessageController,
+                  //   decoration: const InputDecoration(labelText: 'Emergency Message'),
+                  // ),
+                  DropdownButtonClass(
+                    contacts: userContacts,
+                    messages: userMessages,
+                    onContactChanged: (String? value) {
+                      setState(() {
+                        selectedEmergencyContact = value;
+                      });
+                    },
+                    onMessageChanged: (String? value) {
+                      setState(() {
+                        selectedEmergencyMessage = value;
+                      });
+                    },
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  ElevatedButton(
+                    onPressed: () async {
+                      await updateProfile();
+                      EmergencyConfiguration emergencyClass = EmergencyConfiguration(
+                        message: selectedEmergencyMessage ?? 'Default Message',
+                        contacts: [selectedEmergencyContact ?? ''],
+                      );
+                      emergencyClass.emergencySOSUpdate();
+                    },
+                    child: const Text('Update SOS Emergency info'),
+                  ),
+
+                  const SizedBox(height: 20),
+                  // ElevatedButton(
+                  //   onPressed: () async {
+                  //     await updateProfile();
+                  //     EmergencyConfiguration emergencyClass = EmergencyConfiguration(message: 'Help me', contacts: contacts );
+                  //     emergencyClass.emergencySOSUpdate(); 
+                  //   },
+                  //   child: const Text('Update SOS Emergency info'),
+                  // ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await _auth.signOut();
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(),
+                        ),
+                      );
+                    },
+                    child: const Text('Logout'),
+                  ),
+                ],
+              );}
+    }),
+    ));
   }
 }
 
