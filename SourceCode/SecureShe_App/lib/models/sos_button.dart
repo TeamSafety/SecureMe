@@ -35,12 +35,12 @@ class _SOSButtonState extends State<SOSButton> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // onTap: () {
-      //   _handleSOSButtonPress(context);
-      // },
-      onTapDown: (_) => _increaseSize(),
-      onTapUp: (_) => _decreaseSize(),
-      onTapCancel: () => _decreaseSize(),
+      onTap: () {
+        _handleSOSButtonPress(context);
+      },
+      // onTapDown: (_) => _increaseSize(),
+      // onTapUp: (_) => _decreaseSize(),
+      // onTapCancel: () => _decreaseSize(),
       child: Container(
         alignment: Alignment.center,
         width: _sizeTmp,
