@@ -18,8 +18,6 @@ class ShareLocationButton extends StatefulWidget {
   _ShareLocationButtonState createState() => _ShareLocationButtonState();
 }
 
-class _LocationPageState extends State<LocationPage> {
-
 class _ShareLocationButtonState extends State<ShareLocationButton> {
   bool isLocationSharing = false; // taggle the button
   Timer? locationTimer;

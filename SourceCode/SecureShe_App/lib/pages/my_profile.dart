@@ -255,23 +255,23 @@ class _MyProfileState extends State<MyProfile> {
                           color: AppVars.secondary.withOpacity(0.8),
                         ),
                       ),
-                      TextField(
-                        controller: _emergencyContactController,
-                        style: TextStyle(
-                          color: AppVars.secondary,
-                          fontSize: 20,
-                        ),
-                        decoration: const InputDecoration(
-                          hintText: "Enter name of contact here",
-                          hintStyle: TextStyle(
-                            color: Color.fromARGB(127, 47, 44, 35),
-                          ),
-                          contentPadding: EdgeInsets.all(0),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
+                      // TextField(
+                      //   controller: _emergencyContactController,
+                      //   style: TextStyle(
+                      //     color: AppVars.secondary,
+                      //     fontSize: 20,
+                      //   ),
+                        // decoration: const InputDecoration(
+                        //   hintText: "Enter name of contact here",
+                        //   hintStyle: TextStyle(
+                        //     color: Color.fromARGB(127, 47, 44, 35),
+                        //   ),
+                        //   contentPadding: EdgeInsets.all(0),
+                        //   border: OutlineInputBorder(
+                        //     borderSide: BorderSide.none,
+                        //   ),
+                        // ),
+                      //),
                     ],
                   ),
                 ),
@@ -307,23 +307,23 @@ class _MyProfileState extends State<MyProfile> {
                           color: AppVars.secondary.withOpacity(0.8),
                         ),
                       ),
-                      TextField(
-                        controller: _emergencyMessageController,
-                        style: TextStyle(
-                          color: AppVars.secondary,
-                          fontSize: 20,
-                        ),
-                        decoration: const InputDecoration(
-                          hintText: "Enter emergency message...",
-                          hintStyle: TextStyle(
-                            color: Color.fromARGB(127, 47, 44, 35),
-                          ),
-                          contentPadding: EdgeInsets.all(0),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
+                      // TextField(
+                      //   controller: _emergencyMessageController,
+                      //   style: TextStyle(
+                      //     color: AppVars.secondary,
+                      //     fontSize: 20,
+                      //   ),
+                      //   decoration: const InputDecoration(
+                      //     hintText: "Enter emergency message...",
+                      //     hintStyle: TextStyle(
+                      //       color: Color.fromARGB(127, 47, 44, 35),
+                      //     ),
+                      //     contentPadding: EdgeInsets.all(0),
+                      //     border: OutlineInputBorder(
+                      //       borderSide: BorderSide.none,
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -336,7 +336,7 @@ class _MyProfileState extends State<MyProfile> {
                     await updateProfile();
                     EmergencyConfiguration emergencyClass =
                         EmergencyConfiguration(
-                            message: 'Help me', contacts: contacts);
+                            message: 'Help me', contacts: userContacts);
                     emergencyClass.emergencySOSUpdate();
                   },
                   child: const Text('Update SOS Emergency info'),
