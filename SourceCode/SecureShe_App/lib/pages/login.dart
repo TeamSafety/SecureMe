@@ -23,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
   String errorMessage = '';
   double errorFontSize = 0;
+  bool hidePassword = false;
 
   void signUserIn() async {
     String email = emailController.text.trim();
@@ -96,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                   controller: passwordController,
                   headerText: "Password",
                   hintText: "*************",
-                  obscureText: true,
+                  obscureText: hidePassword,
                 ),
               ),
               const SizedBox(

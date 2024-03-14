@@ -18,23 +18,23 @@ class HomePage extends StatelessWidget {
         width: double.infinity,
         child: Column(
           children: [
+            SizedBox(
+              height: AppVars.elementMargin,
+            ),
             Text(
-              'Welcome to SecureMe',
+              'SecureMe',
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: AppVars.bigHeader,
                   fontWeight: FontWeight.bold,
                   color: AppVars.accent),
             ),
-            //LocationPage(), 
-            const Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SOSButton(),
-                  //LocationPage(),  
-                ],
-              ),
+            SizedBox(
+              height: AppVars.elementMargin,
+            ),
+            ShareLocationButton(),
+            Expanded(
+              child: Container(child: const SOSButton()),
             ),
             // const Text(
             //   'Privacy Statement:\nYour data is securely stored in our database.',

@@ -29,7 +29,7 @@ class PresetMessage extends StatelessWidget {
           const SizedBox(
             width: 8,
           ),
-          Flexible(
+          Expanded(
             child: Text(
               message,
               style: TextStyle(

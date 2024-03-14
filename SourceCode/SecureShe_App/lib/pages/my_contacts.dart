@@ -24,15 +24,6 @@ class _MyContactsState extends State<MyContacts> {
   String errorMessage = "";
   final TextEditingController _messageController = TextEditingController();
 
-  // TEMPORARY Users
-  final List _userContacts = [
-    ["Charles Samonte", "123", "assets/images/profile_charles.png"],
-    ["Charles Samonte", "123", "assets/images/profile_charles.png"],
-    ["Charles Samonte", "123", "assets/images/profile_charles.png"],
-    ["Kawthar Alkhateeb", "345", "assets/images/profile_kawthar.png"],
-    ["Kristina Langgard", "567", "assets/images/profile_kristina.png"],
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -68,7 +59,6 @@ class _MyContactsState extends State<MyContacts> {
           .set({
         'contactName': contactName,
         'contactUid': contactUid,
-        
       });
     }
     getPersonalContacts();
@@ -142,6 +132,7 @@ class _MyContactsState extends State<MyContacts> {
         ),
         // Allow the user to add more messages
         ElevatedButton(
+          style: AppVars.primaryButtonStyle,
           onPressed: _showAddMessageDialog,
           child: const Text('Add Message'),
         ),
@@ -267,18 +258,6 @@ class _MyContactsState extends State<MyContacts> {
         const SizedBox(
           height: 16,
         ),
-        // const PersonalContact(
-        //   contactName: "Charles Samonte",
-        //   imagePath: "assets/images/profile_charles.png",
-        // ),
-        // const SizedBox(height: 8),
-        // const PersonalContact(
-        //     contactName: "Kawthar Alkhateeb",
-        //     imagePath: "assets/images/profile_kristina.png"),
-        // const SizedBox(height: 8),
-        // const PersonalContact(
-        //     contactName: "Kristina Langgard",
-        //     imagePath: "assets/images/profile_kawthar.png"),
         const SizedBox(height: 8),
         for (PersonalContactModel contact in personalContacts)
           Column(
@@ -297,6 +276,7 @@ class _MyContactsState extends State<MyContacts> {
         //     imagePath: "assets/images/profile_kawthar.png"),
         const SizedBox(height: 8),
         ElevatedButton(
+          style: AppVars.primaryButtonStyle,
           onPressed: () => _showAddContactDialog(),
           child: const Text('Add Contact'),
         )
@@ -379,7 +359,7 @@ class _MyContactsState extends State<MyContacts> {
                         _usernameController.clear();
                       } else {
                         // Case where the contact is already in the list
-                        errorMessage = "You have alread added this contact";
+                        errorMessage = "You have already added this contact";
                       }
                     } else {
                       errorMessage = "Cannot find the username";

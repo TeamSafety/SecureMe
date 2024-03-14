@@ -10,8 +10,27 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final MessageService _messageService = MessageService();
 
-class SOSButton extends StatelessWidget {
+class SOSButton extends StatefulWidget {
   const SOSButton({super.key});
+
+  @override
+  State<SOSButton> createState() => _SOSButtonState();
+}
+
+class _SOSButtonState extends State<SOSButton> {
+  double _sizeTmp = 115;
+
+  void _increaseSize() {
+    setState(() {
+      _sizeTmp = 200;
+    });
+  }
+
+  void _decreaseSize() {
+    setState(() {
+      _sizeTmp = 115;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +38,13 @@ class SOSButton extends StatelessWidget {
       onTap: () {
         _handleSOSButtonPress(context);
       },
+      // onTapDown: (_) => _increaseSize(),
+      // onTapUp: (_) => _decreaseSize(),
+      // onTapCancel: () => _decreaseSize(),
       child: Container(
         alignment: Alignment.center,
-        width: 114,
-        height: 114,
+        width: _sizeTmp,
+        height: _sizeTmp,
         decoration: BoxDecoration(
           color: AppVars.accent,
           shape: BoxShape.circle,
@@ -118,6 +140,7 @@ class SOSButton extends StatelessWidget {
       },
     );
   }
+
   Future<void> _sendEmergencyMessage() async {
     User? user = _auth.currentUser;
     if (user != null) {
@@ -144,8 +167,9 @@ class SOSButton extends StatelessWidget {
 
           for (int i = 0; i < emergencyContactIds.length; i++) {
             String contactId = emergencyContactIds[i];
-            String chatroomId = _messageService.getChatroomId(user.uid, contactId);
-            print(user.uid); 
+            String chatroomId =
+                _messageService.getChatroomId(user.uid, contactId);
+            print(user.uid);
 
             String formattedMessage =
                 'EMERGENCY Message: ${emergencyMessages[i]}';
@@ -168,5 +192,4 @@ class SOSButton extends StatelessWidget {
       }
     }
   }
-
 }

@@ -47,6 +47,7 @@ void main() async {
   runApp(const MyApp());
 }
 
+
 // Background message handler
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -68,8 +69,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(fontFamily: "ArbutusSlab"),
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
-      //home: const MainPage(),
+      // home: LoginPage(),
+      home: const MainPage(),
     );
   }
 }
