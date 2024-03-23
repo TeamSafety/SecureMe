@@ -283,50 +283,6 @@ class _MyContactsState extends State<MyContacts> {
       ],
     );
   }
-
-  // EDIT builder using listview
-  // Column personalContactsBuilder2() {
-  //   return Column(
-  //     children: [
-  //       SizedBox(
-  //         width: double.infinity,
-  //         child: Text(
-  //           "Personal contacts",
-  //           style: TextStyle(
-  //             color: AppVars.secondary,
-  //             fontSize: AppVars.textHeader,
-  //           ),
-  //         ),
-  //       ),
-  //       SizedBox(
-  //         height: AppVars.titleMargin,
-  //       ),
-  //       SizedBox(
-  //         height: 400,
-  //         child: ListView.builder(
-  //           itemCount: _userContacts.length,
-  //           itemBuilder: (context, index) {
-  //             return Column(
-  //               children: [
-  //                 PersonalContact(
-  //                   contactName: _userContacts[index][0],
-  //                   imagePath: _userContacts[index][2],
-  //                 ),
-  //                 SizedBox(
-  //                   height: AppVars.elementMargin,
-  //                 )
-  //               ],
-  //             );
-  //           },
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  //   //     ElevatedButton(
-  //   //       onPressed: () => _showAddContactDialog(),
-  //   //       child: Text('Add Contact'),
-  // }
-
   void _showAddContactDialog() {
     showDialog(
       context: context,

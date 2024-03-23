@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/pages/osm_page.dart';
@@ -15,7 +16,6 @@ class CommunityContact extends StatelessWidget {
     required this.lat, 
     required this.long, 
   });
-
   @override
   Widget build(BuildContext context) {
     return // CONTACT ROW
@@ -79,6 +79,10 @@ class CommunityContact extends StatelessWidget {
                     children: [
                       // CONTACT BUTTON
                       GestureDetector(
+                        onTap: () {
+                          //TODO: pass the user ID!!! - for Kawthar
+                          addCommunityToPersonal("userId", contactName); 
+                        },
                         child: AspectRatio(
                           aspectRatio: 1,
                           child: Container(
@@ -175,6 +179,50 @@ class CommunityContact extends StatelessWidget {
       ),
     );
   }
+  Future<void> addCommunityToPersonal(String userId, String conatctName) async {
+    String contactID = await getContactID(conatctName); 
+
+  try {
+    DocumentReference userRef =
+        FirebaseFirestore.instance.collection('Users').doc(userId);
+    DocumentSnapshot userSnapshot = await userRef.get();
+    if (userSnapshot.exists) {
+      await userRef.collection('communityContacts').doc(contactID).set({
+        'contactName': contactName, 
+        'phoneNumber': phoneNumber, 
+        'lat': lat,
+        'long': long, 
+      });
+
+      print('Community contact added to personal contacts successfully.');
+    } 
+    else {
+      print('User does not exist.');
+    }
+  } catch (error) {
+    print('Error adding community contact to personal contacts: $error');
+  }
+  }
+  Future<String> getContactID(String conatctName) async{
+    try{
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('localContacts')
+              .where('organization', isEqualTo: conatctName)
+              .get();
+      if(querySnapshot.docs.isNotEmpty){
+        return querySnapshot.docs.first.id; 
+      }
+      else{
+        return " "; 
+      }
+    }
+    catch(e){
+      print("Error preventing adding community conatcts"); 
+      return " "; 
+    }
+  }
+
 }
 
 Future<void> _makePhoneCall(String phoneNumber) async {
@@ -184,3 +232,4 @@ Future<void> _makePhoneCall(String phoneNumber) async {
   );
   await launchUrl(launchUri);
 }
+

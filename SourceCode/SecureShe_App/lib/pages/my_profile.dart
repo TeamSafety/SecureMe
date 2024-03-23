@@ -208,7 +208,20 @@ class _MyProfileState extends State<MyProfile> {
                               height: AppVars.elementMargin,
                             ),
                             InkWell(
-                              onTap: null,
+                              onTap:(){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditInfoScreen(
+                                      usernameController: _usernameController,
+                                      emailController: _emailController,
+                                      onUpdate: () {
+                                        fetchUserProfile();
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
                               child: Text(
                                 "Edit profile",
                                 style: TextStyle(

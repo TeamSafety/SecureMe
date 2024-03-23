@@ -7,23 +7,18 @@ import 'package:geolocator/geolocator.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/pages/osm_page.dart';
 
-
+//variables declaration
 final FirebaseAuth _auth = FirebaseAuth.instance;
-final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  bool isLocationSharing = false;
-  Timer? locationTimer;
-  bool shouldSaveLocation = false;
+bool isLocationSharing = false;
+Timer? locationTimer;
+bool shouldSaveLocation = false;
+
 class ShareLocationButton extends StatefulWidget {
   @override
   _ShareLocationButtonState createState() => _ShareLocationButtonState();
 }
 
 class _ShareLocationButtonState extends State<ShareLocationButton> {
-  bool isLocationSharing = false; // taggle the button
-  Timer? locationTimer;
-  bool shouldSaveLocation =
-      false; // Flag to control saving location updates, false=don't save location
-
   @override
   void dispose() {
     stopLocationUpdates();

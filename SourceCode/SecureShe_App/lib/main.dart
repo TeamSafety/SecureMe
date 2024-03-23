@@ -6,6 +6,7 @@ import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
+//import 'package:firebase_storage/firebase_storage.dart';
 
 // used to pass messages from event handler to the UI
 final _messageStreamController = BehaviorSubject<RemoteMessage>();
@@ -70,8 +71,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(fontFamily: "ArbutusSlab"),
       debugShowCheckedModeBanner: false,
-      // home: LoginPage(),
-      home: const MainPage(),
+      home: LoginPage(),
+      //home: const MainPage(),
     );
   }
 }
