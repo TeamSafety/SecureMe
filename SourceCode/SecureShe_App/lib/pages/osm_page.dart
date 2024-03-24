@@ -48,32 +48,33 @@ Future<Position?> grabLastLocation() async {
   return position;
 }
 
-void placeMarker(double lat, double long, name) {
-  MarkerLayer(
-    markers: [
-      Marker(
-        point: LatLng(lat, long),
-        child: Column(
-          children: <Widget>[
-            Icon(Icons.location_on,
-                color: AppVars.accent,
-                shadows: <Shadow>[
-                  Shadow(color: Colors.white, blurRadius: 15.0)
-                ],
-                size: 30.0),
-            FittedBox(
-              fit: BoxFit.cover,
-              child: Text(name),
-            ),
-          ],
-        ),
-      ),
-    ],
-  );
-}
+// demo list
+List contactlist = [['Salvation Army', 50.416950, -104.623500],
+                    ['Souls Harbour Mens Shelter', 50.452810, -104.619690]];
+//List contactlist = [{'name': 'Salvation Army', 'lat':50.416950, 'long':-104.623500},
+//                    {'name': 'Souls Harbour Mens Shelter', 'lat':50.452810, 'long':-104.619690}];
+var marker = <Marker>[];
 
 class MyMapOSM extends StatelessWidget {
   @override
+
+  var marker = <Marker>[
+    Marker(
+      point: LatLng(50.416950, -104.623500),
+      child: Wrap(
+        children:
+          getMarker('Salvation Army'),
+      ),
+    ),
+    Marker(
+      point: LatLng(50.452810, -104.619690),
+      child: Wrap(
+        children:
+          getMarker('Souls Harbour Mens Shelter'),
+      ),
+    ),
+  ];
+
   Widget build(BuildContext context) {
     return FlutterMap(
       options: const MapOptions(
@@ -86,26 +87,9 @@ class MyMapOSM extends StatelessWidget {
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           userAgentPackageName: 'com.example.app',
         ),
+        //placeContacts(contactlist),
         MarkerLayer(
-          markers: [
-            Marker(
-              point: LatLng(50.450840, -104.619410),
-              child: Wrap(
-                children: <Widget>[
-                  Icon(Icons.location_on,
-                      color: AppVars.accent,
-                      shadows: <Shadow>[
-                        Shadow(color: Colors.white, blurRadius: 15.0)
-                      ],
-                      size: 30.0),
-                  FittedBox(
-                    fit: BoxFit.cover,
-                    child: Text("Sofia House"),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          markers: marker,
         ),
         CurrentLocationLayer(),
         CurrentLocationLayer(
@@ -135,4 +119,40 @@ class MyMapOSM extends StatelessWidget {
       ],
     );
   }
+}
+
+getMarker(name) {
+  //child:
+  return <Widget>[
+      Icon(Icons.location_on,
+          color: AppVars.accent,
+          shadows: <Shadow>[
+            Shadow(color: Colors.white, blurRadius: 15.0)
+          ],
+          size:30.0),
+      FittedBox(
+        fit: BoxFit.cover,
+        child: Text(name, style: TextStyle(fontWeight:FontWeight.w700, fontSize:20)),
+      ),
+    ];
+}
+
+placeMarker(lat, long, name) {
+  return marker.add(
+    Marker(
+      point: LatLng(lat, long),
+      child: Wrap(
+        children:
+          getMarker(name),
+      ),
+    ),
+  );
+}
+
+placeContacts(contactlist) {
+  for (var i = 0; i < contactlist.length; i++) {
+    if (contactlist[i][0] != null) {
+      placeMarker(contactlist[i][1], contactlist[i][2], contactlist[i][0]);
+    };
+  };
 }
