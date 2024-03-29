@@ -4,9 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:my_app/models/sos_button.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
