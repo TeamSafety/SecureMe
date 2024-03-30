@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/Chat/message_chat.dart';
 import 'package:my_app/models/Chat/message_service.dart';
+import 'package:my_app/models/firestore_constants.dart';
+import 'package:my_app/pages/my_contacts.dart';
 
 class ChatScreen extends StatefulWidget {
   final String userId;
@@ -32,7 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Navigator.of(context).pop();
+            _onBackPress(); 
           },
         ),
         title: FutureBuilder<String>(
@@ -65,7 +68,7 @@ class _ChatScreenState extends State<ChatScreen> {
               stream: _messageService.getMessages(_chatroomId),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
+                  return const Text("Loading ....");
                 }
 
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -92,7 +95,7 @@ class _ChatScreenState extends State<ChatScreen> {
       future: _messageService.getUserNames(message.fromUserId, message.toUserId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const Text("Loading ...");
         }
 
         if (snapshot.hasError) {
@@ -146,7 +149,7 @@ class _ChatScreenState extends State<ChatScreen> {
             future: _messageService.getUserPresetMessages(widget.userId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return Text("Loading ...");
               }
               if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
                 // Handle error or empty preset messages
@@ -221,4 +224,26 @@ class _ChatScreenState extends State<ChatScreen> {
       _messageController.clear();
     }
   }
+  void _onBackPress() async {
+    try {
+      final messagesCollection = FirebaseFirestore.instance.collection('messages').doc(_chatroomId).collection('messages');
+      
+      final documents = await messagesCollection.get();
+      for (final doc in documents.docs) {
+        await messagesCollection.doc(doc.id).update({
+          'chattingWith': null,
+        });
+      }
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                const MyContacts()), // Replace YourNextPage with the actual page you want to navigate to
+      );
+    } catch (e) {
+      print('Error during back press: $e');
+      // Handle the error as per your app's requirements
+    }
+  }
+
 }

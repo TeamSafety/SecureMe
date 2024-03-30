@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
   String errorMessage = '';
   double errorFontSize = 0;
-  bool hidePassword = false;
+  bool hidePassword = true;
 
   void signUserIn() async {
     String email = emailController.text.trim();
@@ -38,7 +38,6 @@ class _LoginPageState extends State<LoginPage> {
         errorMessage = '';
         errorFontSize = 0;
       });
-      // Navigate to another page (e.g., Home page) on successful sign-in
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
         context,
