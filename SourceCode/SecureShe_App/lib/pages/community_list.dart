@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:my_app/models/community_contact.dart';
@@ -13,11 +14,23 @@ class ContactPage extends StatefulWidget {
 class _ContactPageState extends State<ContactPage> {
   late List<DocumentSnapshot> contacts = [];
   late List<DocumentSnapshot> originalContacts = [];
+  late String _userId = ''; 
   TextEditingController searchController = TextEditingController();
   @override
   void initState() {
     super.initState();
+    getCurrentUserId();
     loadContactData();
+  }
+  
+  Future<void> getCurrentUserId() async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      setState(() {
+        _userId = user.uid;
+      });
+    }
   }
 
   Future<void> loadContactData() async {
@@ -43,6 +56,7 @@ class _ContactPageState extends State<ContactPage> {
             phoneNumber: '${contact['phone'] ?? 'N/A'}',
             lat: latitude ?? 0.0, // Use 0.0 as a default value
             long: longitude ?? 0.0, // Use 0.0 as a default value
+            userId: _userId,
           ),
         );
       }).toList(),

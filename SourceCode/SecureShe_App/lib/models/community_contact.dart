@@ -9,12 +9,14 @@ class CommunityContact extends StatelessWidget {
   final String phoneNumber;
   final double lat; 
   final double long; 
+  final String userId; 
   const CommunityContact({
     super.key,
     required this.contactName,
     required this.phoneNumber,
     required this.lat, 
     required this.long, 
+    required this.userId, 
   });
   @override
   Widget build(BuildContext context) {
@@ -80,8 +82,7 @@ class CommunityContact extends StatelessWidget {
                       // CONTACT BUTTON
                       GestureDetector(
                         onTap: () {
-                          //TODO: pass the user ID!!! - for Kawthar
-                          addCommunityToPersonal("userId", contactName); 
+                          addCommunityToPersonal(userId, contactName, context); 
                         },
                         child: AspectRatio(
                           aspectRatio: 1,
@@ -179,29 +180,35 @@ class CommunityContact extends StatelessWidget {
       ),
     );
   }
-  Future<void> addCommunityToPersonal(String userId, String conatctName) async {
+  Future<void> addCommunityToPersonal(String userId, String conatctName, BuildContext context) async {
     String contactID = await getContactID(conatctName); 
 
-  try {
-    DocumentReference userRef =
-        FirebaseFirestore.instance.collection('Users').doc(userId);
-    DocumentSnapshot userSnapshot = await userRef.get();
-    if (userSnapshot.exists) {
-      await userRef.collection('communityContacts').doc(contactID).set({
-        'contactName': contactName, 
-        'phoneNumber': phoneNumber, 
-        'lat': lat,
-        'long': long, 
-      });
+    try {
+      DocumentReference userRef =
+          FirebaseFirestore.instance.collection('Users').doc(userId);
+      DocumentSnapshot userSnapshot = await userRef.get();
+      if (userSnapshot.exists) {
+        await userRef.collection('communityContacts').doc(contactID).set({
+          'contactName': contactName, 
+          'phoneNumber': phoneNumber, 
+          'lat': lat,
+          'long': long, 
+        });
 
-      print('Community contact added to personal contacts successfully.');
-    } 
-    else {
-      print('User does not exist.');
+        print('Community contact added to personal contacts successfully.');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Community contact added to personal contacts successfully.')),
+        );
+      } 
+      else {
+        print('User does not exist.');
+      }
+    } catch (error) {
+        print('Error adding community contact to personal contacts: $error');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error adding community contact to personal contacts')),
+        );
     }
-  } catch (error) {
-    print('Error adding community contact to personal contacts: $error');
-  }
   }
   Future<String> getContactID(String conatctName) async{
     try{

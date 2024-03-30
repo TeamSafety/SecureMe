@@ -23,14 +23,27 @@ class _MyContactsState extends State<MyContacts> {
   List<PersonalContactModel> personalContacts = [];
   String errorMessage = "";
   final TextEditingController _messageController = TextEditingController();
+  late String _userId = ''; // Declare userId variable
+
 
   @override
   void initState() {
     super.initState();
     getPersonalContacts();
+    getCurrentUserId(); 
     getExistingMessages();
   }
+  Future<void> getCurrentUserId() async {
+    // Retrieve the current user from Firebase Authentication
+    User? user = FirebaseAuth.instance.currentUser;
 
+    if (user != null) {
+      // If user is not null, set the userId variable
+      setState(() {
+        _userId = user.uid;
+      });
+    }
+  }
   Future<void> getPersonalContacts() async {
     User? user = _auth.currentUser;
     if (user != null) {
@@ -82,7 +95,7 @@ class _MyContactsState extends State<MyContacts> {
                   const SizedBox(
                     height: 24,
                   ),
-                  communityContactsBuilder(),
+                  communityContactsBuilder(_userId),
                   const SizedBox(
                     height: 24,
                   ),
@@ -115,7 +128,7 @@ class _MyContactsState extends State<MyContacts> {
           future: getExistingMessages(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return const Text(" ");
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {
@@ -212,7 +225,8 @@ class _MyContactsState extends State<MyContacts> {
     getExistingMessages();
   }
 
-  Column communityContactsBuilder() {
+
+  Column communityContactsBuilder(String userId) {
     return Column(
       children: [
         SizedBox(
@@ -228,16 +242,38 @@ class _MyContactsState extends State<MyContacts> {
         const SizedBox(
           height: 16,
         ),
-        const SavedCommunityContact(
-          contactName: "Test Community Contact",
-          phoneNumber: "123",
+        StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('Users')
+              .doc(userId)
+              .collection('communityContacts')
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Text("Loading contacts ....."); // Placeholder for loading
+            }
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return Text('No community contacts available.');
+            }
+            // If data is available, build the list of community contacts
+            return Column(
+              children: snapshot.data!.docs.map((doc) {
+                var contactData = doc.data() as Map<String, dynamic>;
+                return SavedCommunityContact(
+                  contactName: contactData['contactName'],
+                  phoneNumber: contactData['phoneNumber'],
+                );
+              }).toList(),
+            );
+          },
         ),
-        //     ElevatedButton(
-        //       onPressed: () => _showAddContactDialog(),
-        //       child: Text('Add Contact'),
       ],
     );
   }
+
 
   Column personalContactsBuilder() {
     return Column(
