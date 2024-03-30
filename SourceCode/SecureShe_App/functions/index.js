@@ -24,65 +24,45 @@ const logger = require("firebase-functions/logger");
 // });
 // Take the text parameter passed to this HTTP endpoint and insert it into
 // Firestore under the path /messages/:documentId/original
-const functions = require('firebase-functions')
-const admin = require('firebase-admin')
-admin.initializeApp()
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+admin.initializeApp();
 
 exports.sendNotification = functions.firestore
-  .document('messages/{groupId1}/{groupId2}/{message}')
-  .onCreate((snap, context) => {
-    console.log('----------------start function--------------------')
+  .document('messages/{groupId1}/messages/{messageId}') // path to the messages collection!
+  .onCreate(async (snap, context) => {
+    try {
+      console.log('New message added:', snap.id);
+      
+      // Get data from the new message document
+      const messageData = snap.data();
+      const idFrom = messageData.idFrom;
+      const idTo = messageData.idTo;
+      const contentMessage = messageData.content;
+      
+      // Get information about the sender
+      const senderSnapshot = await admin.firestore().collection('Users').doc(idFrom).get();
+      const senderData = senderSnapshot.data();
+      const senderName = senderData.username; 
+      
+      // Get information about the receiver
+      const receiverSnapshot = await admin.firestore().collection('Users').doc(idTo).get();
+      const receiverData = receiverSnapshot.data();
+      const receiverToken = receiverData.token; // Assuming token is the field containing the receiver's FCM token
 
-    const doc = snap.data()
-    console.log(doc)
+      // Construct the notification payload
+      const payload = {
+        notification: {
+          title: `New message from ${senderName}`,
+          body: contentMessage,
+        },
+      };
 
-    const idFrom = doc.idFrom
-    const idTo = doc.idTo
-    const contentMessage = doc.content
-
-    // Get push token user to (receive)
-    admin
-      .firestore()
-      .collection('Users')
-      .where('id', '==', idTo)
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(userTo => {
-          console.log(`Found user to: ${userTo.data().nickname}`)
-          if (userTo.data().pushToken && userTo.data().chattingWith !== idFrom) {
-            // Get info user from (sent)
-            admin
-              .firestore()
-              .collection('users')
-              .where('id', '==', idFrom)
-              .get()
-              .then(querySnapshot2 => {
-                querySnapshot2.forEach(userFrom => {
-                  console.log(`Found user from: ${userFrom.data().username}`)
-                  const payload = {
-                    notification: {
-                      title: `You have a message from "${userFrom.data().username}"`,
-                      body: contentMessage,
-                      badge: '1',
-                      sound: 'default'
-                    }
-                  }
-                  // Let push to the target device
-                  admin
-                    .messaging()
-                    .sendToDevice(userTo.data().pushToken, payload)
-                    .then(response => {
-                      console.log('Successfully sent message:', response)
-                    })
-                    .catch(error => {
-                      console.log('Error sending message:', error)
-                    })
-                })
-              })
-          } else {
-            console.log('Can not find pushToken target user')
-          }
-        })
-      })
-    return null
-  })
+      // Send the notification to the receiver
+      await admin.messaging().send(receiverToken, payload);
+      
+      console.log('Notification sent successfully');
+    } catch (error) {
+      console.error('Error sending notification:', error);
+    }
+  });

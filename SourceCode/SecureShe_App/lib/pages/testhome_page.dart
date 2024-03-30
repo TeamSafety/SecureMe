@@ -48,11 +48,10 @@ class HomePageState extends State<TestHomePage> {
       }
     }).catchError((err) {
         return;     
-      });
+    });
     
   }
   void saveTokenForCurrentUser(String token) async {
-  // Get current user from FirebaseAuth
     User? user = _auth.currentUser;
 
     if (user != null) {

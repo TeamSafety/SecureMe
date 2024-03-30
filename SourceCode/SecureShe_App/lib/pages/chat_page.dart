@@ -234,15 +234,14 @@ class _ChatScreenState extends State<ChatScreen> {
           'chattingWith': null,
         });
       }
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) =>
-                const MyContacts()), // Replace YourNextPage with the actual page you want to navigate to
+                const MyContacts()), 
       );
     } catch (e) {
       print('Error during back press: $e');
-      // Handle the error as per your app's requirements
     }
   }
 
