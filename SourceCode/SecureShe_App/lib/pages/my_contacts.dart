@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:my_app/models/AppVars.dart';
+import 'package:my_app/models/Chat/message_chat.dart';
+import 'package:my_app/models/Chat/message_service.dart';
 import 'package:my_app/models/PersonalConatcts/personal_contact.dart';
 import 'package:my_app/models/preset_message_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,7 +25,9 @@ class _MyContactsState extends State<MyContacts> {
   List<PersonalContactModel> personalContacts = [];
   String errorMessage = "";
   final TextEditingController _messageController = TextEditingController();
-  late String _userId = ''; // Declare userId variable
+  late String _userId = ''; 
+  final MessageService _messageService = MessageService();
+
 
 
   @override
@@ -136,7 +140,12 @@ class _MyContactsState extends State<MyContacts> {
               return Column(
                 children: [
                   for (String message in snapshot.data ?? [])
-                    PresetMessage(message: message),
+                    PresetMessage(
+                      message: message, 
+                      onSendPressed: (message) {
+                        _selectContactAndSendMessage(context, message);
+                      },
+                    ),
                   const SizedBox(height: 8),
                 ],
               );
@@ -155,7 +164,61 @@ class _MyContactsState extends State<MyContacts> {
       ],
     );
   }
+  Future<void> _selectContactAndSendMessage(BuildContext context, String message) async {
+    // Retrieve user's contacts from Firestore subcollection
+    final userContacts = await _getUserContactsFromFirestore();
 
+    // Show a dialog or screen to select a contact
+    final selectedContact = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Select Contact'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: userContacts.map((contact) {
+                return ListTile(
+                  title: Text(contact['contactName']),
+                  onTap: () {
+                    Navigator.of(context).pop(contact['contactName']);
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
+    );
+
+    // If a contact was selected, send the message
+    if (selectedContact != null) {
+      // Implement logic to send message to selected contact
+      String contactId = await getUidFromUsername(selectedContact); 
+      String chatroomId = _messageService.getChatroomId(_userId, contactId);
+      MessageChat emergencyMessageObj = MessageChat(
+        fromUserId: _userId,
+        toUserId: contactId,
+        content: message,
+        timestamp: DateTime.now(),
+      );
+      await _messageService.sendMessage(emergencyMessageObj, chatroomId);
+      print('Sending message: $message to $selectedContact');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> _getUserContactsFromFirestore() async {
+    // Retrieve user's contacts from Firestore subcollection
+    final userId = _userId; // Replace with actual user ID
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .collection('contacts')
+        .get();
+
+    // Convert query snapshot to list of maps
+    final contacts = querySnapshot.docs.map((doc) => doc.data()).toList();
+    return contacts;
+  }
 // Retrieve existing preset messages from the database
   Future<List<String>> getExistingMessages() async {
     User? user = _auth.currentUser;

@@ -4,9 +4,12 @@ import 'package:my_app/models/AppVars.dart';
 
 class PresetMessage extends StatelessWidget {
   final String message;
+  final Function(String) onSendPressed;
+
   const PresetMessage({
     super.key,
     required this.message,
+    required this.onSendPressed,
   });
 
   @override
@@ -40,6 +43,10 @@ class PresetMessage extends StatelessWidget {
             width: 8,
           ),
           GestureDetector(
+            onTap: () {
+              // Call the onSendPressed callback when send button is tapped
+              onSendPressed(message);
+            },
             child: Container(
               height: 35,
               width: 35,
