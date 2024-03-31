@@ -182,6 +182,17 @@ class _SOSButtonState extends State<SOSButton> {
             );
 
             await _messageService.sendMessage(emergencyMessageObj, chatroomId);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Your EMERGENCY message was sent',
+                  style: TextStyle(color: Colors.white), // Change text color
+                ),
+                backgroundColor: AppVars.accent, // Change background color
+                behavior: SnackBarBehavior.floating, // Optional: Makes the snackbar float above other content
+                duration: Duration(seconds: 7), // Optional: Set the duration for how long the snackbar is displayed
+              ),
+            );
             print("Message was sent to $contactId!"); // for debug purposes!
           }
 

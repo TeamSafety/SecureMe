@@ -19,8 +19,6 @@ class MyProfile extends StatefulWidget {
 class _MyProfileState extends State<MyProfile> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  //final TextEditingController _emergencyContactController = TextEditingController(); 
-  //final TextEditingController _emergencyMessageController = TextEditingController(); 
 
   List<String> userContacts = ["KawtharKH"]; 
   List<String> userMessages = ["Help please"]; 
@@ -268,23 +266,6 @@ class _MyProfileState extends State<MyProfile> {
                           color: AppVars.secondary.withOpacity(0.8),
                         ),
                       ),
-                      // TextField(
-                      //   controller: _emergencyContactController,
-                      //   style: TextStyle(
-                      //     color: AppVars.secondary,
-                      //     fontSize: 20,
-                      //   ),
-                        // decoration: const InputDecoration(
-                        //   hintText: "Enter name of contact here",
-                        //   hintStyle: TextStyle(
-                        //     color: Color.fromARGB(127, 47, 44, 35),
-                        //   ),
-                        //   contentPadding: EdgeInsets.all(0),
-                        //   border: OutlineInputBorder(
-                        //     borderSide: BorderSide.none,
-                        //   ),
-                        // ),
-                      //),
                     ],
                   ),
                 ),
@@ -320,23 +301,6 @@ class _MyProfileState extends State<MyProfile> {
                           color: AppVars.secondary.withOpacity(0.8),
                         ),
                       ),
-                      // TextField(
-                      //   controller: _emergencyMessageController,
-                      //   style: TextStyle(
-                      //     color: AppVars.secondary,
-                      //     fontSize: 20,
-                      //   ),
-                      //   decoration: const InputDecoration(
-                      //     hintText: "Enter emergency message...",
-                      //     hintStyle: TextStyle(
-                      //       color: Color.fromARGB(127, 47, 44, 35),
-                      //     ),
-                      //     contentPadding: EdgeInsets.all(0),
-                      //     border: OutlineInputBorder(
-                      //       borderSide: BorderSide.none,
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
@@ -375,71 +339,6 @@ class _MyProfileState extends State<MyProfile> {
             ),
           ),
         ),
-        // body: Center(
-        //   child: Column(
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: <Widget>[
-        //       Text("Welcome ${_usernameController.text} "),
-        //       const SizedBox(height: 20),
-        //       Text('Username: ${_usernameController.text}'),
-        //       Text('Email: ${_emailController.text}'),
-
-        //       ElevatedButton(
-        //         onPressed: () {
-        //           Navigator.push(
-        //             context,
-        //             MaterialPageRoute(
-        //               builder: (context) => EditInfoScreen(
-        //                 usernameController: _usernameController,
-        //                 emailController: _emailController,
-        //                 onUpdate: () {
-        //                   fetchUserProfile();
-        //                 },
-        //               ),
-        //             ),
-        //           );
-        //         },
-        //         child: const Text('Edit Info'),
-        //       ),
-        //       const SizedBox(
-        //         height: 20,
-        //       ),
-        //       // SOS Button Configuration UI
-        //       TextField(
-        //         controller: _emergencyContactController,
-        //         decoration: const InputDecoration(labelText: 'Emergency Contact'),
-        //       ),
-        //       TextField(
-        //         controller: _emergencyMessageController,
-        //         decoration: const InputDecoration(labelText: 'Emergency Message'),
-        //       ),
-        //       const SizedBox(height: 20),
-        //       ElevatedButton(
-        //         onPressed: () async {
-        //           await updateProfile();
-        //           EmergencyConfiguration emergencyClass = EmergencyConfiguration(
-        //               message: 'Help me', contacts: contacts);
-        //           emergencyClass.emergencySOSUpdate();
-        //         },
-        //         child: const Text('Update SOS Emergency info'),
-        //       ),
-        //       const SizedBox(height: 20),
-        //       ElevatedButton(
-        //         onPressed: () async {
-        //           await _auth.signOut();
-        //           // ignore: use_build_context_synchronously
-        //           Navigator.push(
-        //             context,
-        //             MaterialPageRoute(
-        //               builder: (context) => LoginPage(),
-        //             ),
-        //           );
-        //         },
-        //         child: const Text('Logout'),
-        //       ),
-        //     ],
-        //   ),
-        // ),
       ),
     );
   }
