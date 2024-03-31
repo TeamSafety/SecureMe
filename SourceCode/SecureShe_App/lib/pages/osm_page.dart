@@ -53,12 +53,12 @@ List contactlist = [['Salvation Army', 50.416950, -104.623500],
                     ['Souls Harbour Mens Shelter', 50.452810, -104.619690]];
 //List contactlist = [{'name': 'Salvation Army', 'lat':50.416950, 'long':-104.623500},
 //                    {'name': 'Souls Harbour Mens Shelter', 'lat':50.452810, 'long':-104.619690}];
-var marker = <Marker>[];
+//var marker = <Marker>[];
 
 class MyMapOSM extends StatelessWidget {
   @override
 
-  var marker = <Marker>[
+  /*var marker = <Marker>[
     Marker(
       point: LatLng(50.416950, -104.623500),
       child: Wrap(
@@ -73,7 +73,9 @@ class MyMapOSM extends StatelessWidget {
           getMarker('Souls Harbour Mens Shelter'),
       ),
     ),
-  ];
+  ];*/
+
+  var marker = placeContacts(contactlist);
 
   Widget build(BuildContext context) {
     return FlutterMap(
@@ -87,7 +89,6 @@ class MyMapOSM extends StatelessWidget {
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           userAgentPackageName: 'com.example.app',
         ),
-        //placeContacts(contactlist),
         MarkerLayer(
           markers: marker,
         ),
@@ -138,21 +139,24 @@ getMarker(name) {
 }
 
 placeMarker(lat, long, name) {
-  return marker.add(
-    Marker(
-      point: LatLng(lat, long),
-      child: Wrap(
-        children:
-          getMarker(name),
-      ),
-    ),
-  );
+  if (contactlist.contains(name)) {
+    contactlist.remove(name);
+  }
+  contactlist.add([name, lat, long]);
 }
 
-placeContacts(contactlist) {
-  for (var i = 0; i < contactlist.length; i++) {
+List<Marker> placeContacts(contactlist) {
+  var marker = <Marker>[];
+  for (var i = 0; i < (contactlist.length); i++) {
     if (contactlist[i][0] != null) {
-      placeMarker(contactlist[i][1], contactlist[i][2], contactlist[i][0]);
+      marker.add(new Marker(
+        point: LatLng(contactlist[i][1], contactlist[i][2]),
+        child: Wrap(
+          children:
+          getMarker(contactlist[i][0]),
+        ),
+      ),);
     };
   };
+  return marker;
 }
