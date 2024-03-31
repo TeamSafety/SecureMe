@@ -1,13 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:my_app/models/AppVars.dart';
 
 class EmergencyConfiguration{
   final String message;
   final List<String> contacts;
+  BuildContext context; 
 
   EmergencyConfiguration({
     required this.message,
     required this.contacts,
+    required this.context, 
   });
   final FirebaseAuth _auth = FirebaseAuth.instance;  
 
@@ -33,11 +37,30 @@ class EmergencyConfiguration{
                 'emergencyContactId': emergencyContactId, // Save the contact's user ID
                 'emergencyMessage': message,
               });
-            //showSnackbar("SOS emergency info updated successfully");
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    "SOS emergency info updated successfully",
+                    style: TextStyle(color: Colors.white), 
+                  ),
+                  backgroundColor: AppVars.accent, 
+                  behavior: SnackBarBehavior.floating, 
+                  duration: Duration(seconds: 3), 
+                ),
+              );
             print("SOS emergency info updated successfully"); 
           } catch (e) {
-            // Handle the error appropriately, e.g., show a Snackbar
-            //showSnackbar('Error updating SOS button info');
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    "Error updating SOS button info",
+                    style: TextStyle(color: Colors.white), 
+                  ),
+                  backgroundColor: AppVars.accent, 
+                  behavior: SnackBarBehavior.floating, 
+                  duration: Duration(seconds: 3), 
+                ),
+            );
 
           }
         } else {

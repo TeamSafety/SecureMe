@@ -51,6 +51,7 @@ class _MyProfileState extends State<MyProfile> {
         });
       } else {
         // Handle the case where the document does not exist.
+        print("can't find doc"); 
       }
 
       // Fetch user contacts
@@ -266,56 +267,51 @@ class _MyProfileState extends State<MyProfile> {
                           color: AppVars.secondary.withOpacity(0.8),
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: AppVars.elementMargin,
-                ),
-                Container(
-                  width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                  decoration: BoxDecoration(
-                    color: AppVars.primary,
-                    border: Border.all(
-                      color: AppVars.secondary.withOpacity(0.1),
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppVars.secondary.withOpacity(0.3),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2.0),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Emergency Message",
-                        style: TextStyle(
-                          fontSize: AppVars.textTitle,
-                          color: AppVars.secondary.withOpacity(0.8),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                      FutureBuilder(
+                        future: userProfileFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return Text(" ");
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            // Data has been fetched, build the UI
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+
+                                DropdownButtonClass(
+                                  contacts: userContacts,
+                                  messages: userMessages,
+                                  onContactChanged: (String? value) {
+                                    setState(() {
+                                      selectedEmergencyContact = value;
+                                    });
+                                  },
+                                  onMessageChanged: (String? value) {
+                                    setState(() {
+                                      selectedEmergencyMessage = value;
+                                    });
+                                  },
+                                ),], 
+                              );
+                          }
+                        }), 
+              ]),), 
                 SizedBox(
                   height: AppVars.elementMargin,
                 ),
                 ElevatedButton(
                   style: AppVars.primaryButtonStyle,
-                  onPressed: () async {
-                    await updateProfile();
-                    EmergencyConfiguration emergencyClass =
-                        EmergencyConfiguration(
-                            message: 'Help me', contacts: userContacts);
-                    emergencyClass.emergencySOSUpdate();
-                  },
+                    onPressed: () async {
+                      await updateProfile();
+                      EmergencyConfiguration emergencyClass = EmergencyConfiguration(
+                        message: selectedEmergencyMessage ?? 'Help ME!!',
+                        contacts: [selectedEmergencyContact ?? ''],
+                        context: context, 
+                      );
+                      emergencyClass.emergencySOSUpdate();
+                    },
                   child: const Text('Update SOS Emergency info'),
                 ),
                 SizedBox(
