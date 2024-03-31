@@ -197,7 +197,15 @@ class CommunityContact extends StatelessWidget {
 
         print('Community contact added to personal contacts successfully.');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Community contact added to personal contacts successfully.')),
+          SnackBar(
+            content: Text(
+              'Community contact added to personal contacts successfully.',
+              style: TextStyle(color: Colors.white), 
+            ),
+            backgroundColor: AppVars.accent, 
+            behavior: SnackBarBehavior.floating, 
+            duration: Duration(seconds: 3), 
+          ),
         );
       } 
       else {
@@ -206,7 +214,15 @@ class CommunityContact extends StatelessWidget {
     } catch (error) {
         print('Error adding community contact to personal contacts: $error');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error adding community contact to personal contacts')),
+          SnackBar(
+            content: Text(
+              'Error adding community contact to personal contacts',
+              style: TextStyle(color: Colors.white), 
+            ),
+            backgroundColor: AppVars.accent, 
+            behavior: SnackBarBehavior.floating, 
+            duration: Duration(seconds: 3), 
+          ),
         );
     }
   }

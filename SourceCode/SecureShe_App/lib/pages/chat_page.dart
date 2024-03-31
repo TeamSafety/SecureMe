@@ -68,7 +68,7 @@ class _ChatScreenState extends State<ChatScreen> {
               stream: _messageService.getMessages(_chatroomId),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Text("Loading ....");
+                  return const Text("  ");
                 }
 
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -95,7 +95,7 @@ class _ChatScreenState extends State<ChatScreen> {
       future: _messageService.getUserNames(message.fromUserId, message.toUserId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text("Loading ...");
+          return const Text("  ");
         }
 
         if (snapshot.hasError) {
@@ -149,7 +149,7 @@ class _ChatScreenState extends State<ChatScreen> {
             future: _messageService.getUserPresetMessages(widget.userId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Text("Loading ...");
+                return Text("  ");
               }
               if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
                 // Handle error or empty preset messages

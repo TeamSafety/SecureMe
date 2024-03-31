@@ -165,10 +165,7 @@ class _MyContactsState extends State<MyContacts> {
     );
   }
   Future<void> _selectContactAndSendMessage(BuildContext context, String message) async {
-    // Retrieve user's contacts from Firestore subcollection
     final userContacts = await _getUserContactsFromFirestore();
-
-    // Show a dialog or screen to select a contact
     final selectedContact = await showDialog<String>(
       context: context,
       builder: (context) {
@@ -192,7 +189,6 @@ class _MyContactsState extends State<MyContacts> {
 
     // If a contact was selected, send the message
     if (selectedContact != null) {
-      // Implement logic to send message to selected contact
       String contactId = await getUidFromUsername(selectedContact); 
       String chatroomId = _messageService.getChatroomId(_userId, contactId);
       MessageChat emergencyMessageObj = MessageChat(
@@ -201,7 +197,20 @@ class _MyContactsState extends State<MyContacts> {
         content: message,
         timestamp: DateTime.now(),
       );
+
       await _messageService.sendMessage(emergencyMessageObj, chatroomId);
+      ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+            content: Text(
+              'Successfully sent message to selected contact!',
+              style: TextStyle(color: Colors.white), 
+            ),
+            backgroundColor: AppVars.accent, 
+            behavior: SnackBarBehavior.floating, 
+            duration: Duration(seconds: 3), 
+          ),
+      );
+
       print('Sending message: $message to $selectedContact');
     }
   }
@@ -313,7 +322,7 @@ class _MyContactsState extends State<MyContacts> {
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Text("Loading contacts ....."); // Placeholder for loading
+              return Text("  "); // Placeholder for loading
             }
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
