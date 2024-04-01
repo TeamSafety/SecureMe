@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
@@ -43,60 +42,18 @@ Future<Position> _determinePosition() async {
 
   return await Geolocator.getCurrentPosition();
 }
-// List<dynamic> contactlist2 = [['Salvation Army', 50.416950, -104.623500],
-//                     ['Souls Harbour Mens Shelter', 50.452810, -104.619690]];
-List<dynamic> contactlist = []; 
+
 Future<Position?> grabLastLocation() async {
   Position? position = await Geolocator.getLastKnownPosition();
   return position;
 }
 
-Future<void> fetchUserLocations() async {
-    try {
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection('Users').get();
-      querySnapshot.docs.forEach((doc) {
-        String name = doc['username'] ?? 'Unknown'; // Provide a default value if 'username' is missing
-        double? latitude = doc['latitude'] as double?; // Use null-aware cast to handle missing 'latitude' field
-        double? longitude = doc['longitude'] as double?; // Use null-aware cast to handle missing 'longitude' field
+List<dynamic> contactlist = [];
+//List contactlist = [['Salvation Army', 50.416950, -104.623500],
+//                     ['Souls Harbour Mens Shelter', 50.452810, -104.619690]];
 
-        if (latitude != null && longitude != null) {
-          contactlist.add([name, latitude, longitude]);
-          print('contactlist was updated'); 
-          print(contactlist); 
-        } else {
-          print('Latitude or longitude is missing for document with ID: ${doc.id}');
-        }
-      });
-    } catch (e) {
-      print('Error fetching user locations: $e');
-    }
-
-}
-  // Future<void> fetchAndSetUserLocations() async {
-  //   List<dynamic> fetchedLocations = await fetchUserLocations();
-  //   contactlist2 = fetchedLocations;
-  //   print(contactlist2); 
-  // }
-// demo list
-//List<dynamic> contactlist2 = [];
-//List contactlist = [{'name': 'Salvation Army', 'lat':50.416950, 'long':-104.623500},
-//                    {'name': 'Souls Harbour Mens Shelter', 'lat':50.452810, 'long':-104.619690}];
-//var marker = <Marker>[];
-
-class MyMapOSM2 extends StatefulWidget {
+class MyMapOSM extends StatelessWidget {
   @override
-  _MyMapOSMState createState() => _MyMapOSMState();
-}
-
-class _MyMapOSMState extends State<MyMapOSM2> {
-  //late List<dynamic> contactlist;
-
-  @override
-  void initState() {
-    super.initState();
-    fetchUserLocations();
-  }
 
   /*var marker = <Marker>[
     Marker(
@@ -115,9 +72,8 @@ class _MyMapOSMState extends State<MyMapOSM2> {
     ),
   ];*/
 
-  
-  @override
   var marker = placeContacts(contactlist);
+
   Widget build(BuildContext context) {
     return FlutterMap(
       options: const MapOptions(
@@ -186,7 +142,7 @@ placeMarker(lat, long, name) {
   contactlist.add([name, lat, long]);
 }
 
-List<Marker> placeContacts(List<dynamic> contactlist) {
+List<Marker> placeContacts(contactlist) {
   var marker = <Marker>[];
   for (var i = 0; i < (contactlist.length); i++) {
     if (contactlist[i][0] != null) {
