@@ -245,7 +245,40 @@ class CommunityContact extends StatelessWidget {
       return " "; 
     }
   }
+  void _removeContact(BuildContext context) async {
+    try {
+      // Remove contact from personal contacts
+      DocumentReference userRef =
+          FirebaseFirestore.instance.collection('Users').doc(userId);
+      await userRef.collection('communityContacts').doc(contactName).delete();
 
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Community contact removed from personal contacts successfully.',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: AppVars.accent,
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    } catch (error) {
+      print('Error removing community contact from personal contacts: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Error removing community contact from personal contacts',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: AppVars.accent,
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
+  }
 }
 
 Future<void> _makePhoneCall(String phoneNumber) async {
