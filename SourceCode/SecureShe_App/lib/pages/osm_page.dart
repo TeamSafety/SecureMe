@@ -49,8 +49,6 @@ Future<Position?> grabLastLocation() async {
   Position? position = await Geolocator.getLastKnownPosition();
   return position;
 }
-// List<dynamic> contactlist2 = [['Salvation Army', 50.416950, -104.623500],
-//                     ['Souls Harbour Mens Shelter', 50.452810, -104.619690]];
 List<dynamic> contactlist = []; 
 
 Future<void> fetchUserLocations() async {
@@ -94,13 +92,6 @@ Future<void> fetchUserLocations() async {
     print('Error fetching user locations: $e');
   }
 }
-
-
-// demo list
-//List contactlist = [{'name': 'Salvation Army', 'lat':50.416950, 'long':-104.623500},
-//                    {'name': 'Souls Harbour Mens Shelter', 'lat':50.452810, 'long':-104.619690}];
-//var marker = <Marker>[];
-
 class MyMapOSM2 extends StatefulWidget {
   @override
   _MyMapOSMState createState() => _MyMapOSMState();
@@ -116,23 +107,6 @@ class _MyMapOSMState extends State<MyMapOSM2> {
  
 
   @override
-
-  /*var marker = <Marker>[
-    Marker(
-      point: LatLng(50.416950, -104.623500),
-      child: Wrap(
-        children:
-          getMarker('Salvation Army'),
-      ),
-    ),
-    Marker(
-      point: LatLng(50.452810, -104.619690),
-      child: Wrap(
-        children:
-          getMarker('Souls Harbour Mens Shelter'),
-      ),
-    ),
-  ];*/
 
   var marker = placeContacts(contactlist);
 

@@ -337,6 +337,7 @@ class _MyContactsState extends State<MyContacts> {
                 return SavedCommunityContact(
                   contactName: contactData['contactName'],
                   phoneNumber: contactData['phoneNumber'],
+                  userId: _userId, 
                 );
               }).toList(),
             );

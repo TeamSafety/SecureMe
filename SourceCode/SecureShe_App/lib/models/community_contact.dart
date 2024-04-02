@@ -247,7 +247,6 @@ class CommunityContact extends StatelessWidget {
   }
   void _removeContact(BuildContext context) async {
     try {
-      // Remove contact from personal contacts
       DocumentReference userRef =
           FirebaseFirestore.instance.collection('Users').doc(userId);
       await userRef.collection('communityContacts').doc(contactName).delete();
