@@ -52,17 +52,6 @@ Future<Position?> grabLastLocation() async {
 // List<dynamic> contactlist2 = [['Salvation Army', 50.416950, -104.623500],
 //                     ['Souls Harbour Mens Shelter', 50.452810, -104.619690]];
 List<dynamic> contactlist = []; 
-Future<String?> getCurrentUserId() async {
-  FirebaseAuth auth = FirebaseAuth.instance;
-  User? user = auth.currentUser;
-
-  if (user != null) {
-    return user.uid;
-  } else {
-    return null; // User is not logged in
-  }
-}
-
 
 Future<void> fetchUserLocations() async {
   try {
@@ -118,6 +107,13 @@ class MyMapOSM2 extends StatefulWidget {
 }
 
 class _MyMapOSMState extends State<MyMapOSM2> {
+  
+  @override
+  void initState() {
+    super.initState();
+    fetchUserLocations();
+  }
+ 
 
   @override
 
