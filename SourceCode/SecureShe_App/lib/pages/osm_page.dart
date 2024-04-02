@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
@@ -47,12 +49,76 @@ Future<Position?> grabLastLocation() async {
   Position? position = await Geolocator.getLastKnownPosition();
   return position;
 }
-
-List<dynamic> contactlist = [];
-//List contactlist = [['Salvation Army', 50.416950, -104.623500],
+// List<dynamic> contactlist2 = [['Salvation Army', 50.416950, -104.623500],
 //                     ['Souls Harbour Mens Shelter', 50.452810, -104.619690]];
+List<dynamic> contactlist = []; 
+Future<String?> getCurrentUserId() async {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  User? user = auth.currentUser;
 
-class MyMapOSM extends StatelessWidget {
+  if (user != null) {
+    return user.uid;
+  } else {
+    return null; // User is not logged in
+  }
+}
+
+
+Future<void> fetchUserLocations() async {
+  try {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String userId = '';  
+    if (user != null) {
+      userId =  user.uid;
+    }
+    print("User id is "); 
+    print(userId); 
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('Users').doc(userId).get();
+
+    if (userDoc.exists) {
+      QuerySnapshot contactsSnapshot = await userDoc.reference.collection('contacts').get();
+
+      contactsSnapshot.docs.forEach((contactDoc) async {
+        String contactId = contactDoc['contactUid']; 
+
+        DocumentSnapshot contactUserDoc = await FirebaseFirestore.instance.collection('Users').doc(contactId).get();
+
+        if (contactUserDoc.exists) {
+          String contactName = contactUserDoc['username'] ?? 'Unknown';
+          double? latitude = contactUserDoc['latitude'] as double?;
+          double? longitude = contactUserDoc['longitude'] as double?;
+
+          if (latitude != null && longitude != null) {
+            contactlist.add([contactName, latitude, longitude]);
+          } else {
+            print('Latitude or longitude is missing for contact: $contactName');
+          }
+        } else {
+          print('Contact document with ID $contactId does not exist.');
+        }
+      });
+    } else {
+      print('User document with ID $userId does not exist.');
+    }
+  } catch (e) {
+    print('Error fetching user locations: $e');
+  }
+}
+
+
+// demo list
+//List contactlist = [{'name': 'Salvation Army', 'lat':50.416950, 'long':-104.623500},
+//                    {'name': 'Souls Harbour Mens Shelter', 'lat':50.452810, 'long':-104.619690}];
+//var marker = <Marker>[];
+
+class MyMapOSM2 extends StatefulWidget {
+  @override
+  _MyMapOSMState createState() => _MyMapOSMState();
+}
+
+class _MyMapOSMState extends State<MyMapOSM2> {
+
   @override
 
   /*var marker = <Marker>[
