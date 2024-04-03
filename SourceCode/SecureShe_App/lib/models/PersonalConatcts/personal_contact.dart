@@ -2,23 +2,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/pages/chat_page.dart';
-import 'package:my_app/pages/my_contacts.dart'; 
+import 'package:my_app/pages/my_contacts.dart';
 
 class PersonalContact extends StatefulWidget {
   final String contactName;
   final String imagePath; // TODO: WILL CHANGE LATER
-  final String addedContactUid; 
-  final String currentUserId; 
+  final String addedContactUid;
+  final String currentUserId;
   const PersonalContact({
     super.key,
     required this.contactName,
     required this.imagePath,
-    required this.addedContactUid, 
-    required this.currentUserId, 
+    required this.addedContactUid,
+    required this.currentUserId,
   });
-    @override
+  @override
   _PersonalContactState createState() => _PersonalContactState();
 }
+
 class _PersonalContactState extends State<PersonalContact> {
   @override
   Widget build(BuildContext context) {
@@ -120,13 +121,14 @@ class _PersonalContactState extends State<PersonalContact> {
                       const SizedBox(width: 8),
                       // CONTACT BUTTON
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChatScreen(userId: widget.currentUserId, recipientUserId: widget.addedContactUid)
-                          ),
-                        );
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChatScreen(
+                                    userId: widget.currentUserId,
+                                    recipientUserId: widget.addedContactUid)),
+                          );
                         },
                         child: AspectRatio(
                           aspectRatio: 1,
@@ -183,7 +185,7 @@ class _PersonalContactState extends State<PersonalContact> {
                       const SizedBox(width: 8),
                       GestureDetector(
                         onTap: () {
-                          _removeContact(context); 
+                          _removeContact(context);
                         },
                         child: AspectRatio(
                           aspectRatio: 1,
@@ -220,15 +222,21 @@ class _PersonalContactState extends State<PersonalContact> {
       ),
     );
   }
+
   void _removeContact(BuildContext context) async {
     try {
-      DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(widget.currentUserId);
+      DocumentReference userRef = FirebaseFirestore.instance
+          .collection('Users')
+          .doc(widget.currentUserId);
       DocumentSnapshot userSnapshot = await userRef.get();
 
       if (userSnapshot.exists) {
-        CollectionReference communityContactsRef = userRef.collection("contacts");
+        CollectionReference communityContactsRef =
+            userRef.collection("contacts");
 
-        QuerySnapshot querySnapshot = await communityContactsRef.where('contactName', isEqualTo: widget.contactName).get();
+        QuerySnapshot querySnapshot = await communityContactsRef
+            .where('contactName', isEqualTo: widget.contactName)
+            .get();
 
         if (querySnapshot.docs.isNotEmpty) {
           DocumentReference contactDocRef = querySnapshot.docs.first.reference;
@@ -236,7 +244,7 @@ class _PersonalContactState extends State<PersonalContact> {
           // Rebuild the widget to reflect the changes
           // setState(() {});
           // Show success message
-          if(context!=null){
+          if (context != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
