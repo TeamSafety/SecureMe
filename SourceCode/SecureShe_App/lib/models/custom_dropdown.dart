@@ -22,6 +22,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
+      padding: EdgeInsets.symmetric(horizontal: 5),
       isExpanded: true,
       alignment: Alignment.centerLeft,
       iconSize: AppVars.bigHeader,
@@ -43,7 +44,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
           child: Text(
             element,
             style: TextStyle(
-              color: AppVars.secondary,
+              color: AppVars.secondary.withOpacity(0.9),
               fontSize: AppVars.textTitle,
             ),
           ),
