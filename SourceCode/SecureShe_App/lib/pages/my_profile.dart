@@ -170,7 +170,7 @@ class _MyProfileState extends State<MyProfile> {
                           child: const Image(
                             fit: BoxFit.scaleDown,
                             image:
-                                AssetImage("assets/images/profile_charles.png"),
+                                AssetImage("assets/images/avatar_default.jpg"),
                             height: double.infinity,
                             width: double.infinity,
                             alignment: Alignment.center,

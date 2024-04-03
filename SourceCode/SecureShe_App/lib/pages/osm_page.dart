@@ -219,7 +219,7 @@ getMarker(name) {
               ),
               child: const Image(
                 fit: BoxFit.scaleDown,
-                image: AssetImage("assets/images/profile_charles.png"),
+                image: AssetImage("assets/images/avatar_default.jpg"),
                 height: double.infinity,
                 width: double.infinity,
                 alignment: Alignment.center,

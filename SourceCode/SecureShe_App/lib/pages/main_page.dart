@@ -65,7 +65,7 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
         child: SizedBox(
-          height: 75,
+          height: 86,
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             fixedColor: AppVars.accent,
