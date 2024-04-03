@@ -25,18 +25,17 @@ class _MyContactsState extends State<MyContacts> {
   List<PersonalContactModel> personalContacts = [];
   String errorMessage = "";
   final TextEditingController _messageController = TextEditingController();
-  late String _userId = ''; 
+  late String _userId = '';
   final MessageService _messageService = MessageService();
-
-
 
   @override
   void initState() {
     super.initState();
     getPersonalContacts();
-    getCurrentUserId(); 
+    getCurrentUserId();
     getExistingMessages();
   }
+
   Future<void> getCurrentUserId() async {
     // Retrieve the current user from Firebase Authentication
     User? user = FirebaseAuth.instance.currentUser;
@@ -48,6 +47,7 @@ class _MyContactsState extends State<MyContacts> {
       });
     }
   }
+
   Future<void> getPersonalContacts() async {
     User? user = _auth.currentUser;
     if (user != null) {
@@ -141,7 +141,7 @@ class _MyContactsState extends State<MyContacts> {
                 children: [
                   for (String message in snapshot.data ?? [])
                     PresetMessage(
-                      message: message, 
+                      message: message,
                       onSendPressed: (message) {
                         _selectContactAndSendMessage(context, message);
                       },
@@ -153,10 +153,13 @@ class _MyContactsState extends State<MyContacts> {
           },
         ),
         // Allow the user to add more messages
-        ElevatedButton(
-          style: AppVars.primaryButtonStyle,
-          onPressed: _showAddMessageDialog,
-          child: const Text('Add Message'),
+        Container(
+          alignment: Alignment.center,
+          child: ElevatedButton(
+            style: AppVars.primaryButtonStyle,
+            onPressed: _showAddMessageDialog,
+            child: const Text('Add Message'),
+          ),
         ),
         const SizedBox(
           height: 8,
@@ -164,7 +167,9 @@ class _MyContactsState extends State<MyContacts> {
       ],
     );
   }
-  Future<void> _selectContactAndSendMessage(BuildContext context, String message) async {
+
+  Future<void> _selectContactAndSendMessage(
+      BuildContext context, String message) async {
     final userContacts = await _getUserContactsFromFirestore();
     final selectedContact = await showDialog<String>(
       context: context,
@@ -189,7 +194,7 @@ class _MyContactsState extends State<MyContacts> {
 
     // If a contact was selected, send the message
     if (selectedContact != null) {
-      String contactId = await getUidFromUsername(selectedContact); 
+      String contactId = await getUidFromUsername(selectedContact);
       String chatroomId = _messageService.getChatroomId(_userId, contactId);
       MessageChat emergencyMessageObj = MessageChat(
         fromUserId: _userId,
@@ -200,15 +205,15 @@ class _MyContactsState extends State<MyContacts> {
 
       await _messageService.sendMessage(emergencyMessageObj, chatroomId);
       ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-            content: Text(
-              'Successfully sent message to selected contact!',
-              style: TextStyle(color: Colors.white), 
-            ),
-            backgroundColor: AppVars.accent, 
-            behavior: SnackBarBehavior.floating, 
-            duration: Duration(seconds: 3), 
+        SnackBar(
+          content: Text(
+            'Successfully sent message to selected contact!',
+            style: TextStyle(color: Colors.white),
           ),
+          backgroundColor: AppVars.accent,
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 3),
+        ),
       );
 
       print('Sending message: $message to $selectedContact');
@@ -228,6 +233,7 @@ class _MyContactsState extends State<MyContacts> {
     final contacts = querySnapshot.docs.map((doc) => doc.data()).toList();
     return contacts;
   }
+
 // Retrieve existing preset messages from the database
   Future<List<String>> getExistingMessages() async {
     User? user = _auth.currentUser;
@@ -297,7 +303,6 @@ class _MyContactsState extends State<MyContacts> {
     getExistingMessages();
   }
 
-
   Column communityContactsBuilder(String userId) {
     return Column(
       children: [
@@ -334,10 +339,17 @@ class _MyContactsState extends State<MyContacts> {
             return Column(
               children: snapshot.data!.docs.map((doc) {
                 var contactData = doc.data() as Map<String, dynamic>;
-                return SavedCommunityContact(
-                  contactName: contactData['contactName'],
-                  phoneNumber: contactData['phoneNumber'],
-                  userId: _userId, 
+                return Column(
+                  children: [
+                    SavedCommunityContact(
+                      contactName: contactData['contactName'],
+                      phoneNumber: contactData['phoneNumber'],
+                      userId: _userId,
+                    ),
+                    SizedBox(
+                      height: AppVars.elementMargin,
+                    )
+                  ],
                 );
               }).toList(),
             );
@@ -346,7 +358,6 @@ class _MyContactsState extends State<MyContacts> {
       ],
     );
   }
-
 
   Column personalContactsBuilder() {
     return Column(
@@ -392,6 +403,7 @@ class _MyContactsState extends State<MyContacts> {
       ],
     );
   }
+
   void _showAddContactDialog() {
     showDialog(
       context: context,

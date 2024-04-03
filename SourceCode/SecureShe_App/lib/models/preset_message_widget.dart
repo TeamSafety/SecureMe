@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_app/models/AppVars.dart';
@@ -16,6 +18,7 @@ class PresetMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10),
+      margin: EdgeInsets.only(bottom: AppVars.elementMargin),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
