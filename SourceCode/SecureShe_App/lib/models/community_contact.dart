@@ -111,7 +111,10 @@ class CommunityContact extends StatelessWidget {
                       const SizedBox(width: 8), // CONTACT BUTTON
                       GestureDetector(
                         onTap: () {
-                          _makePhoneCall(phoneNumber);
+                          if (phoneNumber != 'N/A') {
+                            _makePhoneCall(phoneNumber);
+                          }
+                          ;
                         },
                         child: AspectRatio(
                           aspectRatio: 1,
@@ -133,7 +136,9 @@ class CommunityContact extends StatelessWidget {
                             ),
                             child: Icon(
                               Icons.phone_callback,
-                              color: AppVars.accent,
+                              color: (phoneNumber == 'N/A')
+                                  ? AppVars.secondary.withOpacity(0.1)
+                                  : AppVars.accent,
                             ),
                           ),
                         ),
