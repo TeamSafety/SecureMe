@@ -59,7 +59,7 @@ exports.sendNotification = functions.firestore
       };
 
       // Send the notification to the receiver
-      await admin.messaging().send(receiverToken, payload);
+      await admin.messaging().sendToDevice(receiverToken, payload);
       
       console.log('Notification sent successfully');
     } catch (error) {

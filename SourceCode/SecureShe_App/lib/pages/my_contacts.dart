@@ -394,9 +394,6 @@ class _MyContactsState extends State<MyContacts> {
               const SizedBox(height: 8),
             ],
           ),
-        // const PersonalContact(
-        //     contactName: ,
-        //     imagePath: "assets/images/profile_kawthar.png"),
         const SizedBox(height: 8),
         ElevatedButton(
           style: AppVars.primaryButtonStyle,
@@ -440,13 +437,46 @@ class _MyContactsState extends State<MyContacts> {
                       } else {
                         // Case where the contact is already in the list
                         errorMessage = "You have already added this contact";
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'You have already added this contact',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            backgroundColor: AppVars.accent,
+                            behavior: SnackBarBehavior.floating,
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
                       }
                     } else {
                       errorMessage = "Cannot find the username";
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Cannot find the username',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            backgroundColor: AppVars.accent,
+                            behavior: SnackBarBehavior.floating,
+                            duration: Duration(seconds: 3),
+                          ),
+                      );
                     }
                   } else {
                     errorMessage =
                         "You are trying to add yourself as a contact";
+                    ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "You are trying to add yourself as a contact", 
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            backgroundColor: AppVars.accent,
+                            behavior: SnackBarBehavior.floating,
+                            duration: Duration(seconds: 3),
+                          ),
+                      );
                   }
                 }
                 // print(errorMessage);
