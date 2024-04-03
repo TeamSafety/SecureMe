@@ -7,16 +7,16 @@ import 'package:url_launcher/url_launcher.dart';
 class CommunityContact extends StatelessWidget {
   final String contactName;
   final String phoneNumber;
-  final double lat; 
-  final double long; 
-  final String userId; 
+  final double lat;
+  final double long;
+  final String userId;
   const CommunityContact({
     super.key,
     required this.contactName,
     required this.phoneNumber,
-    required this.lat, 
-    required this.long, 
-    required this.userId, 
+    required this.lat,
+    required this.long,
+    required this.userId,
   });
   @override
   Widget build(BuildContext context) {
@@ -82,7 +82,7 @@ class CommunityContact extends StatelessWidget {
                       // CONTACT BUTTON
                       GestureDetector(
                         onTap: () {
-                          addCommunityToPersonal(userId, contactName, context); 
+                          addCommunityToPersonal(userId, contactName, context);
                         },
                         child: AspectRatio(
                           aspectRatio: 1,
@@ -142,7 +142,9 @@ class CommunityContact extends StatelessWidget {
                       // CONTACT BUTTON
                       GestureDetector(
                         onTap: () {
-                          placeMarker(lat, long, contactName);
+                          if (lat != 0.0 && long != 0.0) {
+                            placeMarker(lat, long, contactName);
+                          }
                         },
                         child: AspectRatio(
                           aspectRatio: 1,
@@ -164,7 +166,9 @@ class CommunityContact extends StatelessWidget {
                             ),
                             child: Icon(
                               Icons.map,
-                              color: AppVars.accent,
+                              color: (lat == 0.0 && long == 0.0)
+                                  ? AppVars.secondary.withOpacity(0.1)
+                                  : AppVars.accent,
                             ),
                           ),
                         ),
@@ -180,8 +184,10 @@ class CommunityContact extends StatelessWidget {
       ),
     );
   }
-  Future<void> addCommunityToPersonal(String userId, String conatctName, BuildContext context) async {
-    String contactID = await getContactID(conatctName); 
+
+  Future<void> addCommunityToPersonal(
+      String userId, String conatctName, BuildContext context) async {
+    String contactID = await getContactID(conatctName);
 
     try {
       DocumentReference userRef =
@@ -189,10 +195,10 @@ class CommunityContact extends StatelessWidget {
       DocumentSnapshot userSnapshot = await userRef.get();
       if (userSnapshot.exists) {
         await userRef.collection('communityContacts').doc(contactID).set({
-          'contactName': contactName, 
-          'phoneNumber': phoneNumber, 
+          'contactName': contactName,
+          'phoneNumber': phoneNumber,
           'lat': lat,
-          'long': long, 
+          'long': long,
         });
 
         print('Community contact added to personal contacts successfully.');
@@ -200,51 +206,50 @@ class CommunityContact extends StatelessWidget {
           SnackBar(
             content: Text(
               'Community contact added to personal contacts successfully.',
-              style: TextStyle(color: Colors.white), 
+              style: TextStyle(color: Colors.white),
             ),
-            backgroundColor: AppVars.accent, 
-            behavior: SnackBarBehavior.floating, 
-            duration: Duration(seconds: 3), 
+            backgroundColor: AppVars.accent,
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 3),
           ),
         );
-      } 
-      else {
+      } else {
         print('User does not exist.');
       }
     } catch (error) {
-        print('Error adding community contact to personal contacts: $error');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Error adding community contact to personal contacts',
-              style: TextStyle(color: Colors.white), 
-            ),
-            backgroundColor: AppVars.accent, 
-            behavior: SnackBarBehavior.floating, 
-            duration: Duration(seconds: 3), 
+      print('Error adding community contact to personal contacts: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Error adding community contact to personal contacts',
+            style: TextStyle(color: Colors.white),
           ),
-        );
+          backgroundColor: AppVars.accent,
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 3),
+        ),
+      );
     }
   }
-  Future<String> getContactID(String conatctName) async{
-    try{
+
+  Future<String> getContactID(String conatctName) async {
+    try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await FirebaseFirestore.instance
               .collection('localContacts')
               .where('organization', isEqualTo: conatctName)
               .get();
-      if(querySnapshot.docs.isNotEmpty){
-        return querySnapshot.docs.first.id; 
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.first.id;
+      } else {
+        return " ";
       }
-      else{
-        return " "; 
-      }
-    }
-    catch(e){
-      print("Error preventing adding community conatcts"); 
-      return " "; 
+    } catch (e) {
+      print("Error preventing adding community conatcts");
+      return " ";
     }
   }
+
   void _removeContact(BuildContext context) async {
     try {
       DocumentReference userRef =
@@ -287,4 +292,3 @@ Future<void> _makePhoneCall(String phoneNumber) async {
   );
   await launchUrl(launchUri);
 }
-

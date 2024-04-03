@@ -7,8 +7,6 @@ import 'package:latlong2/latlong.dart';
 import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
-//import 'package:geolocator_apple/geolocator_apple.dart';
-//import 'package:geolocator_android/geolocator_android.dart';
 import 'dart:async';
 import 'package:my_app/models/AppVars.dart';
 
@@ -119,7 +117,7 @@ class _MyMapOSMState extends State<MyMapOSM2> {
     return FlutterMap(
       options: const MapOptions(
         initialCenter: LatLng(50.4488, -104.6178),
-        initialZoom: 9.2,
+        initialZoom: 12.2,
         interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
       ),
       children: [
@@ -132,7 +130,7 @@ class _MyMapOSMState extends State<MyMapOSM2> {
             MarkerLayer(
               markers: marker,
             ),
-            CurrentLocationLayer(),
+            //CurrentLocationLayer(),
             CurrentLocationLayer(
               followOnLocationUpdate: FollowOnLocationUpdate.never,
               turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
@@ -173,12 +171,11 @@ class _MyMapOSMState extends State<MyMapOSM2> {
 }
 
 getMarker(name) {
-  //child:
   return <Widget>[
     Icon(Icons.location_on,
         color: AppVars.accent,
         shadows: <Shadow>[Shadow(color: Colors.white, blurRadius: 15.0)],
-        size: 30.0),
+        size: 35.0),
     FittedBox(
       fit: BoxFit.cover,
       child: Text(name,
