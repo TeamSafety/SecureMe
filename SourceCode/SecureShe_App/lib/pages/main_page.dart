@@ -66,21 +66,22 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
         child: SizedBox(
-          height: 65,
+          height: 75,
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
+            fixedColor: AppVars.accent,
+            showUnselectedLabels: true,
+            showSelectedLabels: true,
+            selectedFontSize: AppVars.smallText,
+            unselectedFontSize: AppVars.smallText,
             backgroundColor: AppVars.primary,
             onTap: onTap,
-            unselectedFontSize: 0,
-            selectedFontSize: 0,
             currentIndex: _currentIndex,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            enableFeedback: false,
             elevation: 0,
             items: [
               BottomNavigationBarItem(
-                label: 'Group',
+                label: 'Community',
+                tooltip: "Community Page",
                 icon: SvgPicture.asset(
                   'assets/icons/group.svg',
                   width: 30,
@@ -106,10 +107,12 @@ class _MainPageState extends State<MainPage> {
                 ),
               ),
               BottomNavigationBarItem(
-                label: 'Home',
+                label: '',
                 icon: Container(
                   decoration: BoxDecoration(
-                      color: AppVars.accent, shape: BoxShape.circle),
+                    color: AppVars.accent,
+                    shape: BoxShape.circle,
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: SvgPicture.asset(
