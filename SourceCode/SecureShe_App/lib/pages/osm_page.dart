@@ -110,7 +110,6 @@ class _MyMapOSMState extends State<MyMapOSM2> {
     fetchUserLocations();
   }
 
-  @override
   var marker = placeContacts(contactlist);
 
   Widget build(BuildContext context) {
@@ -118,7 +117,7 @@ class _MyMapOSMState extends State<MyMapOSM2> {
       options: const MapOptions(
         initialCenter: LatLng(50.4488, -104.6178),
         initialZoom: 12.2,
-        interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+        //interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
       ),
       children: [
         Stack(
@@ -170,16 +169,75 @@ class _MyMapOSMState extends State<MyMapOSM2> {
   }
 }
 
-getMarker(name) {
+getMarker1(name) {
   return <Widget>[
-    Icon(Icons.location_on,
-        color: AppVars.accent,
-        shadows: <Shadow>[Shadow(color: Colors.white, blurRadius: 15.0)],
-        size: 35.0),
+    Icon(
+      Icons.location_on,
+      color: AppVars.accent,
+      shadows: <Shadow>[Shadow(color: Colors.white, blurRadius: 15.0)],
+      size: 35.0,
+    ),
     FittedBox(
       fit: BoxFit.cover,
-      child: Text(name,
-          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20)),
+      child: Text(
+        name,
+        style: TextStyle(
+          fontWeight: FontWeight.w700,
+          fontSize: 20,
+        ),
+      ),
+    ),
+  ];
+}
+
+getMarker(name) {
+  return <Widget>[
+    Column(
+      children: [
+        Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              child: Transform.scale(
+                scale: 2,
+                origin: Offset(0, -6),
+                child: Icon(
+                  Icons.location_on,
+                  color: AppVars.accent,
+                ),
+              ),
+            ),
+            Container(
+              clipBehavior: Clip.hardEdge,
+              height: 25,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppVars.secondary,
+                boxShadow: [
+                  BoxShadow(color: AppVars.primary, spreadRadius: 0.4),
+                ],
+              ),
+              child: const Image(
+                fit: BoxFit.scaleDown,
+                image: AssetImage("assets/images/profile_charles.png"),
+                height: double.infinity,
+                width: double.infinity,
+                alignment: Alignment.center,
+              ),
+            ),
+          ],
+        ),
+        Transform.scale(
+          scale: 3,
+          origin: Offset(0, -9),
+          child: FittedBox(
+            child: Text(
+              name,
+              style: TextStyle(color: AppVars.secondary.withOpacity(0.8)),
+            ),
+          ),
+        )
+      ],
     ),
   ];
 }
