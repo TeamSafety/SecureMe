@@ -6,14 +6,7 @@
  *
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
-// The Cloud Functions for Firebase SDK to create Cloud Functions and triggers.
 
-// The Firebase Admin SDK to access Firestore.
-// const {initializeApp} = require("firebase-admin/app");
-
-// initializeApp();
-const {onRequest} = require("firebase-functions/v2/https");
-const logger = require("firebase-functions/logger");
 
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
@@ -25,7 +18,8 @@ const logger = require("firebase-functions/logger");
 // Take the text parameter passed to this HTTP endpoint and insert it into
 // Firestore under the path /messages/:documentId/original
 const functions = require('firebase-functions');
-const admin = require('firebase-admin');
+const admin = require('firebase-admin/app');
+
 admin.initializeApp();
 
 exports.sendNotification = functions.firestore
@@ -41,12 +35,12 @@ exports.sendNotification = functions.firestore
       const contentMessage = messageData.content;
       
       // Get information about the sender
-      const senderSnapshot = await admin.firestore().collection('Users').doc(idFrom).get();
+      const senderSnapshot = await firestore().collection('Users').doc(idFrom).get();
       const senderData = senderSnapshot.data();
       const senderName = senderData.username; 
       
       // Get information about the receiver
-      const receiverSnapshot = await admin.firestore().collection('Users').doc(idTo).get();
+      const receiverSnapshot = await firestore().collection('Users').doc(idTo).get();
       const receiverData = receiverSnapshot.data();
       const receiverToken = receiverData.token; // Assuming token is the field containing the receiver's FCM token
 
@@ -55,6 +49,8 @@ exports.sendNotification = functions.firestore
         notification: {
           title: `New message from ${senderName}`,
           body: contentMessage,
+          badge: '1',
+          sound: 'default'
         },
       };
 
