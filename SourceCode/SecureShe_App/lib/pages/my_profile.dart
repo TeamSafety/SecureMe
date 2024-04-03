@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/Profile/SOS_configuration.dart';
+import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:my_app/models/custom_dropdown.dart';
 import 'package:my_app/pages/login.dart';
 
@@ -134,6 +135,10 @@ class _MyProfileState extends State<MyProfile> {
             width: double.infinity,
             child: Column(
               children: [
+                SizedBox(
+                  height: AppVars.elementMargin,
+                ),
+                ShareLocationButton(),
                 SizedBox(
                   height: AppVars.sectionPadding,
                 ),

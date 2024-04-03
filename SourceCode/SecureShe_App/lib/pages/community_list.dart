@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:my_app/models/community_contact.dart';
 import 'package:my_app/models/AppVars.dart';
 
@@ -14,7 +15,7 @@ class ContactPage extends StatefulWidget {
 class _ContactPageState extends State<ContactPage> {
   late List<DocumentSnapshot> contacts = [];
   late List<DocumentSnapshot> originalContacts = [];
-  late String _userId = ''; 
+  late String _userId = '';
   TextEditingController searchController = TextEditingController();
   @override
   void initState() {
@@ -22,7 +23,7 @@ class _ContactPageState extends State<ContactPage> {
     getCurrentUserId();
     loadContactData();
   }
-  
+
   Future<void> getCurrentUserId() async {
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -78,9 +79,13 @@ class _ContactPageState extends State<ContactPage> {
       // Data has been loaded, you can use it in your UI
       return Scaffold(
         body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             children: [
+              SizedBox(
+                height: AppVars.elementMargin,
+              ),
+              ShareLocationButton(),
               TextField(
                 controller: searchController,
                 onChanged: (value) {

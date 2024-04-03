@@ -4,6 +4,7 @@ import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/Chat/message_chat.dart';
 import 'package:my_app/models/Chat/message_service.dart';
 import 'package:my_app/models/PersonalConatcts/personal_contact.dart';
+import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:my_app/models/preset_message_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -92,20 +93,24 @@ class _MyContactsState extends State<MyContacts> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 24,
+                  SizedBox(
+                    height: AppVars.elementMargin,
+                  ),
+                  ShareLocationButton(),
+                  SizedBox(
+                    height: AppVars.sectionPadding,
                   ),
                   personalContactsBuilder(),
-                  const SizedBox(
-                    height: 24,
+                  SizedBox(
+                    height: AppVars.sectionPadding,
                   ),
                   communityContactsBuilder(_userId),
-                  const SizedBox(
-                    height: 24,
+                  SizedBox(
+                    height: AppVars.sectionPadding,
                   ),
                   presetMessagesBuilder(),
-                  const SizedBox(
-                    height: 24,
+                  SizedBox(
+                    height: AppVars.sectionPadding,
                   ),
                 ],
               ),
@@ -363,9 +368,6 @@ class _MyContactsState extends State<MyContacts> {
   Column personalContactsBuilder() {
     return Column(
       children: [
-        SizedBox(
-          height: AppVars.sectionPadding,
-        ),
         SizedBox(
           width: double.infinity,
           child: Text(

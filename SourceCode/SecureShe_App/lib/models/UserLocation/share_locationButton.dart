@@ -89,7 +89,8 @@ class _ShareLocationButtonState extends State<ShareLocationButton> {
 }
 
 Future<void> saveToDatabase(Position position, String userID) async {
-  CollectionReference usersCollection = FirebaseFirestore.instance.collection('Users');
+  CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('Users');
   DocumentReference userDocRef = usersCollection.doc(userID);
 
   Map<String, dynamic> data = {

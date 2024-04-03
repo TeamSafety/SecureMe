@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
 //import 'package:geolocator_apple/geolocator_apple.dart';
@@ -49,27 +50,33 @@ Future<Position?> grabLastLocation() async {
   Position? position = await Geolocator.getLastKnownPosition();
   return position;
 }
-List<dynamic> contactlist = []; 
+
+List<dynamic> contactlist = [];
 
 Future<void> fetchUserLocations() async {
   try {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
-    String userId = '';  
+    String userId = '';
     if (user != null) {
-      userId =  user.uid;
+      userId = user.uid;
     }
-    print("User id is "); 
-    print(userId); 
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('Users').doc(userId).get();
+    print("User id is ");
+    print(userId);
+    DocumentSnapshot userDoc =
+        await FirebaseFirestore.instance.collection('Users').doc(userId).get();
 
     if (userDoc.exists) {
-      QuerySnapshot contactsSnapshot = await userDoc.reference.collection('contacts').get();
+      QuerySnapshot contactsSnapshot =
+          await userDoc.reference.collection('contacts').get();
 
       contactsSnapshot.docs.forEach((contactDoc) async {
-        String contactId = contactDoc['contactUid']; 
+        String contactId = contactDoc['contactUid'];
 
-        DocumentSnapshot contactUserDoc = await FirebaseFirestore.instance.collection('Users').doc(contactId).get();
+        DocumentSnapshot contactUserDoc = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(contactId)
+            .get();
 
         if (contactUserDoc.exists) {
           String contactName = contactUserDoc['username'] ?? 'Unknown';
@@ -92,22 +99,20 @@ Future<void> fetchUserLocations() async {
     print('Error fetching user locations: $e');
   }
 }
+
 class MyMapOSM2 extends StatefulWidget {
   @override
   _MyMapOSMState createState() => _MyMapOSMState();
 }
 
 class _MyMapOSMState extends State<MyMapOSM2> {
-  
   @override
   void initState() {
     super.initState();
     fetchUserLocations();
   }
- 
 
   @override
-
   var marker = placeContacts(contactlist);
 
   Widget build(BuildContext context) {
@@ -118,38 +123,50 @@ class _MyMapOSMState extends State<MyMapOSM2> {
         interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
       ),
       children: [
-        TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'com.example.app',
-        ),
-        MarkerLayer(
-          markers: marker,
-        ),
-        CurrentLocationLayer(),
-        CurrentLocationLayer(
-          followOnLocationUpdate: FollowOnLocationUpdate.never,
-          turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
-          style: LocationMarkerStyle(
-            marker: DefaultLocationMarker(
-              color: AppVars.accent, //(0xffFF8D83),
-              child: Icon(
-                Icons.navigation,
-                color: Colors.white,
-              ),
+        Stack(
+          children: [
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'com.example.app',
             ),
-            markerSize: const Size(40, 40),
-            markerDirection: MarkerDirection.heading,
-          ),
-        ), //CurrentLocationLayer
-        RichAttributionWidget(
-          attributions: [
-            TextSourceAttribution(
-              'OpenStreetMap contributors',
-              onTap: () =>
-                  launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
+            MarkerLayer(
+              markers: marker,
+            ),
+            CurrentLocationLayer(),
+            CurrentLocationLayer(
+              followOnLocationUpdate: FollowOnLocationUpdate.never,
+              turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
+              style: LocationMarkerStyle(
+                marker: DefaultLocationMarker(
+                  color: AppVars.accent, //(0xffFF8D83),
+                  child: Icon(
+                    Icons.navigation,
+                    color: Colors.white,
+                  ),
+                ),
+                markerSize: const Size(40, 40),
+                markerDirection: MarkerDirection.heading,
+              ),
+            ), //CurrentLocationLayer
+            RichAttributionWidget(
+              attributions: [
+                TextSourceAttribution(
+                  'OpenStreetMap contributors',
+                  onTap: () => launchUrl(
+                      Uri.parse('https://openstreetmap.org/copyright')),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                SizedBox(
+                  height: AppVars.elementMargin,
+                ),
+                ShareLocationButton(),
+              ],
             ),
           ],
-        ),
+        )
       ],
     );
   }
@@ -158,17 +175,16 @@ class _MyMapOSMState extends State<MyMapOSM2> {
 getMarker(name) {
   //child:
   return <Widget>[
-      Icon(Icons.location_on,
-          color: AppVars.accent,
-          shadows: <Shadow>[
-            Shadow(color: Colors.white, blurRadius: 15.0)
-          ],
-          size:30.0),
-      FittedBox(
-        fit: BoxFit.cover,
-        child: Text(name, style: TextStyle(fontWeight:FontWeight.w700, fontSize:20)),
-      ),
-    ];
+    Icon(Icons.location_on,
+        color: AppVars.accent,
+        shadows: <Shadow>[Shadow(color: Colors.white, blurRadius: 15.0)],
+        size: 30.0),
+    FittedBox(
+      fit: BoxFit.cover,
+      child: Text(name,
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20)),
+    ),
+  ];
 }
 
 placeMarker(lat, long, name) {
@@ -182,14 +198,17 @@ List<Marker> placeContacts(contactlist) {
   var marker = <Marker>[];
   for (var i = 0; i < (contactlist.length); i++) {
     if (contactlist[i][0] != null) {
-      marker.add(new Marker(
-        point: LatLng(contactlist[i][1], contactlist[i][2]),
-        child: Wrap(
-          children:
-          getMarker(contactlist[i][0]),
+      marker.add(
+        new Marker(
+          point: LatLng(contactlist[i][1], contactlist[i][2]),
+          child: Wrap(
+            children: getMarker(contactlist[i][0]),
+          ),
         ),
-      ),);
-    };
-  };
+      );
+    }
+    ;
+  }
+  ;
   return marker;
 }
