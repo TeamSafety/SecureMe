@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/models/AppVars.dart';
+import 'package:my_app/models/PersonalConatcts/personal_contact.dart';
+import 'package:my_app/models/user_active_location.dart';
 
 class PanelWidget extends StatelessWidget {
   final ScrollController controller;
@@ -13,9 +16,9 @@ class PanelWidget extends StatelessWidget {
         controller: controller,
         padding: EdgeInsets.zero,
         children: <Widget>[
-          const SizedBox(height: 15),
+          SizedBox(height: AppVars.elementMargin),
           buildPanelTitle(),
-          const SizedBox(height: 15),
+          SizedBox(height: AppVars.elementMargin),
           buildListUser(),
         ],
       ),
@@ -26,14 +29,23 @@ class PanelWidget extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const Text(
-          'Active Location Sharing',
-          style: TextStyle(color: Color(0xff2F2C23), fontSize: 16),
+        Expanded(
+          child: Container(
+            height: 30,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Active Location Sharing',
+              style: TextStyle(
+                  color: AppVars.secondary.withOpacity(0.9), fontSize: 16),
+            ),
+          ),
         ),
         Container(
-          height: 30,
-          width: 30,
-          color: Colors.green,
+          child: Icon(
+            Icons.expand_less,
+            size: 35,
+            color: AppVars.accent,
+          ),
         ),
       ],
     );
@@ -43,20 +55,11 @@ class PanelWidget extends StatelessWidget {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
-        SizedBox(height: 36),
-        Text(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
-        SizedBox(height: 36),
-        Text(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
-        SizedBox(height: 36),
-        Text(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
-        SizedBox(height: 36),
-        Text(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
+        UserSharingLoc(
+            contactName: "Someone",
+            imagePath: "assets/images/avatar_default.jpg",
+            addedContactUid: "addedContactUid",
+            currentUserId: "currentUserId")
       ],
     );
   }

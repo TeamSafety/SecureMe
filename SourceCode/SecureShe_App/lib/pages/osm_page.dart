@@ -5,6 +5,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:my_app/models/UserLocation/share_locationButton.dart';
+import 'package:my_app/models/panel_widget.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
@@ -113,81 +115,74 @@ class _MyMapOSMState extends State<MyMapOSM2> {
   var marker = placeContacts(contactlist);
 
   Widget build(BuildContext context) {
-    return FlutterMap(
-      options: const MapOptions(
-        initialCenter: LatLng(50.4488, -104.6178),
-        initialZoom: 12.2,
-        //interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+    final panelMaxHeight = MediaQuery.of(context).size.height * 0.45;
+
+    return SlidingUpPanel(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(10),
+        topRight: Radius.circular(10),
       ),
-      children: [
-        Stack(
-          children: [
-            TileLayer(
-              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.example.app',
-            ),
-            MarkerLayer(
-              markers: marker,
-            ),
-            //CurrentLocationLayer(),
-            CurrentLocationLayer(
-              followOnLocationUpdate: FollowOnLocationUpdate.never,
-              turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
-              style: LocationMarkerStyle(
-                marker: DefaultLocationMarker(
-                  color: AppVars.accent, //(0xffFF8D83),
-                  child: Icon(
-                    Icons.navigation,
-                    color: Colors.white,
-                  ),
-                ),
-                markerSize: const Size(40, 40),
-                markerDirection: MarkerDirection.heading,
+      parallaxEnabled: true,
+      parallaxOffset: 0.05,
+      minHeight: 50,
+      maxHeight: panelMaxHeight,
+      panelBuilder: (controller) => PanelWidget(
+        controller: controller,
+      ),
+      body: FlutterMap(
+        options: const MapOptions(
+          initialCenter: LatLng(50.4488, -104.6178),
+          initialZoom: 12.2,
+          //interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+        ),
+        children: [
+          Stack(
+            children: [
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'com.example.app',
               ),
-            ), //CurrentLocationLayer
-            RichAttributionWidget(
-              attributions: [
-                TextSourceAttribution(
-                  'OpenStreetMap contributors',
-                  onTap: () => launchUrl(
-                      Uri.parse('https://openstreetmap.org/copyright')),
+              MarkerLayer(
+                markers: marker,
+              ),
+              CurrentLocationLayer(
+                followOnLocationUpdate: FollowOnLocationUpdate.never,
+                turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
+                style: LocationMarkerStyle(
+                  marker: DefaultLocationMarker(
+                    color: AppVars.accent,
+                    child: Icon(
+                      Icons.navigation,
+                      color: Colors.white,
+                    ),
+                  ),
+                  markerSize: const Size(40, 40),
+                  markerDirection: MarkerDirection.heading,
                 ),
-              ],
-            ),
-            Column(
-              children: [
-                SizedBox(
-                  height: AppVars.elementMargin,
-                ),
-                ShareLocationButton(),
-              ],
-            ),
-          ],
-        )
-      ],
+              ), //CurrentLocationLayer
+              RichAttributionWidget(
+                attributions: [
+                  TextSourceAttribution(
+                    'OpenStreetMap contributors',
+                    onTap: () => launchUrl(
+                        Uri.parse('https://openstreetmap.org/copyright')),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  SizedBox(
+                    height: AppVars.elementMargin,
+                  ),
+                  ShareLocationButton(),
+                ],
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
-}
-
-getMarker1(name) {
-  return <Widget>[
-    Icon(
-      Icons.location_on,
-      color: AppVars.accent,
-      shadows: <Shadow>[Shadow(color: Colors.white, blurRadius: 15.0)],
-      size: 35.0,
-    ),
-    FittedBox(
-      fit: BoxFit.cover,
-      child: Text(
-        name,
-        style: TextStyle(
-          fontWeight: FontWeight.w700,
-          fontSize: 20,
-        ),
-      ),
-    ),
-  ];
 }
 
 getMarker(name) {
