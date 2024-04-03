@@ -23,9 +23,9 @@ class _MainPageState extends State<MainPage> {
   List pages = [
     ContactPage(),
     MyContacts(),
-    //HomePage(),
+    HomePage(),
     // LocationPage(),
-    TestHomePage(), 
+    //TestHomePage(),
     MyMapOSM2(),
     MyProfile(),
   ];

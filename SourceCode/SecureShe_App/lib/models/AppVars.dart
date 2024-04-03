@@ -14,6 +14,7 @@ class AppVars {
   static double textHeader = 20;
   static double textTitle = 16;
   static double textHref = 16;
+  static double smallText = 12;
 
   static ButtonStyle primaryButtonStyle = ElevatedButton.styleFrom(
     foregroundColor: AppVars.primary,

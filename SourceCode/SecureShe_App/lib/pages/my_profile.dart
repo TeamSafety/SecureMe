@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/Profile/SOS_configuration.dart';
-import 'package:my_app/models/drop_downList.dart';
+import 'package:my_app/models/custom_dropdown.dart';
 import 'package:my_app/pages/login.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -20,8 +20,8 @@ class _MyProfileState extends State<MyProfile> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
 
-  List<String> userContacts = ["KawtharKH"]; 
-  List<String> userMessages = ["Help please"]; 
+  List<String> userContacts = [""];
+  List<String> userMessages = [""];
   String? selectedEmergencyContact;
   String? selectedEmergencyMessage;
 
@@ -30,7 +30,7 @@ class _MyProfileState extends State<MyProfile> {
   @override
   void initState() {
     super.initState();
-    userProfileFuture = fetchUserProfile();  
+    userProfileFuture = fetchUserProfile();
   }
 
   Future<void> fetchUserProfile() async {
@@ -51,32 +51,33 @@ class _MyProfileState extends State<MyProfile> {
         });
       } else {
         // Handle the case where the document does not exist.
-        print("can't find doc"); 
+        print("can't find doc");
       }
 
       // Fetch user contacts
-      QuerySnapshot<Map<String, dynamic>> contactsSnapshot = await FirebaseFirestore
-          .instance
-          .collection('Users')
-          .doc(user.uid)
-          .collection('contacts')
-          .get();
+      QuerySnapshot<Map<String, dynamic>> contactsSnapshot =
+          await FirebaseFirestore.instance
+              .collection('Users')
+              .doc(user.uid)
+              .collection('contacts')
+              .get();
 
-      userContacts = contactsSnapshot.docs.map((doc) => doc['contactName'] as String).toList();
+      userContacts = contactsSnapshot.docs
+          .map((doc) => doc['contactName'] as String)
+          .toList();
 
       // Fetch user messages
-      QuerySnapshot<Map<String, dynamic>> messagesSnapshot = await FirebaseFirestore
-          .instance
-          .collection('Users')
-          .doc(user.uid)
-          .collection('messages')
-          .get();
+      QuerySnapshot<Map<String, dynamic>> messagesSnapshot =
+          await FirebaseFirestore.instance
+              .collection('Users')
+              .doc(user.uid)
+              .collection('messages')
+              .get();
 
-      userMessages = messagesSnapshot.docs.map((doc) => doc['message'] as String).toList();
+      userMessages =
+          messagesSnapshot.docs.map((doc) => doc['message'] as String).toList();
     }
   }
-
-  
 
   Future<void> updateProfile() async {
     User? user = _auth.currentUser;
@@ -207,7 +208,7 @@ class _MyProfileState extends State<MyProfile> {
                               height: AppVars.elementMargin,
                             ),
                             InkWell(
-                              onTap:(){
+                              onTap: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -257,61 +258,109 @@ class _MyProfileState extends State<MyProfile> {
                     ],
                   ),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Emergency Contact",
-                        style: TextStyle(
-                          fontSize: AppVars.textTitle,
-                          color: AppVars.secondary.withOpacity(0.8),
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Emergency Contact",
+                          style: TextStyle(
+                            fontSize: AppVars.textTitle,
+                            color: AppVars.secondary.withOpacity(0.8),
+                          ),
                         ),
-                      ),
-                      FutureBuilder(
-                        future: userProfileFuture,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return Text(" ");
-                          } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          } else {
-                            // Data has been fetched, build the UI
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-
-                                DropdownButtonClass(
-                                  contacts: userContacts,
-                                  messages: userMessages,
-                                  onContactChanged: (String? value) {
-                                    setState(() {
-                                      selectedEmergencyContact = value;
-                                    });
-                                  },
-                                  onMessageChanged: (String? value) {
-                                    setState(() {
-                                      selectedEmergencyMessage = value;
-                                    });
-                                  },
-                                ),], 
+                        FutureBuilder(
+                          future: userProfileFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Text(" ");
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              return CustomDropdown(
+                                title: "Select from contacts",
+                                listItems: userContacts,
+                                dropdownValue: (String? value) {
+                                  setState(() {
+                                    selectedEmergencyContact = value;
+                                  });
+                                },
                               );
-                          }
-                        }), 
-              ]),), 
+                            }
+                          },
+                        )
+                      ]),
+                ),
+                SizedBox(
+                  height: AppVars.elementMargin,
+                ),
+                Container(
+                  width: double.infinity,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  decoration: BoxDecoration(
+                    color: AppVars.primary,
+                    border: Border.all(
+                      color: AppVars.secondary.withOpacity(0.1),
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppVars.secondary.withOpacity(0.3),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2.0),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Emergency Message",
+                          style: TextStyle(
+                            fontSize: AppVars.textTitle,
+                            color: AppVars.secondary.withOpacity(0.8),
+                          ),
+                        ),
+                        FutureBuilder(
+                          future: userProfileFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Text(" ");
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              return CustomDropdown(
+                                title: "Select from preset messages",
+                                listItems: userMessages,
+                                dropdownValue: (String? value) {
+                                  setState(() {
+                                    selectedEmergencyContact = value;
+                                  });
+                                },
+                              );
+                            }
+                          },
+                        )
+                      ]),
+                ),
                 SizedBox(
                   height: AppVars.elementMargin,
                 ),
                 ElevatedButton(
                   style: AppVars.primaryButtonStyle,
-                    onPressed: () async {
-                      await updateProfile();
-                      EmergencyConfiguration emergencyClass = EmergencyConfiguration(
-                        message: selectedEmergencyMessage ?? 'Help ME!!',
-                        contacts: [selectedEmergencyContact ?? ''],
-                        context: context, 
-                      );
-                      emergencyClass.emergencySOSUpdate();
-                    },
+                  onPressed: () async {
+                    await updateProfile();
+                    EmergencyConfiguration emergencyClass =
+                        EmergencyConfiguration(
+                      message: selectedEmergencyMessage ?? 'Help ME!!',
+                      contacts: [selectedEmergencyContact ?? ''],
+                      context: context,
+                    );
+                    emergencyClass.emergencySOSUpdate();
+                  },
                   child: const Text('Update SOS Emergency info'),
                 ),
                 SizedBox(
