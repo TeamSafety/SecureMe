@@ -223,7 +223,6 @@ class _ChatScreenState extends State<ChatScreen> {
         timestamp: DateTime.now(),
         content: content,
       );
-
       _messageService.sendMessage(newMessage, _chatroomId);
       _messageController.clear();
     }

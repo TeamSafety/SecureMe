@@ -59,9 +59,7 @@ class MessageService {
 
       if (userDoc.exists) {
         var messagesCollection = userDoc.reference.collection('messages');
-        // Fetch documents from the 'messages' subcollection
         var messagesQuery = await messagesCollection.get();
-        // Extract the message field from each document
         List<String> presetMessages = messagesQuery.docs
             .map((messageDoc) => messageDoc['message'] as String)
             .toList();
@@ -72,7 +70,6 @@ class MessageService {
         return [];
       }
     } catch (e) {
-      // Handle errors
       print('Error fetching user preset messages: $e');
       return [];
     }

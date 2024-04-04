@@ -4,7 +4,7 @@ import 'package:my_app/models/firestore_constants.dart';
 class MessageChat {
   final String fromUserId;
   final String toUserId;
-  final DateTime timestamp; // Correct type
+  final DateTime timestamp; 
   final String content;
 
   const MessageChat({
@@ -32,3 +32,4 @@ class MessageChat {
     );
   }
 }
+
