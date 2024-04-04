@@ -247,7 +247,7 @@ placeMarker(lat, long, name) {
 List<Marker> placeContacts(contactlist) {
   var marker = <Marker>[];
   for (var i = 0; i < (contactlist.length); i++) {
-    if (contactlist[i][0] != null) {
+    if (contactlist[i][0] != null && contactlist[i][1] != null) {
       marker.add(
         new Marker(
           point: LatLng(contactlist[i][1], contactlist[i][2]),
