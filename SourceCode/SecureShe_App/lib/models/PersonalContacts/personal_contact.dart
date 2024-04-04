@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/pages/chat_page.dart';
-import 'package:my_app/pages/my_contacts.dart';
 
 class PersonalContact extends StatefulWidget {
   final String contactName;

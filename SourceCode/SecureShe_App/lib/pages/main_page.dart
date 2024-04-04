@@ -1,6 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_app/models/AppVars.dart';
@@ -8,8 +6,7 @@ import 'package:my_app/pages/community_list.dart';
 import 'package:my_app/pages/home_page.dart';
 import 'package:my_app/pages/my_contacts.dart';
 import 'package:my_app/pages/my_profile.dart';
-import 'package:my_app/pages/osm_page.dart';
-import 'package:my_app/pages/testhome_page.dart';
+import 'package:my_app/pages/map_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -23,8 +20,6 @@ class _MainPageState extends State<MainPage> {
     ContactPage(),
     MyContacts(),
     HomePage(),
-    // LocationPage(),
-    //TestHomePage(),
     MyMapOSM2(),
     MyProfile(),
   ];

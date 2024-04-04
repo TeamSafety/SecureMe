@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:my_app/models/AppVars.dart';
-import 'package:my_app/pages/osm_page.dart';
+import 'package:my_app/pages/map_page.dart';
 
 //variables declaration
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -118,13 +118,13 @@ Future<void> startLocationUpdates(String userID) async {
         await saveToDatabase(currentPosition, userID);
       }
     } else {
-
       timer.cancel(); // Stop the timer if saving location updates is disabled
       await clearLocationData(userID); // set location data to null
     }
   });
 }
-Future<void> clearLocationData(String userID) async{
+
+Future<void> clearLocationData(String userID) async {
   CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('Users');
   DocumentReference userDocRef = usersCollection.doc(userID);
@@ -133,6 +133,5 @@ Future<void> clearLocationData(String userID) async{
     'longitude': null,
     'timestamp': FieldValue.serverTimestamp(),
   };
-  await userDocRef.update(data); 
-
+  await userDocRef.update(data);
 }

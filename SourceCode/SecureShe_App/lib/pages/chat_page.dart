@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/Chat/message_chat.dart';
 import 'package:my_app/models/Chat/message_service.dart';
-import 'package:my_app/models/firestore_constants.dart';
 import 'package:my_app/pages/my_contacts.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -24,18 +23,19 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    _chatroomId = _messageService.getChatroomId(widget.userId, widget.recipientUserId);
+    _chatroomId =
+        _messageService.getChatroomId(widget.userId, widget.recipientUserId);
   }
 
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppVars.accent, 
+        backgroundColor: AppVars.accent,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
-            _onBackPress(); 
+            _onBackPress();
           },
         ),
         title: FutureBuilder<String>(
@@ -49,14 +49,13 @@ class _ChatScreenState extends State<ChatScreen> {
             }
             if (snapshot.hasError) {
               return const Text(
-                'Error loading user name', 
+                'Error loading user name',
                 style: TextStyle(color: Colors.white),
               );
             }
             return Text(
-              'Chat with ${snapshot.data}', 
+              'Chat with ${snapshot.data}',
               style: const TextStyle(color: Colors.white),
-
             );
           },
         ),
@@ -90,9 +89,11 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
+
   Widget _buildMessageItem(MessageChat message) {
     return FutureBuilder<Map<String, String>>(
-      future: _messageService.getUserNames(message.fromUserId, message.toUserId),
+      future:
+          _messageService.getUserNames(message.fromUserId, message.toUserId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text("  ");
@@ -106,7 +107,8 @@ class _ChatScreenState extends State<ChatScreen> {
         final isCurrentUser = message.fromUserId == widget.userId;
 
         return Align(
-          alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
+          alignment:
+              isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
           child: Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             padding: const EdgeInsets.all(8),
@@ -127,7 +129,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 const SizedBox(height: 5),
                 Text(
                   message.content,
-                  style: TextStyle(color: isCurrentUser ? Colors.white : Colors.black87),
+                  style: TextStyle(
+                      color: isCurrentUser ? Colors.white : Colors.black87),
                 ),
               ],
             ),
@@ -138,77 +141,78 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildInput() {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Column(
-      children: [
-        // Display user-specific preset messages as suggestions
-        Container(
-          height: 50,
-          child: FutureBuilder<List<String>>(
-            future: _messageService.getUserPresetMessages(widget.userId),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Text("  ");
-              }
-              if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
-                // Handle error or empty preset messages
-                return Container();
-              }
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          // Display user-specific preset messages as suggestions
+          Container(
+            height: 50,
+            child: FutureBuilder<List<String>>(
+              future: _messageService.getUserPresetMessages(widget.userId),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Text("  ");
+                }
+                if (snapshot.hasError ||
+                    !snapshot.hasData ||
+                    snapshot.data!.isEmpty) {
+                  // Handle error or empty preset messages
+                  return Container();
+                }
 
-              return ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      // Set the tapped preset message in the input field
-                      _messageController.text = snapshot.data![index];
-                    },
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 8),
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppVars.accent,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          snapshot.data![index],
-                          style: TextStyle(color: Colors.white),
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        // Set the tapped preset message in the input field
+                        _messageController.text = snapshot.data![index];
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 8),
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: AppVars.accent,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text(
+                            snapshot.data![index],
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-        ),
-        // Input field for typing a message
-        Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _messageController,
-                decoration: const InputDecoration(
-                  hintText: 'Type your message...',
-                ),
-              ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.send),
-              onPressed: () {
-                _sendMessage();
+                    );
+                  },
+                );
               },
             ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
-
+          ),
+          // Input field for typing a message
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _messageController,
+                  decoration: const InputDecoration(
+                    hintText: 'Type your message...',
+                  ),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: () {
+                  _sendMessage();
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
   void _sendMessage() {
     final content = _messageController.text.trim();
@@ -224,10 +228,14 @@ class _ChatScreenState extends State<ChatScreen> {
       _messageController.clear();
     }
   }
+
   void _onBackPress() async {
     try {
-      final messagesCollection = FirebaseFirestore.instance.collection('messages').doc(_chatroomId).collection('messages');
-      
+      final messagesCollection = FirebaseFirestore.instance
+          .collection('messages')
+          .doc(_chatroomId)
+          .collection('messages');
+
       final documents = await messagesCollection.get();
       for (final doc in documents.docs) {
         await messagesCollection.doc(doc.id).update({
@@ -236,13 +244,10 @@ class _ChatScreenState extends State<ChatScreen> {
       }
       Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (context) =>
-                const MyContacts()), 
+        MaterialPageRoute(builder: (context) => const MyContacts()),
       );
     } catch (e) {
       print('Error during back press: $e');
     }
   }
-
 }

@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -9,7 +7,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:my_app/models/sos_button.dart';
-
 
 class TestHomePage extends StatefulWidget {
   const TestHomePage({super.key});
@@ -29,7 +26,7 @@ class HomePageState extends State<TestHomePage> {
     _registerNotification();
     _configLocalNotification();
   }
-  
+
   void _registerNotification() {
     FirebaseMessaging.onMessage.listen((message) {
       print('onMessage: $message');
@@ -43,31 +40,32 @@ class HomePageState extends State<TestHomePage> {
       print('push token: $token');
       if (token != null) {
         // save the token in the user's collection
-        saveTokenForCurrentUser(token); 
-        return; 
+        saveTokenForCurrentUser(token);
+        return;
       }
     }).catchError((err) {
-        return;     
+      return;
     });
-    
   }
+
   void saveTokenForCurrentUser(String token) async {
     User? user = _auth.currentUser;
 
     if (user != null) {
-    CollectionReference users = _firestore.collection('Users');
-    await users
-        .doc(user.uid)
-        .set({'token': token}, SetOptions(merge: true))
-        .then((value) => print("Token added to user's document"))
-        .catchError((error) => print("Failed to add token: $error"));
+      CollectionReference users = _firestore.collection('Users');
+      await users
+          .doc(user.uid)
+          .set({'token': token}, SetOptions(merge: true))
+          .then((value) => print("Token added to user's document"))
+          .catchError((error) => print("Failed to add token: $error"));
     } else {
       print('No user signed in');
     }
   }
-  
+
   void _configLocalNotification() {
-    final initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
+    final initializationSettingsAndroid =
+        AndroidInitializationSettings('app_icon');
     final initializationSettingsIOS = DarwinInitializationSettings();
     final initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
@@ -75,9 +73,12 @@ class HomePageState extends State<TestHomePage> {
     );
     _flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
+
   void _showNotification(RemoteNotification remoteNotification) async {
     final androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      Platform.isAndroid ? 'com.example.my_app' : 'com.example.flutter_application1',
+      Platform.isAndroid
+          ? 'com.example.my_app'
+          : 'com.example.flutter_application1',
       'SecureMe app',
       playSound: true,
       enableVibration: true,
@@ -100,7 +101,7 @@ class HomePageState extends State<TestHomePage> {
       payload: null,
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

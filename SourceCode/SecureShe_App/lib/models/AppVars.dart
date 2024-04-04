@@ -16,6 +16,8 @@ class AppVars {
   static double textHref = 16;
   static double smallText = 12;
 
+  static double borderRadius = 10;
+
   static ButtonStyle primaryButtonStyle = ElevatedButton.styleFrom(
     foregroundColor: AppVars.primary,
     backgroundColor: AppVars.accent,
@@ -26,11 +28,12 @@ class AppVars {
   );
 
   static ButtonStyle secondaryButtonStyle = ElevatedButton.styleFrom(
-      foregroundColor: AppVars.accent,
-      backgroundColor: AppVars.primary,
-      shadowColor: AppVars.secondary.withOpacity(0.8),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      side: BorderSide(color: AppVars.accent));
+    foregroundColor: AppVars.accent,
+    backgroundColor: AppVars.primary,
+    shadowColor: AppVars.secondary.withOpacity(0.8),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+    side: BorderSide(color: AppVars.accent),
+  );
 }

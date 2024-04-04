@@ -193,6 +193,7 @@ class SavedCommunityContact extends StatelessWidget {
           await contactDocRef.delete();
 
           // Show success message
+          // ignore: unnecessary_null_comparison
           if (context != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

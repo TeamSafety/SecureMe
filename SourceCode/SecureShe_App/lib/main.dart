@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:my_app/models/AppVars.dart';
+// ignore: unused_import
 import 'package:my_app/pages/login.dart';
 import 'package:my_app/pages/main_page.dart';
 import 'firebase_options.dart';
@@ -69,7 +71,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(fontFamily: "ArbutusSlab"),
+      theme: ThemeData(
+        fontFamily: "ArbutusSlab",
+        colorScheme: ThemeData().colorScheme.copyWith(
+              primary: AppVars.secondary.withOpacity(0.5),
+            ),
+      ),
       debugShowCheckedModeBanner: false,
       // home: LoginPage(),
       home: MainPage(),

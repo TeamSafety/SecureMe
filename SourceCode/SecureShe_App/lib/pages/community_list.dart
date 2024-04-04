@@ -86,14 +86,38 @@ class _ContactPageState extends State<ContactPage> {
                 height: AppVars.elementMargin,
               ),
               ShareLocationButton(),
+              SizedBox(
+                height: AppVars.elementMargin,
+              ),
               TextField(
                 controller: searchController,
                 onChanged: (value) {
                   filterContacts(value);
                 },
-                decoration: const InputDecoration(
-                  labelText: 'Search contacts',
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppVars.primary,
                   prefixIcon: Icon(Icons.search),
+                  iconColor: AppVars.secondary.withOpacity(0.8),
+                  labelText: 'Search Community',
+                  labelStyle: TextStyle(
+                    color: AppVars.secondary.withOpacity(0.8),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppVars.borderRadius),
+                    borderSide: BorderSide(
+                        width: 0.5, color: AppVars.secondary.withOpacity(0.5)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppVars.borderRadius),
+                    borderSide: BorderSide(
+                        width: 0.5, color: AppVars.secondary.withOpacity(0.5)),
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 1, vertical: 0),
+                ),
+                style: TextStyle(
+                  color: AppVars.secondary.withOpacity(0.9),
                 ),
               ),
               const SizedBox(height: 16),
