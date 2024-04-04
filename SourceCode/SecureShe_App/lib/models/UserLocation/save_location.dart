@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:geolocator/geolocator.dart';
-import 'package:my_app/pages/osm_page.dart';
+import 'package:my_app/pages/map_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 Future<void> saveToDatabase(Position position, String userID) async {

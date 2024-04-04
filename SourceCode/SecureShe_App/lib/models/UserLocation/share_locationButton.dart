@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:my_app/models/AppVars.dart';
-import 'package:my_app/pages/osm_page.dart';
+import 'package:my_app/pages/map_page.dart';
 
 //variables declaration
 final FirebaseAuth _auth = FirebaseAuth.instance;
