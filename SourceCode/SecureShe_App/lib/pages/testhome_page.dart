@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:my_app/models/sos_button.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class TestHomePage extends StatefulWidget {
   const TestHomePage({super.key});
@@ -28,14 +29,13 @@ class HomePageState extends State<TestHomePage> {
   }
 
   void _registerNotification() {
-    FirebaseMessaging.onMessage.listen((message) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('onMessage: $message');
       if (message.notification != null) {
         _showNotification(message.notification!);
       }
       return;
     });
-
     _firebaseMessaging.getToken().then((token) {
       print('push token: $token');
       if (token != null) {
@@ -65,7 +65,7 @@ class HomePageState extends State<TestHomePage> {
 
   void _configLocalNotification() {
     final initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+        AndroidInitializationSettings('assets/images/avatar_default.jpg');
     final initializationSettingsIOS = DarwinInitializationSettings();
     final initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,

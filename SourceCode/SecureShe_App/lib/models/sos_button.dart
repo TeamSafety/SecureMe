@@ -182,7 +182,8 @@ class _SOSButtonState extends State<SOSButton> {
             );
 
             await _messageService.sendMessage(emergencyMessageObj, chatroomId);
-            ScaffoldMessenger.of(context).showSnackBar(
+          }
+          ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
                   'Your EMERGENCY message was sent',
@@ -193,9 +194,6 @@ class _SOSButtonState extends State<SOSButton> {
                 duration: Duration(seconds: 3), 
               ),
             );
-            print("Message was sent to $contactId!"); // for debug purposes!
-          }
-
           // Navigate to a page where the user can send an "I'm safe" message or a timer
         }
       } catch (e) {
