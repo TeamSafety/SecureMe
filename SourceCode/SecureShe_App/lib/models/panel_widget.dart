@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/AppVars.dart';
-import 'package:my_app/models/PersonalConatcts/personal_contact.dart';
 import 'package:my_app/models/user_active_location.dart';
 
 class PanelWidget extends StatelessWidget {

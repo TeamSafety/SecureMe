@@ -6,12 +6,12 @@ import 'package:url_launcher/url_launcher.dart';
 class SavedCommunityContact extends StatelessWidget {
   final String contactName;
   final String phoneNumber;
-  final String userId; 
+  final String userId;
   const SavedCommunityContact({
     super.key,
     required this.contactName,
     required this.phoneNumber,
-    required this.userId, 
+    required this.userId,
   });
 
   @override
@@ -132,7 +132,7 @@ class SavedCommunityContact extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8), 
+                      const SizedBox(width: 8),
                       GestureDetector(
                         onTap: () {
                           _removeContact(context);
@@ -173,22 +173,27 @@ class SavedCommunityContact extends StatelessWidget {
       ),
     );
   }
+
   void _removeContact(BuildContext context) async {
     try {
-      DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(userId);
+      DocumentReference userRef =
+          FirebaseFirestore.instance.collection('Users').doc(userId);
       DocumentSnapshot userSnapshot = await userRef.get();
 
       if (userSnapshot.exists) {
-        CollectionReference communityContactsRef = userRef.collection("communityContacts");
+        CollectionReference communityContactsRef =
+            userRef.collection("communityContacts");
 
-        QuerySnapshot querySnapshot = await communityContactsRef.where('contactName', isEqualTo: contactName).get();
+        QuerySnapshot querySnapshot = await communityContactsRef
+            .where('contactName', isEqualTo: contactName)
+            .get();
 
         if (querySnapshot.docs.isNotEmpty) {
           DocumentReference contactDocRef = querySnapshot.docs.first.reference;
           await contactDocRef.delete();
 
           // Show success message
-          if(context!=null){
+          if (context != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
@@ -222,7 +227,6 @@ class SavedCommunityContact extends StatelessWidget {
       );
     }
   }
-  
 }
 
 Future<void> _makePhoneCall(String phoneNumber) async {
