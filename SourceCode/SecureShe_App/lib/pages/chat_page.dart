@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/Chat/message_chat.dart';
 import 'package:my_app/models/Chat/message_service.dart';
-import 'package:my_app/models/firestore_constants.dart';
 import 'package:my_app/pages/my_contacts.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -219,7 +218,6 @@ class _ChatScreenState extends State<ChatScreen> {
         timestamp: DateTime.now(),
         content: content,
       );
-
       _messageService.sendMessage(newMessage, _chatroomId);
       _messageController.clear();
     }

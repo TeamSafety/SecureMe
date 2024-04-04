@@ -8,7 +8,6 @@ import 'package:my_app/models/custom_dropdown.dart';
 import 'package:my_app/pages/login.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
-//final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class MyProfile extends StatefulWidget {
   const MyProfile({super.key});
@@ -431,9 +430,6 @@ class EditInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Edit Info'),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
