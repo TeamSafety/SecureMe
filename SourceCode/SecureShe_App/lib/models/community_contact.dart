@@ -39,13 +39,13 @@ class CommunityContact extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          // PROFILE PIC
+          // Image
           AspectRatio(
             aspectRatio: 1,
             child: Container(
               height: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.grey,
+                color: AppVars.secondary.withOpacity(0.5),
                 borderRadius: const BorderRadius.all(
                   Radius.circular(10),
                 ),
