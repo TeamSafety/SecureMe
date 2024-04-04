@@ -56,8 +56,6 @@ exports.sendNotification = functions.firestore
           notification: {
             title: `New message from ${senderName}`,
             body: contentMessage,
-            badge: '1',
-            sound: 'default'
           },
           token: receiverToken
         };
