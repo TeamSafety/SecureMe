@@ -99,8 +99,6 @@ Future<void> saveToDatabase(Position position, String userID) async {
     'timestamp': FieldValue.serverTimestamp(),
   };
   await userDocRef.update(data);
-
-  print('Saved to Firestore: ${position.latitude}, ${position.longitude}');
 }
 
 Future<void> startLocationUpdates(String userID) async {
@@ -120,7 +118,21 @@ Future<void> startLocationUpdates(String userID) async {
         await saveToDatabase(currentPosition, userID);
       }
     } else {
+
       timer.cancel(); // Stop the timer if saving location updates is disabled
+      await clearLocationData(userID); // set location data to null
     }
   });
+}
+Future<void> clearLocationData(String userID) async{
+  CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('Users');
+  DocumentReference userDocRef = usersCollection.doc(userID);
+  Map<String, dynamic> data = {
+    'latitude': null,
+    'longitude': null,
+    'timestamp': FieldValue.serverTimestamp(),
+  };
+  await userDocRef.update(data); 
+
 }

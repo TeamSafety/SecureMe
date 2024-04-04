@@ -20,8 +20,10 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin/app');
 
+const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
+const{getMessaging} = require('firebase-admin/messaging')
 admin.initializeApp();
-
+const db = getFirestore();
 exports.sendNotification = functions.firestore
   .document('messages/{groupId1}/messages/{messageId}') // path to the messages collection!
   .onCreate(async (snap, context) => {
@@ -35,30 +37,44 @@ exports.sendNotification = functions.firestore
       const contentMessage = messageData.content;
       
       // Get information about the sender
-      const senderSnapshot = await firestore().collection('Users').doc(idFrom).get();
-      const senderData = senderSnapshot.data();
-      const senderName = senderData.username; 
-      
-      // Get information about the receiver
-      const receiverSnapshot = await firestore().collection('Users').doc(idTo).get();
-      const receiverData = receiverSnapshot.data();
-      const receiverToken = receiverData.token; // Assuming token is the field containing the receiver's FCM token
+      const senderSnapshot = await db.collection('Users').doc(idFrom).get();
+      if(!senderSnapshot.exists){
+        console.log("User doesn't exists"); 
+      }
+      else{
+        const senderData = senderSnapshot.data();
 
-      // Construct the notification payload
-      const payload = {
-        notification: {
-          title: `New message from ${senderName}`,
-          body: contentMessage,
-          badge: '1',
-          sound: 'default'
-        },
-      };
+        const senderName = senderData.username; 
+        
+        // Get information about the receiver
+        const receiverSnapshot = await db.collection('Users').doc(idTo).get();
+        const receiverData = receiverSnapshot.data();
+        const receiverToken = receiverData.token; // Assuming token is the field containing the receiver's FCM token
 
-      // Send the notification to the receiver
-      await admin.messaging().sendToDevice(receiverToken, payload);
-      
-      console.log('Notification sent successfully');
-    } catch (error) {
-      console.error('Error sending notification:', error);
-    }
+        // Construct the notification payload
+        const payload = {
+          notification: {
+            title: `New message from ${senderName}`,
+            body: contentMessage,
+          },
+          token: receiverToken
+        };
+        // Send the notification to the receiver
+        await getMessaging().send(payload)
+        .then((response) => {
+          console.log("Successfully sent Message.", response);
+          return;
+        })
+        .catch((error) => {
+          console.log("Error sending message!", error);
+        })
+        //const response = await admin.messaging().sendToDevice(receiverToken, payload);
+        functions.logger.log('Notifications have been sent and tokens cleaned up.');
+        console.log('Notification sent successfully');
+      }
+    } 
+     catch (error) {
+        console.error('Error sending notification:', error);
+      }
+
   });

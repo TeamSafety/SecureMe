@@ -4,6 +4,7 @@ import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/Chat/message_chat.dart';
 import 'package:my_app/models/Chat/message_service.dart';
 import 'package:my_app/models/PersonalContacts/personal_contact.dart';
+import 'package:my_app/models/PersonalContacts/personal_contact.dart';
 import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:my_app/models/preset_message_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';

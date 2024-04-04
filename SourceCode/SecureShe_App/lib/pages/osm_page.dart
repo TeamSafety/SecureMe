@@ -86,7 +86,7 @@ Future<void> fetchUserLocations() async {
           if (latitude != null && longitude != null) {
             contactlist.add([contactName, latitude, longitude]);
           } else {
-            print('Latitude or longitude is missing for contact: $contactName');
+            print('Latitude or longitude info is missing for contact: $contactName');
           }
         } else {
           print('Contact document with ID $contactId does not exist.');
@@ -247,7 +247,7 @@ placeMarker(lat, long, name) {
 List<Marker> placeContacts(contactlist) {
   var marker = <Marker>[];
   for (var i = 0; i < (contactlist.length); i++) {
-    if (contactlist[i][0] != null) {
+    if (contactlist[i][0] != null && contactlist[i][1] != null) {
       marker.add(
         new Marker(
           point: LatLng(contactlist[i][1], contactlist[i][2]),
