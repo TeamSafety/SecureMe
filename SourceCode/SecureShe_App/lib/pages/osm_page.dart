@@ -86,7 +86,7 @@ Future<void> fetchUserLocations() async {
           if (latitude != null && longitude != null) {
             contactlist.add([contactName, latitude, longitude]);
           } else {
-            print('Latitude or longitude is missing for contact: $contactName');
+            print('Latitude or longitude info is missing for contact: $contactName');
           }
         } else {
           print('Contact document with ID $contactId does not exist.');
