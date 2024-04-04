@@ -24,4 +24,13 @@ class AppVars {
       borderRadius: BorderRadius.all(Radius.circular(10)),
     ),
   );
+
+  static ButtonStyle secondaryButtonStyle = ElevatedButton.styleFrom(
+      foregroundColor: AppVars.accent,
+      backgroundColor: AppVars.primary,
+      shadowColor: AppVars.secondary.withOpacity(0.8),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      side: BorderSide(color: AppVars.accent));
 }

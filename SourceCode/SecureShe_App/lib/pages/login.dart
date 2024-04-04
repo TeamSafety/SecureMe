@@ -37,20 +37,16 @@ class _LoginPageState extends State<LoginPage> {
         errorMessage = '';
         errorFontSize = 0;
       });
-      // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                const MainPage()), // Replace YourNextPage with the actual page you want to navigate to
+          builder: (context) => const MainPage(),
+        ),
       );
     } on FirebaseAuthException catch (e) {
-      // Handle errors
-      //print('Error: $e');
-      // Set error message to be displayed
       setState(() {
-        errorMessage = e.message ?? 'An error occurred';
-        errorFontSize = 12;
+        errorMessage = "Couldn't find your SecureMe account";
+        errorFontSize = AppVars.smallText;
       });
     }
   }
@@ -111,20 +107,39 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(
                         color: AppVars.accent,
                         fontSize: 12,
+                        decoration: TextDecoration.underline,
                       ),
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  errorMessage,
-                  style: TextStyle(color: Colors.red, fontSize: errorFontSize),
-                ),
-              ),
               const SizedBox(
-                height: 24,
+                height: 16,
+              ),
+              //ERROR MESSAGE
+              Container(
+                alignment: Alignment.centerRight,
+                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                height: (errorMessage != '') ? 16 : 0,
+                child: (errorMessage == '')
+                    ? Row()
+                    : Row(
+                        children: [
+                          Icon(
+                            Icons.error,
+                            size: 16,
+                            color: Colors.red,
+                          ),
+                          SizedBox(
+                            width: 2,
+                          ),
+                          Text(
+                            errorMessage,
+                            style: TextStyle(
+                                color: Colors.red, fontSize: errorFontSize),
+                          ),
+                        ],
+                      ),
               ),
               Container(
                 height: 35,
@@ -132,25 +147,11 @@ class _LoginPageState extends State<LoginPage> {
                 margin: const EdgeInsets.symmetric(
                   horizontal: 20,
                 ),
-                decoration: BoxDecoration(
-                  color: AppVars.accent,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppVars.secondary.withOpacity(0.25),
-                      blurRadius: 4,
-                      offset: const Offset(0, 4),
-                    )
-                  ],
-                ),
-                child: GestureDetector(
-                  onTap: signUserIn,
-                  child: Text(
-                    "Sign In",
-                    style: TextStyle(
-                      color: AppVars.primary,
-                      fontSize: 24,
-                    ),
+                child: SizedBox.expand(
+                  child: ElevatedButton(
+                    style: AppVars.primaryButtonStyle,
+                    onPressed: signUserIn,
+                    child: const Text('Login'),
                   ),
                 ),
               ),

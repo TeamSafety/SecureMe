@@ -3,12 +3,12 @@ import 'package:latlong2/latlong.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/Chat/message_chat.dart';
 import 'package:my_app/models/Chat/message_service.dart';
-import 'package:my_app/models/PersonalConatcts/personal_contact.dart';
+import 'package:my_app/models/PersonalContacts/personal_contact.dart';
 import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:my_app/models/preset_message_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:my_app/models/PersonalConatcts/personalContact.dart';
+import 'package:my_app/models/PersonalContacts/personalContact.dart';
 import 'package:my_app/models/saved_community_contact.dart';
 
 //TODO: Please display the errorMessage to users
@@ -339,7 +339,14 @@ class _MyContactsState extends State<MyContacts> {
               return Text('Error: ${snapshot.error}');
             }
             if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-              return Text('No community contacts available.');
+              return Container(
+                margin: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'You have not saved any community contacts.',
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                ),
+              );
             }
             // If data is available, build the list of community contacts
             return Column(
@@ -452,31 +459,31 @@ class _MyContactsState extends State<MyContacts> {
                     } else {
                       errorMessage = "Cannot find the username";
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Cannot find the username',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            backgroundColor: AppVars.accent,
-                            behavior: SnackBarBehavior.floating,
-                            duration: Duration(seconds: 3),
+                        SnackBar(
+                          content: Text(
+                            'Cannot find the username',
+                            style: TextStyle(color: Colors.white),
                           ),
+                          backgroundColor: AppVars.accent,
+                          behavior: SnackBarBehavior.floating,
+                          duration: Duration(seconds: 3),
+                        ),
                       );
                     }
                   } else {
                     errorMessage =
                         "You are trying to add yourself as a contact";
                     ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              "You are trying to add yourself as a contact", 
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            backgroundColor: AppVars.accent,
-                            behavior: SnackBarBehavior.floating,
-                            duration: Duration(seconds: 3),
-                          ),
-                      );
+                      SnackBar(
+                        content: Text(
+                          "You are trying to add yourself as a contact",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: AppVars.accent,
+                        behavior: SnackBarBehavior.floating,
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
                   }
                 }
                 // print(errorMessage);

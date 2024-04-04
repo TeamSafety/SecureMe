@@ -22,17 +22,27 @@ bool isPasswordValid(String password) {
 }
 
 // ignore: must_be_immutable
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
   final BuildContext context; // Add this line
   SignUpPage({required this.context, Key? key}) : super(key: key);
+
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
   //initiating database connection
-  final FirebaseAuth _auth = FirebaseAuth.instance; // for user
-  // text editing controllers
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // for user
   final emailController = TextEditingController();
+
   final passwordController = TextEditingController();
+
   final rptPasswordController = TextEditingController();
-  String passwordErrorMessage = "";
+
   String emailErrorMessage = '';
+
+  String passwordErrorMessage = '1';
 
   void signUpUser() async {
     String email = emailController.text.trim();
@@ -44,19 +54,22 @@ class SignUpPage extends StatelessWidget {
           await _auth.fetchSignInMethodsForEmail(email);
       if (signInMethods.isNotEmpty) {
         // Email has been used before, show an error message
-        print('Email has already been used before');
-        emailErrorMessage = "Email has already been used before";
+        setState(() {
+          emailErrorMessage = "Email is already in use. Try logging in.";
+        });
         return;
       }
       if (passwordController.text != rptPasswordController.text) {
         // Passwords don't match, show an error message
-        passwordErrorMessage = "Passwords should match";
-        print(passwordErrorMessage);
+        setState(() {
+          passwordErrorMessage = "Passwords do not match.";
+        });
         return;
       } else if (!isPasswordValid(password)) {
-        passwordErrorMessage =
-            "Password should have at least 8 characters and should have at least one special character (!@#%^&*(),.?:{}|<>])";
-        print(passwordErrorMessage);
+        setState(() {
+          passwordErrorMessage =
+              "Password should have at least 8 characters and should have at least one special character (!@#%^&*(),.?:{}|<>])";
+        });
         return;
       }
       UserCredential userCredential =
@@ -76,7 +89,7 @@ class SignUpPage extends StatelessWidget {
       print('User signed up: ${userCredential.user!.uid}');
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
-        context,
+        widget.context,
         MaterialPageRoute(builder: (context) => const MainPage()),
       );
     } on FirebaseAuthException catch (e) {
@@ -144,31 +157,39 @@ class SignUpPage extends StatelessWidget {
                 height: 48,
               ),
               Container(
-                height: 40,
+                alignment: Alignment.centerRight,
+                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                height: (passwordErrorMessage != '') ? 16 : 0,
+                child: (passwordErrorMessage == '')
+                    ? Row()
+                    : Row(
+                        children: [
+                          Icon(
+                            Icons.error,
+                            size: 16,
+                            color: Colors.red,
+                          ),
+                          SizedBox(
+                            width: 2,
+                          ),
+                          Text(
+                            passwordErrorMessage,
+                            style: TextStyle(color: Colors.red, fontSize: 12),
+                          ),
+                        ],
+                      ),
+              ),
+              Container(
+                height: 35,
                 alignment: Alignment.center,
                 margin: const EdgeInsets.symmetric(
                   horizontal: 20,
                 ),
-                decoration: BoxDecoration(
-                  color: AppVars.primary,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppVars.accent),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppVars.secondary.withOpacity(0.25),
-                      blurRadius: 4,
-                      offset: const Offset(0, 4),
-                    )
-                  ],
-                ),
-                child: GestureDetector(
-                  onTap: signUpUser,
-                  child: Text(
-                    "Sign Up",
-                    style: TextStyle(
-                      color: AppVars.accent,
-                      fontSize: 24,
-                    ),
+                child: SizedBox.expand(
+                  child: ElevatedButton(
+                    style: AppVars.secondaryButtonStyle,
+                    onPressed: signUpUser,
+                    child: const Text('Sign Up'),
                   ),
                 ),
               ),
