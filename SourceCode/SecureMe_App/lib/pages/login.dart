@@ -3,7 +3,7 @@ import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/background_wave.dart';
 import 'package:my_app/models/input_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:my_app/pages/main_page.dart';
+import 'package:my_app/pages/main_pages_setup.dart';
 import 'package:my_app/pages/signup.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;

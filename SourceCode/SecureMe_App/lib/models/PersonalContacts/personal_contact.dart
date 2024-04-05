@@ -91,7 +91,7 @@ class _PersonalContactState extends State<PersonalContact> {
                 Expanded(
                   child: Row(
                     children: [
-                      // CONTACT BUTTON
+                      // LOCATE BUTTON
                       GestureDetector(
                         child: AspectRatio(
                           aspectRatio: 1,
