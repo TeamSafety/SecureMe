@@ -121,12 +121,13 @@ class _PersonalContactState extends State<PersonalContact> {
                       // CONTACT BUTTON
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacement(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ChatScreen(
-                                    userId: widget.currentUserId,
-                                    recipientUserId: widget.addedContactUid)),
+                              builder: (context) => ChatScreen(
+                                  userId: widget.currentUserId,
+                                  recipientUserId: widget.addedContactUid),
+                            ),
                           );
                         },
                         child: AspectRatio(
