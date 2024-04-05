@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +10,10 @@ import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:my_app/models/sos_button.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:my_app/pages/chat_page.dart';
+
+
+late String routeToGo = '/';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -34,6 +40,30 @@ class HomePageState extends State<HomePage>{
       }
       return;
     });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('onMessageOpenedApp: $message');
+      // Handle notification when the app is in the background but opened by the user.
+      if (message.notification != null){
+        print("Sender ID"); 
+        print(message.data['sender']); 
+        final senderId = message.data['sender'];
+        final receiverId = message.data['receiver']; 
+        print(receiverId); 
+
+        if (mounted) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatScreen(userId: senderId, recipientUserId: receiverId),
+              ),
+            );
+        }
+      }
+    });
+
+    // callback is triggered when the app is terminated and the user taps on a notification.
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     _firebaseMessaging.getToken().then((token) {
       print('push token: $token');
       if (token != null) {
@@ -98,6 +128,17 @@ class HomePageState extends State<HomePage>{
     //   platformChannelSpecifics,
     //   payload: null,
     // );
+  }
+  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+    await Firebase.initializeApp();
+    print("Handling a background message: ${message.messageId}");
+    print('Message data: ${message.data}');
+    if (kDebugMode) {
+      print("Handling a background message: ${message.messageId}");
+      print('Message data: ${message.data}');
+      print('Message notification: ${message.notification?.title}');
+      print('Message notification: ${message.notification?.body}');
+    }
   }
 
   @override

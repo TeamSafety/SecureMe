@@ -45,19 +45,25 @@ exports.sendNotification = functions.firestore
         const senderData = senderSnapshot.data();
 
         const senderName = senderData.username; 
+        const senderId = senderData.userId; 
         
         // Get information about the receiver
         const receiverSnapshot = await db.collection('Users').doc(idTo).get();
         const receiverData = receiverSnapshot.data();
         const receiverToken = receiverData.token; // Assuming token is the field containing the receiver's FCM token
+        const receiverId = receiverData.userId; 
 
         // Construct the notification payload
         const payload = {
           notification: {
             title: `New message from ${senderName}`,
-            body: contentMessage,
+            body: contentMessage, 
           },
-          token: receiverToken
+          data:{
+            sender: senderId, 
+            receiver: receiverId,
+          }, 
+          token: receiverToken, 
         };
         // Send the notification to the receiver
         await getMessaging().send(payload)
