@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,12 +9,96 @@ import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:my_app/models/sos_button.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+  @override
+  State createState() => HomePageState(); 
+}
+class HomePageState extends State<HomePage>{
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final _firebaseMessaging = FirebaseMessaging.instance;
+  final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  @override
+  void initState() {
+    super.initState();
+    _registerNotification();
+    _configLocalNotification();
+  }
+
+  void _registerNotification() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('onMessage: $message');
+      if (message.notification != null) {
+        _showNotification(message.notification!);
+      }
+      return;
+    });
+    _firebaseMessaging.getToken().then((token) {
+      print('push token: $token');
+      if (token != null) {
+        // save the token in the user's collection
+        saveTokenForCurrentUser(token);
+        return;
+      }
+    }).catchError((err) {
+      return;
+    });
+  }
+
+  void saveTokenForCurrentUser(String token) async {
+    User? user = _auth.currentUser;
+
+    if (user != null) {
+      CollectionReference users = _firestore.collection('Users');
+      await users
+          .doc(user.uid)
+          .set({'token': token}, SetOptions(merge: true))
+          .then((value) => print("Token added to user's document"))
+          .catchError((error) => print("Failed to add token: $error"));
+    } else {
+      print('No user signed in');
+    }
+  }
+
+  void _configLocalNotification() {
+    final initializationSettingsAndroid =
+        AndroidInitializationSettings('assets/images/avatar_default.jpg');
+    final initializationSettingsIOS = DarwinInitializationSettings();
+    final initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
+    _flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  void _showNotification(RemoteNotification remoteNotification) async {
+    final androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      Platform.isAndroid
+          ? 'com.example.my_app'
+          : 'com.example.flutter_application1',
+      'SecureMe app',
+      playSound: true,
+      enableVibration: true,
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+    final iOSPlatformChannelSpecifics = DarwinNotificationDetails();
+    final platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics,
+    );
+
+    print(remoteNotification);
+
+    // await _flutterLocalNotificationsPlugin.show(
+    //   0,
+    //   remoteNotification.title,
+    //   remoteNotification.body,
+    //   platformChannelSpecifics,
+    //   payload: null,
+    // );
+  }
 
   @override
   Widget build(BuildContext context) {
