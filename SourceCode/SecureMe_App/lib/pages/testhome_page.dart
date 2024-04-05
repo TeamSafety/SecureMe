@@ -8,6 +8,10 @@ import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:my_app/models/sos_button.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:rxdart/rxdart.dart';
+
+// used to pass messages from event handler to the UI
+final _messageStreamController = BehaviorSubject<RemoteMessage>();
 
 class TestHomePage extends StatefulWidget {
   const TestHomePage({super.key});
