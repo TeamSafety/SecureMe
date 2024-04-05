@@ -12,15 +12,15 @@ import 'package:my_app/models/sos_button.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:my_app/pages/chat_page.dart';
 
-
 late String routeToGo = '/';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
   @override
-  State createState() => HomePageState(); 
+  State createState() => HomePageState();
 }
-class HomePageState extends State<HomePage>{
+
+class HomePageState extends State<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _firebaseMessaging = FirebaseMessaging.instance;
@@ -44,20 +44,21 @@ class HomePageState extends State<HomePage>{
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('onMessageOpenedApp: $message');
       // Handle notification when the app is in the background but opened by the user.
-      if (message.notification != null){
-        print("Sender ID"); 
-        print(message.data['sender']); 
+      if (message.notification != null) {
+        print("Sender ID");
+        print(message.data['sender']);
         final senderId = message.data['sender'];
-        final receiverId = message.data['receiver']; 
-        print(receiverId); 
+        final receiverId = message.data['receiver'];
+        print(receiverId);
 
         if (mounted) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ChatScreen(userId: senderId, recipientUserId: receiverId),
-              ),
-            );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  ChatScreen(userId: senderId, recipientUserId: receiverId),
+            ),
+          );
         }
       }
     });
@@ -129,7 +130,9 @@ class HomePageState extends State<HomePage>{
     //   payload: null,
     // );
   }
-  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
     await Firebase.initializeApp();
     print("Handling a background message: ${message.messageId}");
     print('Message data: ${message.data}');
