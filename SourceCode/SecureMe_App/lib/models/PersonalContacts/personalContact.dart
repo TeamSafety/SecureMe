@@ -1,7 +1,7 @@
 class PersonalContactModel {
   final String contactName;
   final String initialsTemp;
-  final String imagePath; 
+  final String profile_image; 
   final String addedContactUid; 
   final String uid;
 
@@ -9,7 +9,7 @@ class PersonalContactModel {
     required this.contactName,
     required this.initialsTemp,
     required this.uid,
-    required this.imagePath, 
+    required this.profile_image, 
     required this.addedContactUid, 
   });
 
@@ -18,7 +18,7 @@ class PersonalContactModel {
       contactName: map['contactName'] ?? '',
       initialsTemp: map['initialsTemp'] ?? '',
       uid: map['uid'] ?? '',
-      imagePath: map['imagePath'] ?? 'assets/images/avatar_default.jpg',
+      profile_image: map['profile_image'] ?? 'assets/images/avatar_default.jpg',
       addedContactUid: map['contactUid'] ?? '',
     );
   }

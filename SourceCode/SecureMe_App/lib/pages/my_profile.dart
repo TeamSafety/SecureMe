@@ -1,11 +1,17 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/Profile/SOS_configuration.dart';
 import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:my_app/models/custom_dropdown.dart';
 import 'package:my_app/pages/login.dart';
+
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -26,12 +32,90 @@ class _MyProfileState extends State<MyProfile> {
   String? selectedEmergencyMessage;
 
   late Future<void> userProfileFuture;
+  Uint8List? _image; 
+  String profileImageURL=''; 
+  String username = ''; 
 
   @override
   void initState() {
     super.initState();
     userProfileFuture = fetchUserProfile();
   }
+
+  void selectImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      final File file = File(image.path);
+      setState(() {
+        _image = file.readAsBytesSync();
+      });
+      uploadImageToFirebaseStorage(file);
+    }
+  }
+
+  Future<void> uploadImageToFirebaseStorage(File file) async {
+    User? user = _auth.currentUser;
+
+    if (user != null) {
+      try {
+        final Reference storageReference = FirebaseStorage.instance
+            .ref()
+            .child('profile_images')
+            .child(user.uid + '_profile.jpg');
+        await storageReference.putFile(file);
+
+        final String downloadURL = await storageReference.getDownloadURL();
+
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(user.uid)
+            .update({
+            'profile_image': downloadURL,
+        });
+        try {
+          DocumentSnapshot<Map<String, dynamic>> userSnapshot = await FirebaseFirestore.instance
+              .collection('Users')
+              .doc(user.uid)
+              .get();
+
+          if (userSnapshot.exists) {
+            username = userSnapshot.get('username');
+          } else {
+            print('User document does not exist');
+          }
+        } catch (e) {
+          print('Error retrieving username: $e');
+        }
+        setState(() async {
+          profileImageURL = await getProfileImageURL(username); 
+        });
+        showSnackbar('Profile picture updated successfully');
+      } catch (e) {
+        print('Error uploading image to Firebase Storage: $e');
+        showSnackbar('Error updating profile picture');
+      }
+    }
+  }
+  
+  Future<String> getProfileImageURL(String username) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('Users')
+              .where('username', isEqualTo: username)
+              .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.first.data()['profile_image'];
+      } else {
+        return " ";
+      }
+    } catch (error) {
+      print('Error retrieving profile image URL: $error');
+      return " ";
+    }
+  }
+
 
   Future<void> fetchUserProfile() async {
     User? user = _auth.currentUser;
@@ -50,11 +134,9 @@ class _MyProfileState extends State<MyProfile> {
           _emailController.text = snapshot['email'];
         });
       } else {
-        // Handle the case where the document does not exist.
         print("can't find doc");
       }
 
-      // Fetch user contacts
       QuerySnapshot<Map<String, dynamic>> contactsSnapshot =
           await FirebaseFirestore.instance
               .collection('Users')
@@ -165,19 +247,39 @@ class _MyProfileState extends State<MyProfile> {
                                 offset: const Offset(0, 2.0),
                               ),
                             ],
-                          ),
-                          child: const Image(
-                            fit: BoxFit.scaleDown,
-                            image:
-                                AssetImage("assets/images/avatar_default.jpg"),
-                            height: double.infinity,
-                            width: double.infinity,
-                            alignment: Alignment.center,
-                          ),
                         ),
+                        //   child: _image != null
+                        //   ? Image.memory(
+                        //       _image!,
+                        //       fit: BoxFit.cover,
+                        //       height: double.infinity,
+                        //       width: double.infinity,
+                        //       alignment: Alignment.center,
+                        //     )
+                        //   : const Image(
+                        //       fit: BoxFit.scaleDown,
+                        //       image: AssetImage("assets/images/avatar_default.jpg"),
+                        //       height: double.infinity,
+                        //       width: double.infinity,
+                        //       alignment: Alignment.center,
+                        //     ),
+                        //   ),
+                        // ), 
+                        child: Image.network(
+                          profileImageURL, 
+                          fit: BoxFit.scaleDown,
+                          height: double.infinity,
+                          width: double.infinity,
+                          alignment: Alignment.center,
+                        ), 
                       ),
+                    ), 
                       const SizedBox(
                         width: 16,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.add_a_photo),
+                        onPressed: selectImage,
                       ),
                       // NAME AND Edit button
                       Expanded(

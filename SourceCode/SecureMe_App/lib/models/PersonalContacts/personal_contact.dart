@@ -62,13 +62,20 @@ class _PersonalContactState extends State<PersonalContact> {
                   ),
                 ],
               ),
-              child: Image(
-                fit: BoxFit.scaleDown,
-                image: AssetImage(widget.imagePath),
+              child:Image.network(
+                widget.imagePath,
+                fit: BoxFit.cover,
                 height: double.infinity,
                 width: double.infinity,
                 alignment: Alignment.center,
-              ),
+              )
+              // child: Image(
+              //   fit: BoxFit.scaleDown,
+              //   image: AssetImage(widget.imagePath),
+              //   height: double.infinity,
+              //   width: double.infinity,
+              //   alignment: Alignment.center,
+              // ),
             ),
           ),
           const SizedBox(width: 8),
@@ -243,20 +250,18 @@ class _PersonalContactState extends State<PersonalContact> {
           // Rebuild the widget to reflect the changes
           // setState(() {});
           // Show success message
-          if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Contact has been removed from your personal contacts successfully.',
-                  style: TextStyle(color: Colors.white),
-                ),
-                backgroundColor: AppVars.accent,
-                behavior: SnackBarBehavior.floating,
-                duration: Duration(seconds: 3),
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Contact has been removed from your personal contacts successfully.',
+                style: TextStyle(color: Colors.white),
               ),
-            );
-          }
-        } else {
+              backgroundColor: AppVars.accent,
+              behavior: SnackBarBehavior.floating,
+              duration: Duration(seconds: 3),
+            ),
+          );
+                } else {
           print('Contact not found in personal contacts.');
         }
       } else {

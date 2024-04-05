@@ -83,7 +83,7 @@ class _SignUpPageState extends State<SignUpPage> {
           .set({
         'email': email,
         'username': username,
-        'uid': userCredential.user?.uid,
+        'userId': userCredential.user?.uid,
       });
       // User has signed up successfully
       print('User signed up: ${userCredential.user!.uid}');

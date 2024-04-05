@@ -65,7 +65,7 @@ class _MyContactsState extends State<MyContacts> {
     }
   }
 
-  Future<void> addContact(String contactUid, String contactName) async {
+  Future<void> addContact(String contactUid, String contactName, String profileImage) async {
     User? user = _auth.currentUser;
     if (user != null) {
       await _firestore
@@ -76,6 +76,7 @@ class _MyContactsState extends State<MyContacts> {
           .set({
         'contactName': contactName,
         'contactUid': contactUid,
+        'profile_image': profileImage, 
       });
     }
     getPersonalContacts();
@@ -393,7 +394,7 @@ class _MyContactsState extends State<MyContacts> {
             children: [
               PersonalContact(
                 contactName: contact.contactName,
-                imagePath: contact.imagePath,
+                imagePath: contact.profile_image,
                 addedContactUid: contact.addedContactUid,
                 currentUserId: _auth.currentUser!.uid,
               ),
@@ -433,11 +434,12 @@ class _MyContactsState extends State<MyContacts> {
                   if (currentUser != null &&
                       username != currentUser.displayName) {
                     String contactUid = await getUidFromUsername(username);
+                    String profileImageURL = await getProfileImageURL(username); 
                     if (contactUid.isNotEmpty) {
                       // Check if the contact is not already in the personal contacts list
                       if (!personalContacts
                           .any((contact) => contactUid == contact.uid)) {
-                        addContact(contactUid, username);
+                        addContact(contactUid, username, profileImageURL);
                         Navigator.pop(context);
                         _usernameController.clear();
                       } else {
@@ -511,6 +513,23 @@ class _MyContactsState extends State<MyContacts> {
     } catch (e) {
       //print('Error retrieving UID: $e');
       return '';
+    }
+  }
+    Future<String> getProfileImageURL(String username) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('Users')
+              .where('username', isEqualTo: username)
+              .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.first.data()['profile_image'];
+      } else {
+        return " ";
+      }
+    } catch (error) {
+      print('Error retrieving profile image URL: $error');
+      return " ";
     }
   }
 }
