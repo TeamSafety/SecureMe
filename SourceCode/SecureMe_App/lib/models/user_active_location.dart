@@ -107,6 +107,7 @@ class _UserSharingLocState extends State<UserSharingLoc> {
                             widget.lat,
                             widget.long,
                             widget.contactName,
+                            widget.imagePath, 
                           );
                           Navigator.push(
                             context,
