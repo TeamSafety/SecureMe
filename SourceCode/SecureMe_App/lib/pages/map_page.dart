@@ -83,7 +83,7 @@ Future<void> fetchUserLocations() async {
           String profileImageURL = contactUserDoc['profile_image'] ?? "";
 
           if (latitude != null && longitude != null) {
-            contactlist.add([contactName, latitude, longitude]);
+            contactlist.add([contactName, latitude, longitude, profileImageURL]);
             users.add(
               UserData(
                 username: contactName,
@@ -199,7 +199,7 @@ class _MyMapOSMState extends State<MyMapOSM2> {
   }
 }
 
-getMarker(name) {
+getMarker(name, String imageURL) {
   return <Widget>[
     Column(
       children: [
@@ -226,9 +226,7 @@ getMarker(name) {
                   BoxShadow(color: AppVars.primary, spreadRadius: 0.4),
                 ],
               ),
-              child: const Image(
-                fit: BoxFit.scaleDown,
-                image: AssetImage("assets/images/avatar_default.jpg"),
+              child:Image.network(imageURL, fit: BoxFit.scaleDown,
                 height: double.infinity,
                 width: double.infinity,
                 alignment: Alignment.center,
@@ -251,11 +249,11 @@ getMarker(name) {
   ];
 }
 
-placeMarker(lat, long, name) {
+placeMarker(lat, long, name, String imageURL) {
   if (contactlist.contains(name)) {
     contactlist.remove(name);
   }
-  contactlist.add([name, lat, long]);
+  contactlist.add([name, lat, long, imageURL]);
 }
 
 List<Marker> placeContacts(contactlist) {
@@ -266,7 +264,7 @@ List<Marker> placeContacts(contactlist) {
         new Marker(
           point: LatLng(contactlist[i][1], contactlist[i][2]),
           child: Wrap(
-            children: getMarker(contactlist[i][0]),
+            children: getMarker(contactlist[i][0], contactlist[i][3]),
           ),
         ),
       );

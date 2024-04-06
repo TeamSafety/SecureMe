@@ -102,12 +102,22 @@ class _PersonalContactState extends State<PersonalContact> {
                       // LOCATE BUTTON
                       GestureDetector(
                         onTap: () {
-                          // if (widget.lat != 0 && widget.long != 0) {
+                        if (widget.lat != 0 && widget.long != 0) {
+                          if(widget.imagePath == ''){
+                            placeMarker(
+                              widget.lat,
+                              widget.long,
+                              widget.contactName,
+                              "https://firebasestorage.googleapis.com/v0/b/she-1acd0.appspot.com/o/avatar_default.jpg?alt=media&token=395337cf-96ee-49a8-84cb-e8e40537cde8", 
+                            );
+                          }
                           placeMarker(
                             widget.lat,
                             widget.long,
                             widget.contactName,
+                            widget.imagePath, 
                           );
+                        }
                           Navigator.push(
                             context,
                             MaterialPageRoute(

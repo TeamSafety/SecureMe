@@ -96,7 +96,10 @@ class SavedCommunityContact extends StatelessWidget {
                           ? GestureDetector(
                               onTap: () {
                                 if (lat != 0.0 && long != 0.0) {
-                                  placeMarker(lat, long, contactName);
+                                  if(imagePath == ''){
+                                    placeMarker(lat, long, contactName, "https://firebasestorage.googleapis.com/v0/b/she-1acd0.appspot.com/o/local_resource_image.jpg?alt=media&token=6148547f-c2d9-4e26-b738-a2a484f33658");
+                                  }
+                                  placeMarker(lat, long, contactName, imagePath);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
