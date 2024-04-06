@@ -11,6 +11,7 @@ class CommunityContact extends StatelessWidget {
   final double lat;
   final double long;
   final String userId;
+  final String imageURL; 
   const CommunityContact({
     super.key,
     required this.contactName,
@@ -18,6 +19,7 @@ class CommunityContact extends StatelessWidget {
     required this.lat,
     required this.long,
     required this.userId,
+    required this.imageURL, 
   });
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class CommunityContact extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
+child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           // Image
@@ -58,6 +60,15 @@ class CommunityContact extends StatelessWidget {
                   ),
                 ],
               ),
+              child: imageURL.isNotEmpty
+                  ? Image.network(
+                      imageURL,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      'assets/images/local_resource_image.jpg', // Provide the path to your default image
+                      fit: BoxFit.cover,
+                    ),
             ),
           ),
           const SizedBox(width: 8),
