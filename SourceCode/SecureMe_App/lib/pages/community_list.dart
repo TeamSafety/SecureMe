@@ -58,6 +58,7 @@ class _ContactPageState extends State<ContactPage> {
             lat: latitude ?? 0.0, // Use 0.0 as a default value
             long: longitude ?? 0.0, // Use 0.0 as a default value
             userId: _userId,
+            imageURL: contact['imagePath'],
           ),
         );
       }).toList(),
