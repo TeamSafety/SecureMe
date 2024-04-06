@@ -78,8 +78,8 @@ class MyApp extends StatelessWidget {
             ),
       ),
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
-      //home: MainPage(),
+      // home: LoginPage(),
+      home: MainPage(),
     );
   }
 }

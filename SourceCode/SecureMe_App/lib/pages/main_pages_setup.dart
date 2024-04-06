@@ -57,7 +57,6 @@ class _MainPageState extends State<MainPage> {
           if (isFirstRouteInCurrentTab) {
             if (_currentPage != "Home") {
               _selectTab("Home", 2);
-
               return false;
             }
           }
@@ -65,16 +64,16 @@ class _MainPageState extends State<MainPage> {
           return isFirstRouteInCurrentTab;
         },
         child: Scaffold(
-          body: _pages[_currentIndex],
-          // body: Stack(
-          //     children: <Widget>[
-          //       _buildOffstageNavigator("Community"),
-          //       _buildOffstageNavigator("Contacts"),
-          //       _buildOffstageNavigator("Home"),
-          //       _buildOffstageNavigator("Map"),
-          //       _buildOffstageNavigator("Profile"),
-          //     ],
-          //     ),
+          // body: _pages[_currentIndex],
+          body: Stack(
+            children: <Widget>[
+              _buildOffstageNavigator("Community"),
+              _buildOffstageNavigator("Contacts"),
+              _buildOffstageNavigator("Home"),
+              _buildOffstageNavigator("Map"),
+              _buildOffstageNavigator("Profile"),
+            ],
+          ),
           bottomNavigationBar: _bottomNavigationBar(),
         ),
       ),
@@ -82,6 +81,10 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget _buildOffstageNavigator(String tabItem) {
+    // return TabNavigator(
+    //   navigatorKey: _navigatorKeys[tabItem]!,
+    //   tabItem: tabItem,
+    // );
     return Offstage(
       offstage: _currentPage != tabItem,
       child: TabNavigator(
