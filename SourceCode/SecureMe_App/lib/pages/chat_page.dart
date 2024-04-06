@@ -141,75 +141,77 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildInput() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          // Display user-specific preset messages as suggestions
-          Container(
-            height: 50,
-            child: FutureBuilder<List<String>>(
-              future: _messageService.getUserPresetMessages(widget.userId),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Text("  ");
-                }
-                if (snapshot.hasError ||
-                    !snapshot.hasData ||
-                    snapshot.data!.isEmpty) {
-                  // Handle error or empty preset messages
-                  return Container();
-                }
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            // Display user-specific preset messages as suggestions
+            Container(
+              height: 50,
+              child: FutureBuilder<List<String>>(
+                future: _messageService.getUserPresetMessages(widget.userId),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text("  ");
+                  }
+                  if (snapshot.hasError ||
+                      !snapshot.hasData ||
+                      snapshot.data!.isEmpty) {
+                    // Handle error or empty preset messages
+                    return Container();
+                  }
 
-                return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        // Set the tapped preset message in the input field
-                        _messageController.text = snapshot.data![index];
-                      },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 8),
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: AppVars.accent,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: Text(
-                            snapshot.data![index],
-                            style: TextStyle(color: Colors.white),
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          // Set the tapped preset message in the input field
+                          _messageController.text = snapshot.data![index];
+                        },
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 8),
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppVars.accent,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Center(
+                            child: Text(
+                              snapshot.data![index],
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-          // Input field for typing a message
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _messageController,
-                  decoration: const InputDecoration(
-                    hintText: 'Type your message...',
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.send),
-                onPressed: () {
-                  _sendMessage();
+                      );
+                    },
+                  );
                 },
               ),
-            ],
-          ),
-        ],
+            ),
+            // Input field for typing a message
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _messageController,
+                    decoration: const InputDecoration(
+                      hintText: 'Type your message...',
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: () {
+                    _sendMessage();
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
