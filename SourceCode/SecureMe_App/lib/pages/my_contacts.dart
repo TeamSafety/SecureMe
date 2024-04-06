@@ -10,8 +10,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:my_app/models/PersonalContacts/personalContact.dart';
 import 'package:my_app/models/saved_community_contact.dart';
 
-//TODO: Please display the errorMessage to users
-
 class MyContacts extends StatefulWidget {
   const MyContacts({super.key});
   @override
@@ -65,7 +63,8 @@ class _MyContactsState extends State<MyContacts> {
     }
   }
 
-  Future<void> addContact(String contactUid, String contactName, String profileImage) async {
+  Future<void> addContact(
+      String contactUid, String contactName, String profileImage) async {
     User? user = _auth.currentUser;
     if (user != null) {
       await _firestore
@@ -76,7 +75,7 @@ class _MyContactsState extends State<MyContacts> {
           .set({
         'contactName': contactName,
         'contactUid': contactUid,
-        'profile_image': profileImage, 
+        'profile_image': profileImage,
       });
     }
     getPersonalContacts();
@@ -358,6 +357,8 @@ class _MyContactsState extends State<MyContacts> {
                       contactName: contactData['contactName'],
                       phoneNumber: contactData['phoneNumber'],
                       userId: _userId,
+                      lat: contactData['lat'],
+                      long: contactData['long'],
                     ),
                     SizedBox(
                       height: AppVars.elementMargin,
@@ -397,6 +398,8 @@ class _MyContactsState extends State<MyContacts> {
                 imagePath: contact.profile_image,
                 addedContactUid: contact.addedContactUid,
                 currentUserId: _auth.currentUser!.uid,
+                lat: contact.lat,
+                long: contact.long,
               ),
               const SizedBox(height: 8),
             ],
@@ -434,7 +437,7 @@ class _MyContactsState extends State<MyContacts> {
                   if (currentUser != null &&
                       username != currentUser.displayName) {
                     String contactUid = await getUidFromUsername(username);
-                    String profileImageURL = await getProfileImageURL(username); 
+                    String profileImageURL = await getProfileImageURL(username);
                     if (contactUid.isNotEmpty) {
                       // Check if the contact is not already in the personal contacts list
                       if (!personalContacts
@@ -515,7 +518,8 @@ class _MyContactsState extends State<MyContacts> {
       return '';
     }
   }
-    Future<String> getProfileImageURL(String username) async {
+
+  Future<String> getProfileImageURL(String username) async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await FirebaseFirestore.instance

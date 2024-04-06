@@ -2,18 +2,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/pages/chat_page.dart';
+import 'package:my_app/pages/map_page.dart';
 
 class PersonalContact extends StatefulWidget {
   final String contactName;
   final String imagePath; // TODO: WILL CHANGE LATER
   final String addedContactUid;
   final String currentUserId;
+  final double lat;
+  final double long;
+
   const PersonalContact({
     super.key,
     required this.contactName,
     required this.imagePath,
     required this.addedContactUid,
     required this.currentUserId,
+    required this.lat,
+    required this.long,
   });
   @override
   _PersonalContactState createState() => _PersonalContactState();
@@ -95,6 +101,21 @@ class _PersonalContactState extends State<PersonalContact> {
                     children: [
                       // LOCATE BUTTON
                       GestureDetector(
+                        onTap: () {
+                          if (widget.lat != 0 && widget.long != 0) {
+                            placeMarker(
+                              widget.lat,
+                              widget.long,
+                              widget.contactName,
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MyMapOSM2(),
+                              ),
+                            );
+                          }
+                        },
                         child: AspectRatio(
                           aspectRatio: 1,
                           child: Container(
@@ -157,7 +178,8 @@ class _PersonalContactState extends State<PersonalContact> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8), // CONTACT BUTTON
+                      const SizedBox(width: 8),
+                      // CALL BUTTON
                       GestureDetector(
                         child: AspectRatio(
                           aspectRatio: 1,

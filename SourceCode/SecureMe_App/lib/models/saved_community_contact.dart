@@ -1,17 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/AppVars.dart';
+import 'package:my_app/pages/map_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SavedCommunityContact extends StatelessWidget {
   final String contactName;
   final String phoneNumber;
   final String userId;
+  final double lat;
+  final double long;
   const SavedCommunityContact({
     super.key,
     required this.contactName,
     required this.phoneNumber,
     required this.userId,
+    required this.lat,
+    required this.long,
   });
 
   @override
@@ -75,32 +80,63 @@ class SavedCommunityContact extends StatelessWidget {
                 Expanded(
                   child: Row(
                     children: [
-                      // CONTACT BUTTON
-                      GestureDetector(
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppVars.accent,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                              border: Border.all(color: AppVars.primary),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppVars.secondary.withOpacity(0.2),
-                                  blurRadius: 2,
-                                  offset: const Offset(0, 2.0),
+                      // MAP BUTTON
+                      (lat != 0 && long != 0)
+                          ? GestureDetector(
+                              onTap: () {
+                                if (lat != 0.0 && long != 0.0) {
+                                  placeMarker(lat, long, contactName);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MyMapOSM2(),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: AspectRatio(
+                                aspectRatio: 1,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: AppVars.accent,
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                    border: Border.all(color: AppVars.primary),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color:
+                                            AppVars.secondary.withOpacity(0.2),
+                                        blurRadius: 2,
+                                        offset: const Offset(0, 2.0),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Icon(
+                                    Icons.map,
+                                    color: AppVars.primary,
+                                  ),
                                 ),
-                              ],
+                              ),
+                            )
+                          : GestureDetector(
+                              onTap: () {},
+                              child: AspectRatio(
+                                aspectRatio: 1,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: AppVars.secondary.withOpacity(0.2),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.map,
+                                    color: AppVars.secondary.withOpacity(0.5),
+                                  ),
+                                ),
+                              ),
                             ),
-                            child: Icon(
-                              Icons.map,
-                              color: AppVars.primary,
-                            ),
-                          ),
-                        ),
-                      ),
                       const SizedBox(width: 8),
                       // CONTACT BUTTON
                       GestureDetector(
