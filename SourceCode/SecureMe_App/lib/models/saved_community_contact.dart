@@ -10,6 +10,7 @@ class SavedCommunityContact extends StatelessWidget {
   final String userId;
   final double lat;
   final double long;
+  final String imagePath; 
   const SavedCommunityContact({
     super.key,
     required this.contactName,
@@ -17,6 +18,7 @@ class SavedCommunityContact extends StatelessWidget {
     required this.userId,
     required this.lat,
     required this.long,
+    required this.imagePath, 
   });
 
   @override
@@ -46,7 +48,7 @@ class SavedCommunityContact extends StatelessWidget {
             child: Container(
               height: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.grey,
+                color: AppVars.secondary.withOpacity(0.5),
                 borderRadius: const BorderRadius.all(
                   Radius.circular(10),
                 ),
@@ -58,6 +60,15 @@ class SavedCommunityContact extends StatelessWidget {
                   ),
                 ],
               ),
+              child: imagePath.isNotEmpty
+                  ? Image.network(
+                      imagePath,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      'assets/images/local_resource_image.jpg', // Provide the path to your default image
+                      fit: BoxFit.cover,
+                    ),
             ),
           ),
           const SizedBox(width: 8),

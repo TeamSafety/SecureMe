@@ -39,7 +39,7 @@ class CommunityContact extends StatelessWidget {
           ),
         ],
       ),
-child: Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           // Image
@@ -222,6 +222,7 @@ child: Row(
           'phoneNumber': phoneNumber,
           'lat': lat,
           'long': long,
+          'imagePath': imageURL, 
         });
 
         print('Community contact added to personal contacts successfully.');
