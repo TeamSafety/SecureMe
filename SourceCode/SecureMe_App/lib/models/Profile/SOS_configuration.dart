@@ -7,7 +7,6 @@ class EmergencyConfiguration{
   final String message;
   final List<String> contacts;
   BuildContext context; 
-
   EmergencyConfiguration({
     required this.message,
     required this.contacts,
@@ -20,6 +19,7 @@ class EmergencyConfiguration{
     if (user != null) {
       for (String contact in contacts){
         String emergencyContactName = contact;
+        print(emergencyContactName); 
         bool isContactInList = await isEmergencyContactInList(user.uid, emergencyContactName);
 
         if (isContactInList) {

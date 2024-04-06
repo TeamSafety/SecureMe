@@ -416,6 +416,7 @@ class _MyProfileState extends State<MyProfile> {
                                 dropdownValue: (String? value) {
                                   setState(() {
                                     selectedEmergencyContact = value;
+                                    print(selectedEmergencyContact); 
                                   });
                                 },
                               );
@@ -470,7 +471,8 @@ class _MyProfileState extends State<MyProfile> {
                                 listItems: userMessages,
                                 dropdownValue: (String? value) {
                                   setState(() {
-                                    selectedEmergencyContact = value;
+                                    selectedEmergencyMessage = value;
+                                    print(selectedEmergencyMessage); 
                                   });
                                 },
                               );
