@@ -33,13 +33,16 @@ class _MyProfileState extends State<MyProfile> {
 
   late Future<void> userProfileFuture;
   Uint8List? _image; 
-  String profileImageURL=''; 
-  String username = ''; 
+  String profileImageURL = " "; 
+ 
+  String username = 'default'; 
 
   @override
   void initState() {
     super.initState();
     userProfileFuture = fetchUserProfile();
+    updateUsername(); 
+    getProfileImageURL(username) ; 
   }
 
   void selectImage() async {
@@ -49,11 +52,40 @@ class _MyProfileState extends State<MyProfile> {
       final File file = File(image.path);
       setState(() {
         _image = file.readAsBytesSync();
+        // updateUsername(); 
+        uploadImageToFirebaseStorage(file);
+        // getProfileImageURL(username) ; 
       });
-      uploadImageToFirebaseStorage(file);
+      // uploadImageToFirebaseStorage(file);
     }
   }
+  Future<dynamic> updateUsername() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+    try {
+          DocumentSnapshot<Map<String, dynamic>> userSnapshot = await FirebaseFirestore.instance
+              .collection('Users')
+              .doc(user.uid)
+              .get();
 
+          if (userSnapshot.exists) {
+            String username1 = userSnapshot.get('username');
+            if(username1 != ''){
+              username = username1; 
+              print(username); 
+            }
+            else{
+              username = "default"; 
+              print(username); 
+            }
+          } else {
+            print('User document does not exist');
+          }
+        } catch (e) {
+          print('Error retrieving username: $e');
+        }
+    }
+  }
   Future<void> uploadImageToFirebaseStorage(File file) async {
     User? user = _auth.currentUser;
 
@@ -73,23 +105,6 @@ class _MyProfileState extends State<MyProfile> {
             .update({
             'profile_image': downloadURL,
         });
-        try {
-          DocumentSnapshot<Map<String, dynamic>> userSnapshot = await FirebaseFirestore.instance
-              .collection('Users')
-              .doc(user.uid)
-              .get();
-
-          if (userSnapshot.exists) {
-            username = userSnapshot.get('username');
-          } else {
-            print('User document does not exist');
-          }
-        } catch (e) {
-          print('Error retrieving username: $e');
-        }
-        setState(() async {
-          profileImageURL = await getProfileImageURL(username); 
-        });
         showSnackbar('Profile picture updated successfully');
       } catch (e) {
         print('Error uploading image to Firebase Storage: $e');
@@ -98,21 +113,31 @@ class _MyProfileState extends State<MyProfile> {
     }
   }
   
-  Future<String> getProfileImageURL(String username) async {
+  Future<void> getProfileImageURL(String username) async {
     try {
+      if(username == "default"){
+        profileImageURL = "https://firebasestorage.googleapis.com/v0/b/she-1acd0.appspot.com/o/avatar_default.jpg?alt=media&token=395337cf-96ee-49a8-84cb-e8e40537cde8"; 
+      }
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await FirebaseFirestore.instance
               .collection('Users')
               .where('username', isEqualTo: username)
               .get();
       if (querySnapshot.docs.isNotEmpty) {
-        return querySnapshot.docs.first.data()['profile_image'];
+      String fetchedProfileImageUrl = querySnapshot.docs.first.data()['profile_image'];
+      setState(() {
+        profileImageURL = fetchedProfileImageUrl;
+      });
+        if(profileImageURL == ''){
+          profileImageURL = "https://firebasestorage.googleapis.com/v0/b/she-1acd0.appspot.com/o/profile_images%2Fc5tJaFhUeBQV84slbA5oUD0b5tA3_profile.jpg?alt=media&token=2602e9fb-813e-4cb0-9b44-de9a6cc511cc"; 
+        }
+        print(profileImageURL); 
       } else {
-        return " ";
+        profileImageURL ='https://firebasestorage.googleapis.com/v0/b/she-1acd0.appspot.com/o/profile_images%2Fc5tJaFhUeBQV84slbA5oUD0b5tA3_profile.jpg?alt=media&token=2602e9fb-813e-4cb0-9b44-de9a6cc511cc';
       }
     } catch (error) {
       print('Error retrieving profile image URL: $error');
-      return " ";
+      profileImageURL = 'https://firebasestorage.googleapis.com/v0/b/she-1acd0.appspot.com/o/profile_images%2Fc5tJaFhUeBQV84slbA5oUD0b5tA3_profile.jpg?alt=media&token=2602e9fb-813e-4cb0-9b44-de9a6cc511cc'; 
     }
   }
 
@@ -248,32 +273,32 @@ class _MyProfileState extends State<MyProfile> {
                               ),
                             ],
                         ),
-                        //   child: _image != null
-                        //   ? Image.memory(
-                        //       _image!,
-                        //       fit: BoxFit.cover,
-                        //       height: double.infinity,
-                        //       width: double.infinity,
-                        //       alignment: Alignment.center,
-                        //     )
-                        //   : const Image(
-                        //       fit: BoxFit.scaleDown,
-                        //       image: AssetImage("assets/images/avatar_default.jpg"),
-                        //       height: double.infinity,
-                        //       width: double.infinity,
-                        //       alignment: Alignment.center,
-                        //     ),
-                        //   ),
-                        // ), 
                         child: Image.network(
                           profileImageURL, 
                           fit: BoxFit.scaleDown,
                           height: double.infinity,
                           width: double.infinity,
                           alignment: Alignment.center,
+                        ),
+
+                          // child: _image != null
+                          // ? Image.memory(
+                          //     _image!,
+                          //     fit: BoxFit.cover,
+                          //     height: double.infinity,
+                          //     width: double.infinity,
+                          //     alignment: Alignment.center,
+                          //   )
+                          // : const Image(
+                          //     fit: BoxFit.scaleDown,
+                          //     image: AssetImage("assets/images/avatar_default.jpg"),
+                          //     height: double.infinity,
+                          //     width: double.infinity,
+                          //     alignment: Alignment.center,
+                          //   ),
+                          // ),
                         ), 
-                      ),
-                    ), 
+                      ),  
                       const SizedBox(
                         width: 16,
                       ),
