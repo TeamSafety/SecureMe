@@ -19,7 +19,7 @@ After conducting market research, we have identified a need for improvement in w
 
 [Vlog#3](https://youtu.be/DNDYm6QJ1fg)
 
-# Scraps2Dishes User Instructional Manual
+# SecureMe User Instructional Manual
 
 ## Table of Contents
 
@@ -34,7 +34,7 @@ After conducting market research, we have identified a need for improvement in w
 ## Introduction
 
 #### SecureMe
-    Welcome to SecureMe, a mobile application designed to provide a swift and convenient way for individuals, particularly women, to access immediate assistance in times of danger or when seeking support.
+Welcome to SecureMe, a mobile application designed to provide a swift and convenient way for individuals, particularly women, to access immediate assistance in times of danger or when seeking support.
 
 ## Installation
 
@@ -49,7 +49,7 @@ Before installing SecureMe, ensure that you have the following prerequisites:
 
 1. **Clone the Repository:**
    ```bash
-   git clone [text](https://github.com/TeamSafety/SecureMe.git)
+   git clone (https://github.com/TeamSafety/SecureMe.git)
 2. **Navigate to the Project Directory:**
      ```bash
    cd SecureMe
@@ -70,7 +70,7 @@ Before installing SecureMe, ensure that you have the following prerequisites:
 1. Launch the App:
     Open SecureMe on your device.
 2. Explore Features:
-    You can find a detailed user manual [here]([text](https://github.com/TeamSafety/SecureMe/blob/main/Project%20Documentions/SecureMe%20User%20Manual.pdf))
+    You can find a detailed user manual [here]((https://github.com/TeamSafety/SecureMe/blob/main/Project%20Documentions/SecureMe%20User%20Manual.pdf))
 
 ### Key Features
 * Quick Assistance Button: A simple, intuitive button for immediate help. 
