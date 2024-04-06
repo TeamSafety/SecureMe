@@ -19,5 +19,63 @@ After conducting market research, we have identified a need for improvement in w
 
 [Vlog#3](https://youtu.be/DNDYm6QJ1fg)
 
+# Scraps2Dishes User Instructional Manual
+
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Installation](#installation)
+    - [Prerequisites](#prerequisites)
+    - [Installation Steps](#installation-steps)
+3. [Usage](#usage)
+    - [Getting Started](#getting-started)
+    - [Key Features](#key-features)
+
+## Introduction
+
+#### SecureMe
+    Welcome to SecureMe, a mobile application designed to provide a swift and convenient way for individuals, particularly women, to access immediate assistance in times of danger or when seeking support.
+
+## Installation
+
+### Prerequisites
+
+Before installing SecureMe, ensure that you have the following prerequisites:
+
+- [Flutter SDK](https://flutter.dev/docs/get-started/install) installed
+- [Firebase account](https://firebase.google.com/) for database functionalities
+
+### Installation Steps
+
+1. **Clone the Repository:**
+   ```bash
+   git clone [text](https://github.com/TeamSafety/SecureMe.git)
+2. **Navigate to the Project Directory:**
+     ```bash
+   cd SecureMe
+
+3. **Install Dependencies:**
+     ```bash
+   flutter pub get
+
+4. **Configure Firebase:**
+    1. Set up a Firebase project: [Firebase Console](https://console.firebase.google.com)
+    2. Obtain the google-services.json file and place it in the android/app directory.
+4. **Run the App:**
+     ```bash
+   flutter run
+## Usage
+
+### Getting Started
+1. Launch the App:
+    Open SecureMe on your device.
+2. Explore Features:
+    You can find a detailed user manual [here]([text](https://github.com/TeamSafety/SecureMe/blob/main/Project%20Documentions/SecureMe%20User%20Manual.pdf))
+
+### Key Features
+* Quick Assistance Button: A simple, intuitive button for immediate help. 
+* Location Sharing: SecureMe allows users to share their real-time location with trusted contacts
+
+
 
 
