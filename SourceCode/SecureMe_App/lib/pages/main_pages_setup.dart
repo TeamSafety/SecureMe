@@ -64,7 +64,7 @@ class _MainPageState extends State<MainPage> {
           return isFirstRouteInCurrentTab;
         },
         child: Scaffold(
-          body: _pages[_currentIndex],
+          body: _buildOffstageNavigator(_currentPage),
           // body: Stack(
           //   children: <Widget>[
           //     _buildOffstageNavigator("Community"),
@@ -81,12 +81,9 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget _buildOffstageNavigator(String tabItem) {
-    return Offstage(
-      offstage: _currentPage != tabItem,
-      child: TabNavigator(
-        navigatorKey: _navigatorKeys[tabItem]!,
-        tabItem: tabItem,
-      ),
+    return TabNavigator(
+      navigatorKey: _navigatorKeys[tabItem]!,
+      tabItem: tabItem,
     );
   }
 
