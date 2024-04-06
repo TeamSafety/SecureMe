@@ -42,7 +42,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   String emailErrorMessage = '';
 
-  String passwordErrorMessage = '1';
+  String passwordErrorMessage = '';
 
   void signUpUser() async {
     String email = emailController.text.trim();

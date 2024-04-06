@@ -134,7 +134,7 @@ class _MyProfileState extends State<MyProfile> {
         });
         if (profileImageURL == '') {
           profileImageURL =
-              "https://firebasestorage.googleapis.com/v0/b/she-1acd0.appspot.com/o/profile_images%2Fc5tJaFhUeBQV84slbA5oUD0b5tA3_profile.jpg?alt=media&token=2602e9fb-813e-4cb0-9b44-de9a6cc511cc";
+              "https://firebasestorage.googleapis.com/v0/b/she-1acd0.appspot.com/o/avatar_default.jpg?alt=media&token=395337cf-96ee-49a8-84cb-e8e40537cde8";
         }
         print(profileImageURL);
       } else {
@@ -255,7 +255,6 @@ class _MyProfileState extends State<MyProfile> {
                   height: AppVars.sectionPadding,
                 ),
                 SizedBox(
-                  // color: Colors.red,
                   width: double.infinity,
                   height: 120,
                   child: Row(
@@ -282,9 +281,7 @@ class _MyProfileState extends State<MyProfile> {
                                 ],
                               ),
                               child: Image.network(
-                                profileImageURL.isNotEmpty
-                                    ? profileImageURL
-                                    : "assets/images/avatar_default.jpg",
+                                profileImageURL,
                                 fit: BoxFit.scaleDown,
                                 height: double.infinity,
                                 width: double.infinity,
@@ -506,7 +503,6 @@ class _MyProfileState extends State<MyProfile> {
                   style: AppVars.primaryButtonStyle,
                   onPressed: () async {
                     await _auth.signOut();
-                    // ignore: use_build_context_synchronously
                     Navigator.push(
                       context,
                       MaterialPageRoute(

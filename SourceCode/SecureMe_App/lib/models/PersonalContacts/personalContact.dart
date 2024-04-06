@@ -24,8 +24,8 @@ class PersonalContactModel {
       uid: map['uid'] ?? '',
       profile_image: map['profile_image'] ?? 'assets/images/avatar_default.jpg',
       addedContactUid: map['contactUid'] ?? '',
-      lat: map['lat'] ?? 0,
-      long: map['long'] ?? 0,
+      lat: map['latitude'] ?? 0,
+      long: map['longitude'] ?? 0,
     );
   }
 }

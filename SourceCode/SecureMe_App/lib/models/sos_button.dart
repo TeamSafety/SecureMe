@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/Chat/message_chat.dart';
 import 'package:my_app/models/Chat/message_service.dart';
+import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:my_app/pages/my_profile.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -20,17 +21,7 @@ class SOSButton extends StatefulWidget {
 class _SOSButtonState extends State<SOSButton> {
   double _sizeTmp = 115;
 
-  void _increaseSize() {
-    setState(() {
-      _sizeTmp = 200;
-    });
-  }
-
-  void _decreaseSize() {
-    setState(() {
-      _sizeTmp = 115;
-    });
-  }
+  final ShareLocationButton loc = new ShareLocationButton();
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +29,6 @@ class _SOSButtonState extends State<SOSButton> {
       onTap: () {
         _handleSOSButtonPress(context);
       },
-      // onTapDown: (_) => _increaseSize(),
-      // onTapUp: (_) => _decreaseSize(),
-      // onTapCancel: () => _decreaseSize(),
       child: Container(
         alignment: Alignment.center,
         width: _sizeTmp,
@@ -184,16 +172,16 @@ class _SOSButtonState extends State<SOSButton> {
             await _messageService.sendMessage(emergencyMessageObj, chatroomId);
           }
           ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Your EMERGENCY message was sent',
-                  style: TextStyle(color: Colors.white), 
-                ),
-                backgroundColor: AppVars.accent, 
-                behavior: SnackBarBehavior.floating, 
-                duration: Duration(seconds: 3), 
+            SnackBar(
+              content: Text(
+                'Your EMERGENCY message was sent',
+                style: TextStyle(color: Colors.white),
               ),
-            );
+              backgroundColor: AppVars.accent,
+              behavior: SnackBarBehavior.floating,
+              duration: Duration(seconds: 3),
+            ),
+          );
           // Navigate to a page where the user can send an "I'm safe" message or a timer
         }
       } catch (e) {
