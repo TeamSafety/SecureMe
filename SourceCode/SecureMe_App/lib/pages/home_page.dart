@@ -11,6 +11,7 @@ import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:my_app/models/sos_button.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:my_app/pages/chat_page.dart';
+import 'package:rxdart/rxdart.dart';
 
 late String routeToGo = '/';
 
@@ -25,6 +26,9 @@ class HomePageState extends State<HomePage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _firebaseMessaging = FirebaseMessaging.instance;
   final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  final _messageStreamController = BehaviorSubject<RemoteMessage>();
+  bool _isNewMessage = false; // Flag to track new messages
+
   @override
   void initState() {
     super.initState();
@@ -33,35 +37,64 @@ class HomePageState extends State<HomePage> {
   }
 
   void _registerNotification() {
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   print('onMessage: $message');
+    //   if (message.notification != null) {
+    //     _showNotification(message.notification!);
+    //   }
+    //   return;
+    // });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('onMessage: $message');
-      if (message.notification != null) {
-        _showNotification(message.notification!);
+      if (kDebugMode) {
+        print('Handling a foreground message: ${message.messageId}');
+        print('Message data: ${message.data}');
+        print('Message notification: ${message.notification?.title}');
+        print('Message notification: ${message.notification?.body}');
+        _handleForegroundMessage(message); 
       }
-      return;
-    });
+      if (mounted) {
+          _messageStreamController.sink.add(message);
+
+          setState(() {
+            _isNewMessage = true;
+          });
+        }
+      });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('onMessageOpenedApp: $message');
       // Handle notification when the app is in the background but opened by the user.
       if (message.notification != null) {
-        print("Sender ID");
+        print("Sender ID ");
         print(message.data['sender']);
         final senderId = message.data['sender'];
         final receiverId = message.data['receiver'];
+        print("receiver ID: "); 
         print(receiverId);
-
         if (mounted) {
-          Navigator.push(
-            context,
+          Navigator.push(context,
             MaterialPageRoute(
-              builder: (context) =>
-                  ChatScreen(userId: senderId, recipientUserId: receiverId),
+              builder: (context) => ChatScreen(
+                userId: senderId,
+                recipientUserId: receiverId
+              ),
             ),
           );
         }
       }
     });
+    Future<void> _firebaseMessagingBackgroundHandler(
+    RemoteMessage message) async {
+      await Firebase.initializeApp();
+      print("Handling a background message: ${message.messageId}");
+      print('Message data: ${message.data}');
+      if (kDebugMode) {
+        print("Handling a background message: ${message.messageId}");
+        print('Message data: ${message.data}');
+        print('Message notification: ${message.notification?.title}');
+        print('Message notification: ${message.notification?.body}');
+      }
+    }
 
     // callback is triggered when the app is terminated and the user taps on a notification.
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -75,6 +108,32 @@ class HomePageState extends State<HomePage> {
     }).catchError((err) {
       return;
     });
+  }
+  void _handleForegroundMessage(RemoteMessage message) {
+  // Extract necessary data from the message
+    final senderId = message.data['sender'];
+    final receiverId = message.data['receiver'];
+
+    // Add your logic here to handle foreground messages
+    print('Foreground message received:');
+    print('Sender ID: $senderId');
+    print('Receiver ID: $receiverId');
+    if (mounted) {
+      Navigator.push(context,
+            MaterialPageRoute(
+              builder: (context) => ChatScreen(
+                userId: senderId,
+                recipientUserId: receiverId
+              ),
+            ),
+          );
+    }
+    
+}
+  @override
+  void dispose() {
+    // Make sure to dispose any resources when the widget is disposed
+    super.dispose();
   }
 
   void saveTokenForCurrentUser(String token) async {
@@ -130,23 +189,20 @@ class HomePageState extends State<HomePage> {
     //   payload: null,
     // );
   }
-
-  Future<void> _firebaseMessagingBackgroundHandler(
-      RemoteMessage message) async {
-    await Firebase.initializeApp();
-    print("Handling a background message: ${message.messageId}");
-    print('Message data: ${message.data}');
-    if (kDebugMode) {
-      print("Handling a background message: ${message.messageId}");
-      print('Message data: ${message.data}');
-      print('Message notification: ${message.notification?.title}');
-      print('Message notification: ${message.notification?.body}');
-    }
+  void _resetNewMessageFlag() {
+    // Reset the flag after handling the notification
+    setState(() {
+      _isNewMessage = false;
+    });
   }
-
   @override
   Widget build(BuildContext context) {
+    if (_isNewMessage) {
+      // Reset the flag if the widget is rebuilt
+      _resetNewMessageFlag();
+    }
     return Scaffold(
+      appBar: _isNewMessage ? AppBar(title: Text('')) : null,
       body: SizedBox(
         width: double.infinity,
         child: Column(

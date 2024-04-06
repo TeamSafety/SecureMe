@@ -6,7 +6,7 @@ import 'package:my_app/pages/map_page.dart';
 
 class PersonalContact extends StatefulWidget {
   final String contactName;
-  final String imagePath; // TODO: WILL CHANGE LATER
+  final String imagePath; 
   final String addedContactUid;
   final String currentUserId;
   final double lat;
