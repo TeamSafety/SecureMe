@@ -5,6 +5,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:my_app/models/UserLocation/share_locationButton.dart';
+import 'package:my_app/models/contacts_data.dart';
 import 'package:my_app/models/panel_widget.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -52,24 +53,21 @@ Future<Position?> grabLastLocation() async {
 }
 
 List<dynamic> contactlist = [];
+List <UserData> userList = []; 
 
 Future<void> fetchUserLocations() async {
   try {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
-    String userId = '';
-    if (user != null) {
-      userId = user.uid;
-    }
-    print("User id is ");
-    print(userId);
+    String userId = user?.uid ?? '';
+
     DocumentSnapshot userDoc =
         await FirebaseFirestore.instance.collection('Users').doc(userId).get();
 
     if (userDoc.exists) {
       QuerySnapshot contactsSnapshot =
           await userDoc.reference.collection('contacts').get();
-
+      List<UserData> users = [];
       contactsSnapshot.docs.forEach((contactDoc) async {
         String contactId = contactDoc['contactUid'];
 
@@ -82,9 +80,18 @@ Future<void> fetchUserLocations() async {
           String contactName = contactUserDoc['username'] ?? 'Unknown';
           double? latitude = contactUserDoc['latitude'] as double?;
           double? longitude = contactUserDoc['longitude'] as double?;
+          String profileImageURL = contactUserDoc['profile_image'] ?? ""; 
 
           if (latitude != null && longitude != null) {
             contactlist.add([contactName, latitude, longitude]);
+            users.add(UserData(
+              username: contactName,
+              latitude: latitude, 
+              longitude: longitude, 
+              profileImageURL: profileImageURL, 
+              currentUid: userId, 
+              receiverId: contactId, 
+            ));
           } else {
             print('Latitude or longitude info is missing for contact: $contactName');
           }
@@ -92,6 +99,7 @@ Future<void> fetchUserLocations() async {
           print('Contact document with ID $contactId does not exist.');
         }
       });
+      userList = users; 
     } else {
       print('User document with ID $userId does not exist.');
     }
@@ -127,7 +135,8 @@ class _MyMapOSMState extends State<MyMapOSM2> {
       minHeight: 50,
       maxHeight: panelMaxHeight,
       panelBuilder: (controller) => PanelWidget(
-        controller: controller,
+          controller: controller,
+          // userList: userList, 
       ),
       body: FlutterMap(
         options: const MapOptions(
