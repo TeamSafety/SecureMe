@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/tab_navigator.dart';
+import 'package:my_app/pages/community_list.dart';
+import 'package:my_app/pages/home_page.dart';
+import 'package:my_app/pages/map_page.dart';
+import 'package:my_app/pages/my_contacts.dart';
+import 'package:my_app/pages/my_profile.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -12,6 +17,14 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  List _pages = [
+    ContactPage(),
+    MyContacts(),
+    HomePage(),
+    MyMapOSM2(),
+    MyProfile(),
+  ];
+
   String _currentPage = "Home";
   List<String> pageKeys = ["Community", "Contacts", "Home", "Map", "Profile"];
   Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
@@ -52,13 +65,16 @@ class _MainPageState extends State<MainPage> {
           return isFirstRouteInCurrentTab;
         },
         child: Scaffold(
-          body: Stack(children: <Widget>[
-            _buildOffstageNavigator("Community"),
-            _buildOffstageNavigator("Contacts"),
-            _buildOffstageNavigator("Home"),
-            _buildOffstageNavigator("Map"),
-            _buildOffstageNavigator("Profile"),
-          ]),
+          body: _pages[_currentIndex],
+          // body: Stack(
+          //     children: <Widget>[
+          //       _buildOffstageNavigator("Community"),
+          //       _buildOffstageNavigator("Contacts"),
+          //       _buildOffstageNavigator("Home"),
+          //       _buildOffstageNavigator("Map"),
+          //       _buildOffstageNavigator("Profile"),
+          //     ],
+          //     ),
           bottomNavigationBar: _bottomNavigationBar(),
         ),
       ),

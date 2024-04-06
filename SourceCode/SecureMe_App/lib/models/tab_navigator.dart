@@ -18,15 +18,17 @@ class TabNavigator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget child = HomePage();
-    if (tabItem == "Community")
+    if (tabItem == "Community") {
       child = ContactPage();
-    else if (tabItem == "Contacts")
+    } else if (tabItem == "Contacts") {
       child = MyContacts();
-    else if (tabItem == "Home")
+    } else if (tabItem == "Home") {
       child = HomePage();
-    else if (tabItem == "Map")
+    } else if (tabItem == "Map") {
       child = MyMapOSM2();
-    else if (tabItem == "Profile") child = MyProfile();
+    } else if (tabItem == "Profile") {
+      child = MyProfile();
+    }
 
     return Navigator(
       key: navigatorKey,
