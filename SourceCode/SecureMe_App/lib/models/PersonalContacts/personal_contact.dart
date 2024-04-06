@@ -102,19 +102,19 @@ class _PersonalContactState extends State<PersonalContact> {
                       // LOCATE BUTTON
                       GestureDetector(
                         onTap: () {
-                          if (widget.lat != 0 && widget.long != 0) {
-                            placeMarker(
-                              widget.lat,
-                              widget.long,
-                              widget.contactName,
-                            );
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MyMapOSM2(),
-                              ),
-                            );
-                          }
+                          // if (widget.lat != 0 && widget.long != 0) {
+                          placeMarker(
+                            widget.lat,
+                            widget.long,
+                            widget.contactName,
+                          );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MyMapOSM2(),
+                            ),
+                          );
+                          // }
                         },
                         child: AspectRatio(
                           aspectRatio: 1,
@@ -266,7 +266,6 @@ class _PersonalContactState extends State<PersonalContact> {
           DocumentReference contactDocRef = querySnapshot.docs.first.reference;
           await contactDocRef.delete();
           // Rebuild the widget to reflect the changes
-          // setState(() {});
           // Show success message
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
