@@ -17,14 +17,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  List _pages = [
-    ContactPage(),
-    MyContacts(),
-    HomePage(),
-    MyMapOSM2(),
-    MyProfile(),
-  ];
-
   String _currentPage = "Home";
   List<String> pageKeys = ["Community", "Contacts", "Home", "Map", "Profile"];
   Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
@@ -65,15 +57,6 @@ class _MainPageState extends State<MainPage> {
         },
         child: Scaffold(
           body: _buildOffstageNavigator(_currentPage),
-          // body: Stack(
-          //   children: <Widget>[
-          //     _buildOffstageNavigator("Community"),
-          //     _buildOffstageNavigator("Contacts"),
-          //     _buildOffstageNavigator("Home"),
-          //     _buildOffstageNavigator("Map"),
-          //     _buildOffstageNavigator("Profile"),
-          //   ],
-          // ),
           bottomNavigationBar: _bottomNavigationBar(),
         ),
       ),

@@ -5,13 +5,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_app/models/AppVars.dart';
 import 'package:my_app/models/Profile/SOS_configuration.dart';
 import 'package:my_app/models/UserLocation/share_locationButton.dart';
 import 'package:my_app/models/custom_dropdown.dart';
 import 'package:my_app/pages/login.dart';
-
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -32,17 +32,17 @@ class _MyProfileState extends State<MyProfile> {
   String? selectedEmergencyMessage;
 
   late Future<void> userProfileFuture;
-  Uint8List? _image; 
-  String profileImageURL = " "; 
- 
-  String username = 'default'; 
+  Uint8List? _image;
+  String profileImageURL = " ";
+
+  String username = 'default';
 
   @override
   void initState() {
     super.initState();
     userProfileFuture = fetchUserProfile();
-    updateUsername(); 
-    getProfileImageURL(username) ; 
+    updateUsername();
+    getProfileImageURL(username);
   }
 
   void selectImage() async {
@@ -52,40 +52,42 @@ class _MyProfileState extends State<MyProfile> {
       final File file = File(image.path);
       setState(() {
         _image = file.readAsBytesSync();
-        // updateUsername(); 
+        // updateUsername();
         uploadImageToFirebaseStorage(file);
-        // getProfileImageURL(username) ; 
+        // getProfileImageURL(username) ;
       });
       // uploadImageToFirebaseStorage(file);
     }
   }
+
   Future<dynamic> updateUsername() async {
     User? user = _auth.currentUser;
     if (user != null) {
-    try {
-          DocumentSnapshot<Map<String, dynamic>> userSnapshot = await FirebaseFirestore.instance
-              .collection('Users')
-              .doc(user.uid)
-              .get();
+      try {
+        DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+            await FirebaseFirestore.instance
+                .collection('Users')
+                .doc(user.uid)
+                .get();
 
-          if (userSnapshot.exists) {
-            String username1 = userSnapshot.get('username');
-            if(username1 != ''){
-              username = username1; 
-              print(username); 
-            }
-            else{
-              username = "default"; 
-              print(username); 
-            }
+        if (userSnapshot.exists) {
+          String username1 = userSnapshot.get('username');
+          if (username1 != '') {
+            username = username1;
+            print(username);
           } else {
-            print('User document does not exist');
+            username = "default";
+            print(username);
           }
-        } catch (e) {
-          print('Error retrieving username: $e');
+        } else {
+          print('User document does not exist');
         }
+      } catch (e) {
+        print('Error retrieving username: $e');
+      }
     }
   }
+
   Future<void> uploadImageToFirebaseStorage(File file) async {
     User? user = _auth.currentUser;
 
@@ -103,7 +105,7 @@ class _MyProfileState extends State<MyProfile> {
             .collection('Users')
             .doc(user.uid)
             .update({
-            'profile_image': downloadURL,
+          'profile_image': downloadURL,
         });
         showSnackbar('Profile picture updated successfully');
       } catch (e) {
@@ -112,11 +114,12 @@ class _MyProfileState extends State<MyProfile> {
       }
     }
   }
-  
+
   Future<void> getProfileImageURL(String username) async {
     try {
-      if(username == "default"){
-        profileImageURL = "https://firebasestorage.googleapis.com/v0/b/she-1acd0.appspot.com/o/avatar_default.jpg?alt=media&token=395337cf-96ee-49a8-84cb-e8e40537cde8"; 
+      if (username == "default") {
+        profileImageURL =
+            "https://firebasestorage.googleapis.com/v0/b/she-1acd0.appspot.com/o/avatar_default.jpg?alt=media&token=395337cf-96ee-49a8-84cb-e8e40537cde8";
       }
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await FirebaseFirestore.instance
@@ -124,23 +127,26 @@ class _MyProfileState extends State<MyProfile> {
               .where('username', isEqualTo: username)
               .get();
       if (querySnapshot.docs.isNotEmpty) {
-      String fetchedProfileImageUrl = querySnapshot.docs.first.data()['profile_image'];
-      setState(() {
-        profileImageURL = fetchedProfileImageUrl;
-      });
-        if(profileImageURL == ''){
-          profileImageURL = "https://firebasestorage.googleapis.com/v0/b/she-1acd0.appspot.com/o/profile_images%2Fc5tJaFhUeBQV84slbA5oUD0b5tA3_profile.jpg?alt=media&token=2602e9fb-813e-4cb0-9b44-de9a6cc511cc"; 
+        String fetchedProfileImageUrl =
+            querySnapshot.docs.first.data()['profile_image'];
+        setState(() {
+          profileImageURL = fetchedProfileImageUrl;
+        });
+        if (profileImageURL == '') {
+          profileImageURL =
+              "https://firebasestorage.googleapis.com/v0/b/she-1acd0.appspot.com/o/profile_images%2Fc5tJaFhUeBQV84slbA5oUD0b5tA3_profile.jpg?alt=media&token=2602e9fb-813e-4cb0-9b44-de9a6cc511cc";
         }
-        print(profileImageURL); 
+        print(profileImageURL);
       } else {
-        profileImageURL ='https://firebasestorage.googleapis.com/v0/b/she-1acd0.appspot.com/o/profile_images%2Fc5tJaFhUeBQV84slbA5oUD0b5tA3_profile.jpg?alt=media&token=2602e9fb-813e-4cb0-9b44-de9a6cc511cc';
+        profileImageURL =
+            'https://firebasestorage.googleapis.com/v0/b/she-1acd0.appspot.com/o/profile_images%2Fc5tJaFhUeBQV84slbA5oUD0b5tA3_profile.jpg?alt=media&token=2602e9fb-813e-4cb0-9b44-de9a6cc511cc';
       }
     } catch (error) {
       print('Error retrieving profile image URL: $error');
-      profileImageURL = 'https://firebasestorage.googleapis.com/v0/b/she-1acd0.appspot.com/o/profile_images%2Fc5tJaFhUeBQV84slbA5oUD0b5tA3_profile.jpg?alt=media&token=2602e9fb-813e-4cb0-9b44-de9a6cc511cc'; 
+      profileImageURL =
+          'https://firebasestorage.googleapis.com/v0/b/she-1acd0.appspot.com/o/profile_images%2Fc5tJaFhUeBQV84slbA5oUD0b5tA3_profile.jpg?alt=media&token=2602e9fb-813e-4cb0-9b44-de9a6cc511cc';
     }
   }
-
 
   Future<void> fetchUserProfile() async {
     User? user = _auth.currentUser;
@@ -255,56 +261,55 @@ class _MyProfileState extends State<MyProfile> {
                   child: Row(
                     children: [
                       // PROFILE PIC
-                      AspectRatio(
-                        aspectRatio: 1,
-                        child: Container(
-                          clipBehavior: Clip.hardEdge,
-                          height: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(100),
-                            ),
-                            color: AppVars.secondary,
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppVars.secondary.withOpacity(0.4),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2.0),
+                      Stack(
+                        children: [
+                          AspectRatio(
+                            aspectRatio: 1,
+                            child: Container(
+                              clipBehavior: Clip.hardEdge,
+                              height: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(100),
+                                ),
+                                color: AppVars.secondary,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AppVars.secondary.withOpacity(0.4),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2.0),
+                                  ),
+                                ],
                               ),
-                            ],
-                        ),
-                        child: Image.network(
-                          profileImageURL, 
-                          fit: BoxFit.scaleDown,
-                          height: double.infinity,
-                          width: double.infinity,
-                          alignment: Alignment.center,
-                        ),
+                              child: Image.network(
+                                profileImageURL.isNotEmpty
+                                    ? profileImageURL
+                                    : "assets/images/avatar_default.jpg",
+                                fit: BoxFit.scaleDown,
+                                height: double.infinity,
+                                width: double.infinity,
+                                alignment: Alignment.center,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 0,
+                            left: 85,
+                            bottom: -100,
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.add_a_photo,
+                                size: 20,
+                                color: AppVars.accent,
+                              ),
+                              onPressed: selectImage,
+                            ),
+                          ),
+                        ],
+                      ),
 
-                          // child: _image != null
-                          // ? Image.memory(
-                          //     _image!,
-                          //     fit: BoxFit.cover,
-                          //     height: double.infinity,
-                          //     width: double.infinity,
-                          //     alignment: Alignment.center,
-                          //   )
-                          // : const Image(
-                          //     fit: BoxFit.scaleDown,
-                          //     image: AssetImage("assets/images/avatar_default.jpg"),
-                          //     height: double.infinity,
-                          //     width: double.infinity,
-                          //     alignment: Alignment.center,
-                          //   ),
-                          // ),
-                        ), 
-                      ),  
                       const SizedBox(
                         width: 16,
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.add_a_photo),
-                        onPressed: selectImage,
                       ),
                       // NAME AND Edit button
                       Expanded(

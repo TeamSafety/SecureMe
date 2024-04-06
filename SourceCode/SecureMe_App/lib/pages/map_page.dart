@@ -53,7 +53,7 @@ Future<Position?> grabLastLocation() async {
 }
 
 List<dynamic> contactlist = [];
-List <UserData> userList = []; 
+List<UserData> userList = [];
 
 Future<void> fetchUserLocations() async {
   try {
@@ -80,26 +80,29 @@ Future<void> fetchUserLocations() async {
           String contactName = contactUserDoc['username'] ?? 'Unknown';
           double? latitude = contactUserDoc['latitude'] as double?;
           double? longitude = contactUserDoc['longitude'] as double?;
-          String profileImageURL = contactUserDoc['profile_image'] ?? ""; 
+          String profileImageURL = contactUserDoc['profile_image'] ?? "";
 
           if (latitude != null && longitude != null) {
             contactlist.add([contactName, latitude, longitude]);
-            users.add(UserData(
-              username: contactName,
-              latitude: latitude, 
-              longitude: longitude, 
-              profileImageURL: profileImageURL, 
-              currentUid: userId, 
-              receiverId: contactId, 
-            ));
+            users.add(
+              UserData(
+                username: contactName,
+                latitude: latitude,
+                longitude: longitude,
+                profileImageURL: profileImageURL,
+                currentUid: userId,
+                receiverId: contactId,
+              ),
+            );
           } else {
-            print('Latitude or longitude info is missing for contact: $contactName');
+            print(
+                'Latitude or longitude info is missing for contact: $contactName');
           }
         } else {
           print('Contact document with ID $contactId does not exist.');
         }
       });
-      userList = users; 
+      userList = users;
     } else {
       print('User document with ID $userId does not exist.');
     }
@@ -125,6 +128,10 @@ class _MyMapOSMState extends State<MyMapOSM2> {
   Widget build(BuildContext context) {
     final panelMaxHeight = MediaQuery.of(context).size.height * 0.45;
 
+    _placeMarkers() {
+      setState(() {});
+    }
+
     return SlidingUpPanel(
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(10),
@@ -135,14 +142,12 @@ class _MyMapOSMState extends State<MyMapOSM2> {
       minHeight: 50,
       maxHeight: panelMaxHeight,
       panelBuilder: (controller) => PanelWidget(
-          controller: controller,
-          // userList: userList, 
+        controller: controller,
       ),
       body: FlutterMap(
         options: const MapOptions(
           initialCenter: LatLng(50.4488, -104.6178),
           initialZoom: 12.2,
-          //interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
         ),
         children: [
           Stack(
@@ -168,7 +173,7 @@ class _MyMapOSMState extends State<MyMapOSM2> {
                   markerSize: const Size(40, 40),
                   markerDirection: MarkerDirection.heading,
                 ),
-              ), //CurrentLocationLayer
+              ),
               RichAttributionWidget(
                 attributions: [
                   TextSourceAttribution(
@@ -266,8 +271,6 @@ List<Marker> placeContacts(contactlist) {
         ),
       );
     }
-    ;
   }
-  ;
   return marker;
 }

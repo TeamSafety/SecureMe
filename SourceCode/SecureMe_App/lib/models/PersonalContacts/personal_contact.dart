@@ -45,38 +45,33 @@ class _PersonalContactState extends State<PersonalContact> {
           AspectRatio(
             aspectRatio: 1,
             child: Container(
-              clipBehavior: Clip.hardEdge,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: AppVars.secondary.withOpacity(0.5),
-                ),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(100),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppVars.secondary.withOpacity(0.3),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2.0),
-                  ),
-                ],
-              ),
-              child:Image.network(
-                widget.imagePath,
-                fit: BoxFit.cover,
+                clipBehavior: Clip.hardEdge,
                 height: double.infinity,
-                width: double.infinity,
-                alignment: Alignment.center,
-              )
-              // child: Image(
-              //   fit: BoxFit.scaleDown,
-              //   image: AssetImage(widget.imagePath),
-              //   height: double.infinity,
-              //   width: double.infinity,
-              //   alignment: Alignment.center,
-              // ),
-            ),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: AppVars.secondary.withOpacity(0.5),
+                  ),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(100),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppVars.secondary.withOpacity(0.3),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2.0),
+                    ),
+                  ],
+                ),
+                child: Transform.scale(
+                  scale: 1.1,
+                  child: Image.network(
+                    widget.imagePath,
+                    fit: BoxFit.fill,
+                    height: double.infinity,
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                  ),
+                )),
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -262,7 +257,7 @@ class _PersonalContactState extends State<PersonalContact> {
               duration: Duration(seconds: 3),
             ),
           );
-                } else {
+        } else {
           print('Contact not found in personal contacts.');
         }
       } else {

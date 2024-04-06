@@ -215,17 +215,17 @@ class SavedCommunityContact extends StatelessWidget {
       }
     } catch (error) {
       print('Error removing community contact from personal contacts: $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Error removing community contact from personal contacts',
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: AppVars.accent,
-          behavior: SnackBarBehavior.floating,
-          duration: Duration(seconds: 3),
-        ),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //       'Error removing community contact from personal contacts',
+      //       style: TextStyle(color: Colors.white),
+      //     ),
+      //     backgroundColor: AppVars.accent,
+      //     behavior: SnackBarBehavior.floating,
+      //     duration: Duration(seconds: 3),
+      //   ),
+      // );
     }
   }
 }

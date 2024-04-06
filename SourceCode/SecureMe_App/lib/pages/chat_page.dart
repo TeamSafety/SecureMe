@@ -175,13 +175,13 @@ class _ChatScreenState extends State<ChatScreen> {
                           margin: EdgeInsets.symmetric(horizontal: 8),
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: AppVars.accent,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                              color: AppVars.primary,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: AppVars.accent)),
                           child: Center(
                             child: Text(
                               snapshot.data![index],
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: AppVars.secondary),
                             ),
                           ),
                         ),
