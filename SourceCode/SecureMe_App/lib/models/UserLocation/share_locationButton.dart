@@ -36,8 +36,8 @@ class _ShareLocationButtonState extends State<ShareLocationButton> {
       if (isLocationSharing) {
         // Stop location sharing
         stopLocationUpdates();
-        if(user!= null){
-          clearLocationData(user.uid); 
+        if (user != null) {
+          clearLocationData(user.uid);
         }
       } else {
         // Start location sharing

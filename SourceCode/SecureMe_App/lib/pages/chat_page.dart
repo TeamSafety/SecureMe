@@ -230,6 +230,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _onBackPress() async {
     try {
+      Navigator.pop(
+        context,
+        MaterialPageRoute(builder: (context) => const MyContacts()),
+      );
       final messagesCollection = FirebaseFirestore.instance
           .collection('messages')
           .doc(_chatroomId)
@@ -241,10 +245,6 @@ class _ChatScreenState extends State<ChatScreen> {
           'chattingWith': null,
         });
       }
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const MyContacts()),
-      );
     } catch (e) {
       print('Error during back press: $e');
     }

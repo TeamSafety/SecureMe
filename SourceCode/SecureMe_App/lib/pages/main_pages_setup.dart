@@ -2,11 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_app/models/AppVars.dart';
+import 'package:my_app/models/tab_navigator.dart';
 import 'package:my_app/pages/community_list.dart';
 import 'package:my_app/pages/home_page.dart';
+import 'package:my_app/pages/map_page.dart';
 import 'package:my_app/pages/my_contacts.dart';
 import 'package:my_app/pages/my_profile.dart';
-import 'package:my_app/pages/map_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -16,7 +17,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  List pages = [
+  List _pages = [
     ContactPage(),
     MyContacts(),
     HomePage(),
@@ -24,20 +25,68 @@ class _MainPageState extends State<MainPage> {
     MyProfile(),
   ];
 
+  String _currentPage = "Home";
+  List<String> pageKeys = ["Community", "Contacts", "Home", "Map", "Profile"];
+  Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
+    "Community": GlobalKey<NavigatorState>(),
+    "Contacts": GlobalKey<NavigatorState>(),
+    "Home": GlobalKey<NavigatorState>(),
+    "Map": GlobalKey<NavigatorState>(),
+    "Profile": GlobalKey<NavigatorState>(),
+  };
+
   int _currentIndex = 2;
-  void onTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
+
+  void _selectTab(String tabItem, int index) {
+    if (tabItem == _currentPage) {
+      _navigatorKeys[tabItem]?.currentState?.popUntil((route) => route.isFirst);
+    } else {
+      setState(() {
+        _currentPage = pageKeys[index];
+        _currentIndex = index;
+      });
+    }
   }
 
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppVars.primary,
-        body: pages[_currentIndex],
-        bottomNavigationBar: _bottomNavigationBar(),
+      child: WillPopScope(
+        onWillPop: () async {
+          final isFirstRouteInCurrentTab =
+              await _navigatorKeys[_currentPage]!.currentState!.maybePop();
+          if (isFirstRouteInCurrentTab) {
+            if (_currentPage != "Home") {
+              _selectTab("Home", 2);
+
+              return false;
+            }
+          }
+          // let system handle back button if we're on the first route
+          return isFirstRouteInCurrentTab;
+        },
+        child: Scaffold(
+          body: _pages[_currentIndex],
+          // body: Stack(
+          //     children: <Widget>[
+          //       _buildOffstageNavigator("Community"),
+          //       _buildOffstageNavigator("Contacts"),
+          //       _buildOffstageNavigator("Home"),
+          //       _buildOffstageNavigator("Map"),
+          //       _buildOffstageNavigator("Profile"),
+          //     ],
+          //     ),
+          bottomNavigationBar: _bottomNavigationBar(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOffstageNavigator(String tabItem) {
+    return Offstage(
+      offstage: _currentPage != tabItem,
+      child: TabNavigator(
+        navigatorKey: _navigatorKeys[tabItem]!,
+        tabItem: tabItem,
       ),
     );
   }
@@ -69,7 +118,9 @@ class _MainPageState extends State<MainPage> {
             selectedFontSize: AppVars.smallText,
             unselectedFontSize: AppVars.smallText,
             backgroundColor: AppVars.primary,
-            onTap: onTap,
+            onTap: (int index) {
+              _selectTab(pageKeys[index], index);
+            },
             currentIndex: _currentIndex,
             elevation: 0,
             items: [

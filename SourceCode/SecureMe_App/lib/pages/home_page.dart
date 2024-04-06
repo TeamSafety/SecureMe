@@ -29,7 +29,7 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _registerNotification();
-    _configLocalNotification();
+    // _configLocalNotification();
   }
 
   void _registerNotification() {

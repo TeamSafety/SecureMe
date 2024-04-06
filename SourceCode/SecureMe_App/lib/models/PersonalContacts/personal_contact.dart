@@ -98,7 +98,7 @@ class _PersonalContactState extends State<PersonalContact> {
                 Expanded(
                   child: Row(
                     children: [
-                      // CONTACT BUTTON
+                      // LOCATE BUTTON
                       GestureDetector(
                         child: AspectRatio(
                           aspectRatio: 1,
@@ -128,12 +128,13 @@ class _PersonalContactState extends State<PersonalContact> {
                       // CONTACT BUTTON
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacement(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ChatScreen(
-                                    userId: widget.currentUserId,
-                                    recipientUserId: widget.addedContactUid)),
+                              builder: (context) => ChatScreen(
+                                  userId: widget.currentUserId,
+                                  recipientUserId: widget.addedContactUid),
+                            ),
                           );
                         },
                         child: AspectRatio(
