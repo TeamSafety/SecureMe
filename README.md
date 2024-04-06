@@ -17,7 +17,7 @@ SecureMe is a mobile application designed to provide a swift and convenient way 
 2. [Usage](#usage)
     - [Getting Started](#getting-started)
     - [Key Features](#key-features)
-3.[Demo](#demo)
+3. [App Demo](#demo)
 
 
 ## Installation
