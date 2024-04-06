@@ -64,16 +64,16 @@ class _MainPageState extends State<MainPage> {
           return isFirstRouteInCurrentTab;
         },
         child: Scaffold(
-          // body: _pages[_currentIndex],
-          body: Stack(
-            children: <Widget>[
-              _buildOffstageNavigator("Community"),
-              _buildOffstageNavigator("Contacts"),
-              _buildOffstageNavigator("Home"),
-              _buildOffstageNavigator("Map"),
-              _buildOffstageNavigator("Profile"),
-            ],
-          ),
+          body: _pages[_currentIndex],
+          // body: Stack(
+          //   children: <Widget>[
+          //     _buildOffstageNavigator("Community"),
+          //     _buildOffstageNavigator("Contacts"),
+          //     _buildOffstageNavigator("Home"),
+          //     _buildOffstageNavigator("Map"),
+          //     _buildOffstageNavigator("Profile"),
+          //   ],
+          // ),
           bottomNavigationBar: _bottomNavigationBar(),
         ),
       ),
